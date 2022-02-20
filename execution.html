@@ -1,0 +1,426 @@
+<!-- PC用表示 -->
+<form action="/execution.php" method="post" id="AjaxForm">
+    <div style="text-align: center;">
+        <div style="background-color:darkgray;">
+            <p style="font-weight:bold; color:white;">ターゲットレース</p>
+        </div>
+        <p style="font-size:medium;">過去の結果を確認したいレースと期間を選択します</p>
+        <p>レース名
+            <select name="race_name" style="width: auto">
+                <option value="有馬記念">有馬記念</option>
+                <option value="日本ダービー">日本ダービー</option>
+                <option value="安田記念">安田記念</option>
+            </select>
+            &nbsp;開始年 ~ 終了年
+            <select name="year_s" style="width: auto;">
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+            </select>
+                ~
+            <select name="year_e" style="width: auto;">
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+            </select>
+        </p>
+    </div>
+
+    <hr>
+    <br>
+
+    <script>
+        var tmp_array=new Array();
+        const UMABAN_MAX=25;
+        const WAKUBAN_MAX=15;
+        const SEIREI_MIN=2;
+        const SEIREI_MAX=9;
+        const KINRYO_MIN=52;
+        const KINRYO_MAX=59;
+        const NINKI_MAX=25;
+        for(let i=1;i<=10;i++){
+            var f='<div id="j_tmp">'
+                +'<div style="text-align: center;background-color:#87ceeb;"><b style="font-weight:bold; color:white;" id="j_no_tmp"></b></div>'
+		        +'<br><p style="font-size:medium;text-align: left;margin-left: 20px;">検索条件を指定してください(有馬記念、馬番1と2など)</p>'
+                +'<p style="margin-left: 50px;">レース名<br>'
+                +'<select id="j_race_name_tmp" name="j_race_name_tmp" style="width: auto;">'
+                +'<option value="">選択無し</option>'
+                +'<option value="有馬記念">有馬記念</option>'
+                +'</select>'
+                +'</p>'
+		        +'<p style="margin-left: 50px;">馬番<br>'
+                +'<input type="checkbox" id="j_umaban_1_tmp" name="j_umaban_1_tmp" value="1">1'
+                +'<input type="checkbox" id="j_umaban_2_tmp" name="j_umaban_2_tmp" value="2">2'
+                +'<input type="checkbox" id="j_umaban_3_tmp" name="j_umaban_3_tmp" value="3">3'
+                +'<input type="checkbox" id="j_umaban_4_tmp" name="j_umaban_4_tmp" value="4">4'
+                +'<input type="checkbox" id="j_umaban_5_tmp" name="j_umaban_5_tmp" value="5">5'
+                +'<input type="checkbox" id="j_umaban_6_tmp" name="j_umaban_6_tmp" value="6">6'
+                +'<input type="checkbox" id="j_umaban_7_tmp" name="j_umaban_7_tmp" value="7">7'
+                +'<input type="checkbox" id="j_umaban_8_tmp" name="j_umaban_8_tmp" value="8">8'
+                +'<input type="checkbox" id="j_umaban_9_tmp" name="j_umaban_9_tmp" value="9">9'
+                +'<input type="checkbox" id="j_umaban_10_tmp" name="j_umaban_10_tmp" value="10">10'
+                +'<input type="checkbox" id="j_umaban_11_tmp" name="j_umaban_11_tmp" value="11">11'
+                +'<input type="checkbox" id="j_umaban_12_tmp" name="j_umaban_12_tmp" value="12">12'
+                +'<input type="checkbox" id="j_umaban_13_tmp" name="j_umaban_13_tmp" value="13">13'
+                +'<input type="checkbox" id="j_umaban_14_tmp" name="j_umaban_14_tmp" value="14">14'
+                +'<input type="checkbox" id="j_umaban_15_tmp" name="j_umaban_15_tmp" value="15">15'
+                +'<input type="checkbox" id="j_umaban_16_tmp" name="j_umaban_16_tmp" value="16">16'
+                +'<input type="checkbox" id="j_umaban_17_tmp" name="j_umaban_17_tmp" value="17">17'
+                +'<input type="checkbox" id="j_umaban_18_tmp" name="j_umaban_18_tmp" value="18">18'
+                +'<input type="checkbox" id="j_umaban_19_tmp" name="j_umaban_19_tmp" value="19">19'
+                +'<input type="checkbox" id="j_umaban_20_tmp" name="j_umaban_20_tmp" value="20">20'
+                +'<input type="checkbox" id="j_umaban_21_tmp" name="j_umaban_21_tmp" value="21">21'
+                +'<input type="checkbox" id="j_umaban_22_tmp" name="j_umaban_22_tmp" value="22">22'
+                +'<input type="checkbox" id="j_umaban_23_tmp" name="j_umaban_23_tmp" value="23">23'
+                +'<input type="checkbox" id="j_umaban_24_tmp" name="j_umaban_24_tmp" value="24">24'
+                +'<input type="checkbox" id="j_umaban_25_tmp" name="j_umaban_25_tmp" value="25">25'
+                +'</p>'
+		        +'<p style="margin-left: 50px;">枠番<br>'
+                +'<input type="checkbox" id="j_wakuban_1_tmp" name="j_wakuban_1_tmp" value="1">1'
+                +'<input type="checkbox" id="j_wakuban_2_tmp" name="j_wakuban_2_tmp" value="2">2'
+                +'<input type="checkbox" id="j_wakuban_3_tmp" name="j_wakuban_3_tmp" value="3">3'
+                +'<input type="checkbox" id="j_wakuban_4_tmp" name="j_wakuban_4_tmp" value="4">4'
+                +'<input type="checkbox" id="j_wakuban_5_tmp" name="j_wakuban_5_tmp" value="5">5'
+                +'<input type="checkbox" id="j_wakuban_6_tmp" name="j_wakuban_6_tmp" value="6">6'
+                +'<input type="checkbox" id="j_wakuban_7_tmp" name="j_wakuban_7_tmp" value="7">7'
+                +'<input type="checkbox" id="j_wakuban_8_tmp" name="j_wakuban_8_tmp" value="8">8'
+                +'<input type="checkbox" id="j_wakuban_9_tmp" name="j_wakuban_9_tmp" value="9">9'
+                +'<input type="checkbox" id="j_wakuban_10_tmp" name="j_wakuban_10_tmp" value="10">10'
+                +'<input type="checkbox" id="j_wakuban_11_tmp" name="j_wakuban_11_tmp" value="11">11'
+                +'<input type="checkbox" id="j_wakuban_12_tmp" name="j_wakuban_12_tmp" value="12">12'
+                +'<input type="checkbox" id="j_wakuban_13_tmp" name="j_wakuban_13_tmp" value="13">13'
+                +'<input type="checkbox" id="j_wakuban_14_tmp" name="j_wakuban_14_tmp" value="14">14'
+                +'<input type="checkbox" id="j_wakuban_15_tmp" name="j_wakuban_15_tmp" value="15">15'
+                +'</p>'
+		        +'<p style="margin-left: 50px;">性齢<br>'
+                +'<input type="checkbox" id="j_seirei_h2_tmp" name="j_seirei_h2_tmp" value="牝2">牝2'
+                +'<input type="checkbox" id="j_seirei_h3_tmp" name="j_seirei_h3_tmp" value="牝3">牝3'
+                +'<input type="checkbox" id="j_seirei_h4_tmp" name="j_seirei_h4_tmp" value="牝4">牝4'
+                +'<input type="checkbox" id="j_seirei_h5_tmp" name="j_seirei_h5_tmp" value="牝5">牝5'
+                +'<input type="checkbox" id="j_seirei_h6_tmp" name="j_seirei_h6_tmp" value="牝6">牝6'
+                +'<input type="checkbox" id="j_seirei_h7_tmp" name="j_seirei_h7_tmp" value="牝7">牝7'
+                +'<input type="checkbox" id="j_seirei_h8_tmp" name="j_seirei_h8_tmp" value="牝8">牝8'
+                +'<input type="checkbox" id="j_seirei_h9_tmp" name="j_seirei_h9_tmp" value="牝9">牝9'
+                +'<input type="checkbox" id="j_seirei_b2_tmp" name="j_seirei_b2_tmp" value="牡2">牡2'
+                +'<input type="checkbox" id="j_seirei_b3_tmp" name="j_seirei_b3_tmp" value="牡3">牡3'
+                +'<input type="checkbox" id="j_seirei_b4_tmp" name="j_seirei_b4_tmp" value="牡4">牡4'
+                +'<input type="checkbox" id="j_seirei_b5_tmp" name="j_seirei_b5_tmp" value="牡5">牡5'
+                +'<input type="checkbox" id="j_seirei_b6_tmp" name="j_seirei_b6_tmp" value="牡6">牡6'
+                +'<input type="checkbox" id="j_seirei_b7_tmp" name="j_seirei_b7_tmp" value="牡7">牡7'
+                +'<input type="checkbox" id="j_seirei_b8_tmp" name="j_seirei_b8_tmp" value="牡8">牡8'
+                +'<input type="checkbox" id="j_seirei_b9_tmp" name="j_seirei_b9_tmp" value="牡9">牡9'
+                +'</p>'
+		        +'<p style="margin-left: 50px;">斤量<br>' // 斤量のid,namaは52.5→525と表す
+                +'<input type="checkbox" id="j_kinryo_520_tmp" name="j_kinryo_520_tmp" value="52">52'
+                +'<input type="checkbox" id="j_kinryo_525_tmp" name="j_kinryo_525_tmp" value="52.5">52.5'
+                +'<input type="checkbox" id="j_kinryo_530_tmp" name="j_kinryo_530_tmp" value="53">53'
+                +'<input type="checkbox" id="j_kinryo_535_tmp" name="j_kinryo_535_tmp" value="53.5">53.5'
+                +'<input type="checkbox" id="j_kinryo_540_tmp" name="j_kinryo_540_tmp" value="54">54'
+                +'<input type="checkbox" id="j_kinryo_545_tmp" name="j_kinryo_545_tmp" value="54.5">54.5'
+                +'<input type="checkbox" id="j_kinryo_550_tmp" name="j_kinryo_550_tmp" value="55">55'
+                +'<input type="checkbox" id="j_kinryo_555_tmp" name="j_kinryo_555_tmp" value="55.5">55.5'
+                +'<input type="checkbox" id="j_kinryo_560_tmp" name="j_kinryo_560_tmp" value="56">56'
+                +'<input type="checkbox" id="j_kinryo_565_tmp" name="j_kinryo_565_tmp" value="56.5">56.5'
+                +'<input type="checkbox" id="j_kinryo_570_tmp" name="j_kinryo_570_tmp" value="57">57'
+                +'<input type="checkbox" id="j_kinryo_575_tmp" name="j_kinryo_575_tmp" value="57.5">57.5'
+                +'<input type="checkbox" id="j_kinryo_580_tmp" name="j_kinryo_580_tmp" value="58">58'
+                +'<input type="checkbox" id="j_kinryo_585_tmp" name="j_kinryo_585_tmp" value="58.5">58.5'
+                +'<input type="checkbox" id="j_kinryo_590_tmp" name="j_kinryo_590_tmp" value="59">59'
+                +'</p>'
+		        +'<p style="margin-left: 50px;">タイム<br>'
+                +'<select id="j_time_min_tmp" name="j_time_min_tmp" style="width: auto;">'
+                +'<option value="">-</option>'
+                +'<option value="2:30">2:30</option>'
+                +'<option value="2:31">2:31</option>'
+                +'<option value="2:32">2:32</option>'
+                +'<option value="2:33">2:33</option>'
+                +'<option value="2:34">2:34</option>'
+                +'<option value="2:35">2:35</option>'
+                +'<option value="2:36">2:36</option>'
+                +'</select> ~ '
+                +'<select id="j_time_max_tmp" name="j_time_max_tmp" style="width: auto;">'
+                +'<option value="">-</option>'
+                +'<option value="2:30">2:30</option>'
+                +'<option value="2:31">2:31</option>'
+                +'<option value="2:32">2:32</option>'
+                +'<option value="2:33">2:33</option>'
+                +'<option value="2:34">2:34</option>'
+                +'<option value="2:35">2:35</option>'
+                +'<option value="2:36">2:36</option>'
+                +'</select>'
+                +'</p>'
+		        +'<p style="margin-left: 50px;">通過<br>'
+                +'<select id="j_tuka_1_tmp" name="j_tuka_1_tmp" style="width: auto;">'
+                +'<option value="">-</option>'
+                +'<option value="1">1</option>'
+                +'<option value="2">2</option>'
+                +'<option value="10">10</option>'
+                +'</select> - '
+                +'<select id="j_tuka_2_tmp" name="j_tuka_2_tmp" style="width: auto;">'
+                +'<option value="">-</option>'
+                +'<option value="1">1</option>'
+                +'<option value="2">2</option>'
+                +'<option value="10">10</option>'
+                +'</select> - '
+                +'<select id="j_tuka_3_tmp" name="j_tuka_3_tmp" style="width: auto;">'
+                +'<option value="">-</option>'
+                +'<option value="1">1</option>'
+                +'<option value="2">2</option>'
+                +'<option value="10">10</option>'
+                +'</select> - '
+                +'<select id="j_tuka_4_tmp" name="j_tuka_4_tmp" style="width: auto;">'
+                +'<option value="">-</option>'
+                +'<option value="1">1</option>'
+                +'<option value="2">2</option>'
+                +'<option value="10">10</option>'
+                +'</select>'
+                +'</p>'
+		        +'<p style="margin-left: 50px;">上り<br>'
+                +'<select id="j_agari_min_tmp" name="j_agari_min_tmp" style="width: auto;">'
+                +'<option value="">-</option>'
+                +'<option value="35">35</option>'
+                +'<option value="36">36</option>'
+                +'<option value="37">37</option>'
+                +'<option value="38">38</option>'
+                +'</select> ~ '
+                +'<select id="j_agari_max_tmp" name="j_agari_max_tmp" style="width: auto;">'
+                +'<option value="">-</option>'
+                +'<option value="35">35</option>'
+                +'<option value="36">36</option>'
+                +'<option value="37">37</option>'
+                +'<option value="38">38</option>'
+                +'</select>'
+                +'</p>'
+		        +'<p style="margin-left: 50px;">単勝<br>'
+                +'<select id="j_tansho_min_tmp" name="j_tansho_min_tmp" style="width: auto;">'
+                +'<option value="">-</option>'
+                +'<option value="1">1</option>'
+                +'<option value="2">2</option>'
+                +'<option value="3">3</option>'
+                +'<option value="10">10</option>'
+                +'</select> ~ '
+                +'<select id="j_tansho_max_tmp" name="j_tansho_max_tmp" style="width: auto;">'
+                +'<option value="">-</option>'
+                +'<option value="1">1</option>'
+                +'<option value="2">2</option>'
+                +'<option value="3">3</option>'
+                +'<option value="10">10</option>'
+                +'</select>'
+                +'</p>'
+		        +'<p style="margin-left: 50px;">人気<br>'
+                +'<input type="checkbox" id="j_ninki_1_tmp" name="j_ninki_1_tmp" value="1">1'
+                +'<input type="checkbox" id="j_ninki_2_tmp" name="j_ninki_2_tmp" value="2">2'
+                +'<input type="checkbox" id="j_ninki_3_tmp" name="j_ninki_3_tmp" value="3">3'
+                +'<input type="checkbox" id="j_ninki_4_tmp" name="j_ninki_4_tmp" value="4">4'
+                +'<input type="checkbox" id="j_ninki_5_tmp" name="j_ninki_5_tmp" value="5">5'
+                +'<input type="checkbox" id="j_ninki_6_tmp" name="j_ninki_6_tmp" value="6">6'
+                +'<input type="checkbox" id="j_ninki_7_tmp" name="j_ninki_7_tmp" value="7">7'
+                +'<input type="checkbox" id="j_ninki_8_tmp" name="j_ninki_8_tmp" value="8">8'
+                +'<input type="checkbox" id="j_ninki_9_tmp" name="j_ninki_9_tmp" value="9">9'
+                +'<input type="checkbox" id="j_ninki_10_tmp" name="j_ninki_10_tmp" value="10">10'
+                +'<input type="checkbox" id="j_ninki_11_tmp" name="j_ninki_11_tmp" value="11">11'
+                +'<input type="checkbox" id="j_ninki_12_tmp" name="j_ninki_12_tmp" value="12">12'
+                +'<input type="checkbox" id="j_ninki_13_tmp" name="j_ninki_13_tmp" value="13">13'
+                +'<input type="checkbox" id="j_ninki_14_tmp" name="j_ninki_14_tmp" value="14">14'
+                +'<input type="checkbox" id="j_ninki_15_tmp" name="j_ninki_15_tmp" value="15">15'
+                +'<input type="checkbox" id="j_ninki_16_tmp" name="j_ninki_16_tmp" value="16">16'
+                +'<input type="checkbox" id="j_ninki_17_tmp" name="j_ninki_17_tmp" value="17">17'
+                +'<input type="checkbox" id="j_ninki_18_tmp" name="j_ninki_18_tmp" value="18">18'
+                +'<input type="checkbox" id="j_ninki_19_tmp" name="j_ninki_19_tmp" value="19">19'
+                +'<input type="checkbox" id="j_ninki_20_tmp" name="j_ninki_20_tmp" value="20">20'
+                +'<input type="checkbox" id="j_ninki_21_tmp" name="j_ninki_21_tmp" value="21">21'
+                +'<input type="checkbox" id="j_ninki_22_tmp" name="j_ninki_22_tmp" value="22">22'
+                +'<input type="checkbox" id="j_ninki_23_tmp" name="j_ninki_23_tmp" value="23">23'
+                +'<input type="checkbox" id="j_ninki_24_tmp" name="j_ninki_24_tmp" value="24">24'
+                +'<input type="checkbox" id="j_ninki_25_tmp" name="j_ninki_25_tmp" value="25">25'
+                +'</p>'
+                +'</div>';
+            document.write(f);
+
+            // 条件i(div)
+            tmp_array[i]=document.getElementById("j_tmp");
+            tmp_array[i].id="j_"+i;
+
+            // 条件i
+            tmp_array[i]=document.getElementById("j_no_tmp");
+            tmp_array[i].id="j_no_"+i;
+            tmp_array[i].innerHTML="条件"+i;
+
+            // 条件i>レース名
+            tmp_array[i]=document.getElementById("j_race_name_tmp");
+            tmp_array[i].id="j"+i+"_race_name";
+            tmp_array[i].name="j"+i+"_race_name";
+            tmp_array[i].onchange=j_race_name_func;
+            // document.write(tmp_array[i].onchange);
+
+            // 条件i>馬番(1~UMABAN_MAX)
+            for(let j=1;j<=UMABAN_MAX;j++){
+                tmp_array[i]=document.getElementById("j_umaban_"+j+"_tmp");
+                tmp_array[i].id="j"+i+"_umaban_"+j;
+                tmp_array[i].name="j"+i+"_umaban_"+j;
+            }
+
+            // 条件i>枠番(1~WAKUBAN_MAX)
+            for(let j=1;j<=WAKUBAN_MAX;j++){
+                tmp_array[i]=document.getElementById("j_wakuban_"+j+"_tmp");
+                tmp_array[i].id="j"+i+"_wakuban_"+j;
+                tmp_array[i].name="j"+i+"_wakuban_"+j;
+            }
+
+            // 条件i>性齢(SEIREI_MIN~SEIREI_MAX)
+            for(let j=SEIREI_MIN;j<=SEIREI_MAX;j++){
+                tmp_array[i]=document.getElementById("j_seirei_h"+j+"_tmp");
+                tmp_array[i].id="j"+i+"_seirei_h"+j;
+                tmp_array[i].name="j"+i+"_seirei_h"+j;
+                tmp_array[i]=document.getElementById("j_seirei_b"+j+"_tmp");
+                tmp_array[i].id="j"+i+"_seirei_b"+j;
+                tmp_array[i].name="j"+i+"_seirei_b"+j;
+            }
+
+            // 条件i>斤量(KINRYO_MIN~KINRYO_MAX)
+            for(let j=KINRYO_MIN;j<=KINRYO_MAX;j=j+0.5){
+                // tmp_array[i]=document.getElementById("j_kinryo_"+j.toFixed(1)+"_tmp");
+                // tmp_array[i].id="j"+i+"_kinryo_"+j.toFixed(1);
+                // tmp_array[i].name="j"+i+"_kinryo_"+j.toFixed(1);
+                k=j*10;
+                tmp_array[i]=document.getElementById("j_kinryo_"+k+"_tmp");
+                tmp_array[i].id="j"+i+"_kinryo_"+k;
+                tmp_array[i].name="j"+i+"_kinryo_"+k;
+                // document.writeln(tmp_array[i].id);
+            }
+
+            // タイム最小値
+            tmp_array[i]=document.getElementById("j_time_min_tmp");
+            tmp_array[i].id="j"+i+"_time_min";
+            tmp_array[i].name="j"+i+"_time_min";
+            // タイム最大値
+            tmp_array[i]=document.getElementById("j_time_max_tmp");
+            tmp_array[i].id="j"+i+"_time_max";
+            tmp_array[i].name="j"+i+"_time_max";
+
+            // 通過(第1コーナー)
+            tmp_array[i]=document.getElementById("j_tuka_1_tmp");
+            tmp_array[i].id="j"+i+"_tuka_1";
+            tmp_array[i].name="j"+i+"_tuka_1";
+            // 通過(第2コーナー)
+            tmp_array[i]=document.getElementById("j_tuka_2_tmp");
+            tmp_array[i].id="j"+i+"_tuka_2";
+            tmp_array[i].name="j"+i+"_tuka_2";
+            // 通過(第3コーナー)
+            tmp_array[i]=document.getElementById("j_tuka_3_tmp");
+            tmp_array[i].id="j"+i+"_tuka_3";
+            tmp_array[i].name="j"+i+"_tuka_3";
+            // 通過(第4コーナー)
+            tmp_array[i]=document.getElementById("j_tuka_4_tmp");
+            tmp_array[i].id="j"+i+"_tuka_4";
+            tmp_array[i].name="j"+i+"_tuka_4";
+
+            // 上り最小値
+            tmp_array[i]=document.getElementById("j_agari_min_tmp");
+            tmp_array[i].id="j"+i+"_agari_min";
+            tmp_array[i].name="j"+i+"_agari_min";
+            // 上り最大値
+            tmp_array[i]=document.getElementById("j_agari_max_tmp");
+            tmp_array[i].id="j"+i+"_agari_max";
+            tmp_array[i].name="j"+i+"_agari_max";
+
+            // 単勝最小値
+            tmp_array[i]=document.getElementById("j_tansho_min_tmp");
+            tmp_array[i].id="j"+i+"_tansho_min";
+            tmp_array[i].name="j"+i+"_tansho_min";
+            // 単勝最大値
+            tmp_array[i]=document.getElementById("j_tansho_max_tmp");
+            tmp_array[i].id="j"+i+"_tansho_max";
+            tmp_array[i].name="j"+i+"_tansho_max";
+
+            // 条件i>人気(1~NINKI_MAX)
+            for(let j=1;j<=NINKI_MAX;j++){
+                tmp_array[i]=document.getElementById("j_ninki_"+j+"_tmp");
+                tmp_array[i].id="j"+i+"_ninki_"+j;
+                tmp_array[i].name="j"+i+"_ninki_"+j;
+            }
+        }
+
+        // 表示・非表示の調整
+        for(let i=2;i<=10;i++){
+            var tmp=document.getElementById("j_"+i);
+            if(i >= 3){
+                tmp.style.display="none";
+            }            
+            tmp.style.opacity=0.3;
+        }        
+        function j_race_name_func(){
+                let no=this.id.substr(1,1);
+                no=Number(no);
+                if(no == 1 || no == 10){
+                    return;
+                }
+                var info=document.getElementById("j"+no+"_race_name");
+                if(info.value == "選択無し"){
+                    var tmp=document.getElementById("j_"+no);
+                    tmp.style.opacity=0.3;
+                    no=no+1;
+                    for(let i=no;i<=10;i++){
+                        var tmp=document.getElementById("j_"+i);
+                        tmp.style.display="none";
+                    }
+                }else{
+                    var tmp=document.getElementById("j_"+no);
+                    tmp.style.opacity=1;
+                    no=no+1;
+                    tmp=document.getElementById("j_"+no);
+                    tmp.style.display="block";
+                }
+        }
+
+        // var tmp=document.getElementById("j1_race_name");
+        // // tmp.onchange=j1_race_name_change;
+        // document.write(tmp.name);
+        // function j1_race_name_change(){
+        //     document.write("change!");
+        //     // const p1
+        //      = document.getElementById("test1");
+
+        //     // if(p1.style.display=="block"){
+        //     //     // noneで非表示
+        //     //     p1.style.display ="none";
+        //     // }else{
+        //     //     // blockで表示
+        //     //     p1.style.display ="block";
+        //     // }    
+        // }
+    </script>
+
+    <!-- <input type="button" value="ボタン1" onclick="clickBtn1()" /> -->
+    <!-- <script>
+        function j1_race_name_change(){
+            document.write("change!!");
+            // const p1 = document.getElementById("test1");
+
+            // if(p1.style.display=="block"){
+            //     // noneで非表示
+            //     p1.style.display ="none";
+            // }else{
+            //     // blockで表示
+            //     p1.style.display ="block";
+            // }     
+        }
+        // //初期表示は非表示
+        // document.getElementById("j_10").style.display ="none";
+        
+        // function clickBtn1(){
+        //     const p1 = document.getElementById("j_10");
+        
+        //     if(p1.style.display=="block"){
+        //         // noneで非表示
+        //         p1.style.display ="none";
+        //     }else{
+        //         // blockで表示
+        //         p1.style.display ="block";
+        //     }
+        // }
+    </script> -->
+
+    <p><input type="submit" value="分析を実行" class="submit" style="width: 100%;"></p>
+</form>
+<div id="result"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" async=""></script>
+<script src="/exectl.js"></script>
