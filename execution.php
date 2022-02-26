@@ -281,6 +281,7 @@ if(!(in_array(1,$j_result_flg))){
     $tmp_results=array(); // 多次元配列→[year][0]=年度 [year][1]=馬名1 [year][2]=馬名2
     $win_rates=array(); // 年度ごとの勝率→[year][0]=勝率 [year][1]=連体率 [year][2]=複勝率
     $year_results=array();
+    $year_result_flg=array();
     $i=0;
     foreach ($year_array as $year){
         $tmp_results[$i][0]=$year;
@@ -299,6 +300,7 @@ if(!(in_array(1,$j_result_flg))){
 
         // 結果が0件(tmp_resultに年度情報しか入っていない)の場合、処理をスキップする
         if(count($tmp_results[$i])==1){
+            $i++;
             continue;
         }
         
@@ -316,6 +318,9 @@ if(!(in_array(1,$j_result_flg))){
 
         // SQL実行
         $year_results[$i]=$keiba_wpdb->get_results("SELECT * FROM $target_race_name WHERE 年度 = ". $year . " AND 馬名 REGEXP \"$uma_name_regexp\"");
+        if(count($year_results[$i])!=0){
+            $year_result_flg[$i]=1;
+        }
 
         // 年度ごとの勝率計算
         $first=0;
@@ -336,6 +341,23 @@ if(!(in_array(1,$j_result_flg))){
         $win_rates[$i][2]=(($first+$second+$third)/$all*100); // 複勝率
 
         $i++;
+    }
+
+    $win_rates_sum=array(); // 勝率合計
+    $i=0;
+    foreach ($win_rates as $win_rate){
+        $win_rates_sum[0]=$win_rates_sum[0]+$win_rate[0];
+        $win_rates_sum[1]=$win_rates_sum[1]+$win_rate[1];
+        $win_rates_sum[2]=$win_rates_sum[2]+$win_rate[2];
+        $i++;
+    }
+    $win_rates_sum[0]=($win_rates_sum[0]/$i);
+    $win_rates_sum[1]=($win_rates_sum[1]/$i);
+    $win_rates_sum[2]=($win_rates_sum[2]/$i);
+
+    // 結果が0件(year_result_flgに1が無い)の場合は警告を出して結果格納処理はスキップする
+    if(!(in_array(1,$year_result_flg))){
+        echo "条件に合致する検索結果がありませんでした。";
     }
 }
 ?>
@@ -532,8 +554,12 @@ if(!(in_array(1,$j_result_flg))){
 <?php echo '<script type="text/javascript">','ninkisave();','</script>'; ?>
 
 <?php
-// 結果が0件(j_result_flgに1が無い)の場合、処理を終了する
+// 検索結果が0件(j_result_flgに1が無い)の場合、処理を終了する
 if(!(in_array(1,$j_result_flg))){
+    return 1;
+}
+// 合致結果が0件(year_result_flgに1が無い)の場合、処理を終了する
+if(!(in_array(1,$year_result_flg))){
     return 1;
 }
 ?>
@@ -573,6 +599,8 @@ if(!(in_array(1,$j_result_flg))){
     </style>
 </head>
 <body>
+    <p>◆全体</p>
+    <p><?php echo "単勝率:".round($win_rates_sum[0],1)."%"." 連体率:".round($win_rates_sum[1],1)."%"." 複勝率:".round($win_rates_sum[2],1)."%"; ?></p>
     <?php for($i=0,$year_tmp=$_POST['year_e'] ;$i<=$diff;$i++,$year_tmp--) : ?>
         <p><?php echo "◆".$year_tmp; ?></p>
         <p><?php echo "単勝率:".round($win_rates[$diff-$i][0],1)."%"." 連体率:".round($win_rates[$diff-$i][1],1)."%"." 複勝率:".round($win_rates[$diff-$i][2],1)."%"; ?></p>
