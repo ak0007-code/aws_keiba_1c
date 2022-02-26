@@ -1,4 +1,4 @@
-<!-- モバイル用 -->
+<!-- モバイル用表示 -->
 <form action="/execution.php" method="post" id="AjaxForm">
     <div style="text-align: center;">
         <div style="background-color:darkgray;">
@@ -12,9 +12,11 @@
                     <option value="有馬記念">　有馬記念</option>
                     <option value="日本ダービー">　日本ダービー</option>
                     <option value="安田記念">　安田記念</option>
+                    <option value="NHKマイルC">　NHKマイルC</option>
                 </optgroup>
             </select>
             <br><br>
+
             <u>開始年 ~ 終了年</u>
             <select name="year_s" id="year_s" style="width: auto;">
                 <option value="2020">2020</option>
@@ -57,6 +59,7 @@
                 +'<option value="">-</option>'
                 +'<optgroup label="G1">'
                 +'<option value="有馬記念">　有馬記念</option>'
+                +'<option value="NHKマイルC">　NHKマイルC</option>'
                 +'</optgroup>'
                 +'</select>'
                 +'</p>'
