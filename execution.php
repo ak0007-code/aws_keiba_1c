@@ -53,9 +53,8 @@ for ($j=0;$j<J_MAX;$j++){
     $delete_check_btn_array[$j]=$_POST["j".($j+1)."_delete_checkbox"];
 
     // レース名
-    // $tmp1=$keiba_wpdb->get_row("SELECT ENG_NAME FROM RACENAME_JP_ENG_TRANS WHERE JP_NAME = 'NHKマイルC'");
-    // $race_name_array_eng[$j]=$keiba_wpdb->get_row("SELECT ENG_NAME FROM RACENAME_JP_ENG_TRANS WHERE JP_NAME = " . $_POST["j".($j+1)."_race_name"]);
     $race_name_array_jp[$j]=$_POST["j".($j+1)."_race_name"];
+    // 英語表記
     $race_name_array_eng[$j]=$keiba_wpdb->get_row("SELECT ENG_NAME FROM RACENAME_JP_ENG_TRANS WHERE JP_NAME = \"$race_name_array_jp[$j]\"")->ENG_NAME;
 
     // 馬番格納
@@ -111,18 +110,6 @@ for ($j=0;$j<J_MAX;$j++){
         $ninki_array[$j][$i]=$_POST["j".($j+1)."_ninki_".($i+1)];
     }
 }
-
-// echo $race_name_array_eng[0];
-// echo $target_race_name;
-// return;
-
-// // DBアクセス準備
-// require_once( dirname( __FILE__ ) . '/wp-load.php' );
-// global $wpdb;
-// $db_user = "root"; //データベース接続ユーザーの取得
-// $db_passwd = "password"; //データベース接続用パスワードの取得
-// $db_host = "aws-and-infra-web.cc4tusje8m3w.ap-northeast-1.rds.amazonaws.com"; //データベースホストの取得
-// $keiba_wpdb = new wpdb($db_user, $db_passwd, 'keiba', $db_host);
 
 // 結果フラグ 0:結果無し 1:結果有り
 $j_result_flg=array();
@@ -198,48 +185,6 @@ for ($j=0;$j<J_MAX;$j++){
             $time_max_regexp=$time_max_array[$j];
         }
 
-        // // 通過(第１コーナー)
-        // $tuka_1_regexp=".*";
-        // if($tuka_1_array[$j]){
-        //     $tuka_1_regexp=$tuka_1_array[$j];
-        // }
-        // // 通過(第2コーナー)
-        // $tuka_2_regexp=".*";
-        // if($tuka_2_array[$j]){
-        //     $tuka_2_regexp=$tuka_2_array[$j];
-        // }
-        // // 通過(第3コーナー)
-        // $tuka_3_regexp=".*";
-        // if($tuka_3_array[$j]){
-        //     $tuka_3_regexp=$tuka_3_array[$j];
-        // }
-        // // 通過(第4コーナー)
-        // $tuka_4_regexp=".*";
-        // if($tuka_4_array[$j]){
-        //     $tuka_4_regexp=$tuka_4_array[$j];
-        // }
-
-        // // 通過(第１コーナー)
-        // $tuka_1_regexp=".*";
-        // if($tuka_1_array[$j]){
-        //     $tuka_1_regexp=$tuka_1_array[$j];
-        // }
-        // // 通過(第2コーナー)
-        // $tuka_2_regexp=".*";
-        // if($tuka_2_array[$j]){
-        //     $tuka_2_regexp=$tuka_2_array[$j];
-        // }
-        // // 通過(第3コーナー)
-        // $tuka_3_regexp=".*";
-        // if($tuka_3_array[$j]){
-        //     $tuka_3_regexp=$tuka_3_array[$j];
-        // }
-        // // 通過(第4コーナー)
-        // $tuka_4_regexp=".*";
-        // if($tuka_4_array[$j]){
-        //     $tuka_4_regexp=$tuka_4_array[$j];
-        // }
-
         // 通過(第１コーナー)
         $tuka_1_regexp="[0-9]{1,2}";
         if($tuka_1_array[$j]){
@@ -266,16 +211,6 @@ for ($j=0;$j<J_MAX;$j++){
         $tuka_regexp_b=$tuka_1_regexp."-".$tuka_2_regexp."-".$tuka_3_regexp;
         $tuka_regexp_c=$tuka_1_regexp."-".$tuka_2_regexp."-".$tuka_3_regexp."-".$tuka_4_regexp;
         $tuka_regexp=$tuka_regexp_a."|".$tuka_regexp_b."|".$tuka_regexp_c;
-        // $tuka_regexp=$tuka_1_regexp."-".$tuka_2_regexp."-".$tuka_3_regexp."-".$tuka_4_regexp;
-        // if(!$tuka_4_array[$j]){
-        //     $tuka_regexp=$tuka_1_regexp."-".$tuka_2_regexp."-".$tuka_3_regexp;
-        //     if(!$tuka_3_array[$j]){
-        //         $tuka_regexp=$tuka_1_regexp."-".$tuka_2_regexp;
-        //         if(!$tuka_2_array[$j]){
-        //             $tuka_regexp=$tuka_1_regexp;
-        //         }
-        //     }
-        // }
 
         // 上り最小値
         $agari_min_regexp="0";
@@ -327,21 +262,10 @@ for ($j=0;$j<J_MAX;$j++){
         $seirei_regexp[$j]="^(".$seirei_regexp[$j].")$";
         $kinryo_regexp[$j]="^(".$kinryo_regexp[$j].")$";
         $ninki_regexp[$j]="^(".$ninki_regexp[$j].")$";
-        // $tuka_regexp_a="^(".$tuka_regexp_a.")$";
-        // $tuka_regexp_b="^(".$tuka_regexp_b.")$";
-        // $tuka_regexp_c="^(".$tuka_regexp_c.")$";
         $tuka_regexp="^(".$tuka_regexp.")$";
         $year_regexp=="^(".$year_regexp.")$";
 
         // 条件j:SQL実行
-        // echo $race_name_array_eng[$j];
-        // $query = "SELECT * FROM NHKマイルC WHERE 年度 = %d";
-        // $j_results[0]=$keiba_wpdb->get_results( $keiba_wpdb->prepare( $query, 2020));
-
-        // $j_results[0]=$keiba_wpdb->get_results("SELECT * FROM \"$race_name_array_eng[$j]\"");
-        // echo "$race_name_array_eng[$j]";
-        // $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array_eng[$j] . " WHERE 馬番 REGEXP \"$umaban_regexp[$j]\" AND 枠番 REGEXP \"$wakuban_regexp[$j]\" AND 年度 REGEXP \"$year_regexp\" AND 性齢 REGEXP \"$seirei_regexp[$j]\" AND 斤量 REGEXP \"$kinryo_regexp[$j]\" AND タイム BETWEEN \"$time_min_regexp\" AND \"$time_max_regexp\" AND 通過 REGEXP \"$tuka_1_regexp-$tuka_2_regexp-$tuka_3_regexp-$tuka_4_regexp\" AND 上り BETWEEN \"$agari_min_regexp\" AND \"$agari_max_regexp\" AND 単勝 BETWEEN \"$tansho_min_regexp\" AND \"$tansho_max_regexp\" AND 人気 REGEXP \"$ninki_regexp[$j]\"");
-        // echo $tuka_regexp;
         $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array_eng[$j] . " WHERE 馬番 REGEXP \"$umaban_regexp[$j]\" AND 枠番 REGEXP \"$wakuban_regexp[$j]\" AND 年度 REGEXP \"$year_regexp\" AND 性齢 REGEXP \"$seirei_regexp[$j]\" AND 斤量 REGEXP \"$kinryo_regexp[$j]\" AND タイム BETWEEN \"$time_min_regexp\" AND \"$time_max_regexp\" AND 通過 REGEXP \"$tuka_regexp\" AND 上り BETWEEN \"$agari_min_regexp\" AND \"$agari_max_regexp\" AND 単勝 BETWEEN \"$tansho_min_regexp\" AND \"$tansho_max_regexp\" AND 人気 REGEXP \"$ninki_regexp[$j]\"");
         if(count($j_results[$j])!=0){
             $j_result_flg[$j]=1;
@@ -349,17 +273,9 @@ for ($j=0;$j<J_MAX;$j++){
     }
 }
 
-// echo $race_name_array_eng[0];
-// print_r($j_results);
-// return;
-
-
-// echo "</br>";
-
 // 結果が0件(j_result_flgに1が無い)の場合は警告を出して結果格納処理はスキップする
 if(!(in_array(1,$j_result_flg))){
     echo "条件が選択されていないかヒットする検索結果がありませんでした。";
-//    return 1;
 }else{
     // 年度ごとの結果をyear_resultsに格納
     $tmp_results=array(); // 多次元配列→[year][0]=年度 [year][1]=馬名1 [year][2]=馬名2
@@ -421,19 +337,6 @@ if(!(in_array(1,$j_result_flg))){
 
         $i++;
     }
-
-    // // 年度ごとの勝率を表示
-    // $year="$_POST[year_s]";
-    // $i=0;
-    // foreach ($win_rates as $win_rate){
-    //     echo $year;
-    //     echo "<br>";
-    //     echo "単勝率:".round($win_rates[$i][0],1)."%"."<br/>";
-    //     echo "連体率:".round($win_rates[$i][1],1)."%"."<br/>";
-    //     echo "複勝率:".round($win_rates[$i][2],1)."%"."<br/>";
-    //     $i++;
-    //     $year++;
-    // }
 }
 ?>
 
@@ -682,16 +585,5 @@ if(!(in_array(1,$j_result_flg))){
             </table>
         </div>
     <?php endfor; ?>
-
-    <!-- <div class="scroll">
-        <table class="table4" border="1">
-            <tr><th>年度</th><th>馬名</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>タイム</th><th>通過</th><th>上り</th><th>単勝</th><th>人気</th><th>馬体重</th><th>着順</th></tr>
-            <?php //foreach ($year_results as $year_result) : ?>
-                <?php //foreach ($year_result as $row) : ?>
-                    <tr><td bgcolor="white"><?php //echo $row->年度 ?></td><td bgcolor="white"><?php //echo $row->馬名 ?></td><td bgcolor="white"><?php //echo $row->馬番 ?></td><td bgcolor="white"><?php //echo $row->枠番 ?></td><td><?php //echo $row->性齢 ?></td><td bgcolor="white"><?php //echo $row->斤量 ?></td><td bgcolor="white"><?php //echo substr_replace(substr($row->タイム, 1, 6),".",4,1) ?></td><td bgcolor="#ffffff"><?php //echo $row->通過 ?></td><td bgcolor="white"><?php //echo $row->上り ?></td><td bgcolor="white"><?php //echo $row->単勝 ?></td><td bgcolor="white"><?php //echo $row->人気 ?></td><td bgcolor="white"><?php //echo $row->馬体重 ?></td><td bgcolor="white"><?php //echo $row->着順 ?></td></tr>
-                <?php //endforeach; ?>
-            <?php //endforeach; ?>
-        </table>
-    </div> -->
 </body>
 </html>
