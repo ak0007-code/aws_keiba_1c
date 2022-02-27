@@ -273,32 +273,46 @@ for ($j=0;$j<J_MAX;$j++){
     }
 }
 
+// print_r($j_results);
+
 // 結果が0件(j_result_flgに1が無い)の場合は警告を出して結果格納処理はスキップする
 if(!(in_array(1,$j_result_flg))){
     echo "条件が選択されていないかヒットする検索結果がありませんでした。";
 }else{
     // 年度ごとの結果をyear_resultsに格納
     $tmp_results=array(); // 多次元配列→[year][0]=年度 [year][1]=馬名1 [year][2]=馬名2
+    $tmp_array=array(); // 一時格納用
     $win_rates=array(); // 年度ごとの勝率→[year][0]=勝率 [year][1]=連体率 [year][2]=複勝率
-    $year_results=array();
-    $year_result_flg=array();
+    $year_results=array(); // 開催年ごとの結果
+    $year_result_flg=array(); // 開催年に値があったかどうか
+    $j_num=count($j_results); // 条件数
     $i=0;
+
+    // 開催年ごとに処理を実行していく
     foreach ($year_array as $year){
         $tmp_results[$i][0]=$year;
+        $tmp_array[$i][0]=null; // 0番目にnullを入れないとarray_pushが使えないため
+
+        // 全条件に対して開催年=$yearに合致する要素を取り出す
         foreach ($j_results as $result){
             if(count($result)==0){
                 continue;
             }
             foreach ($result as $row){
                 if($row->年度 == $year){
-                    if(!(in_array($row->馬名,$tmp_results[$i]))){
-                        array_push($tmp_results[$i],$row->馬名);
-                    }
+                    array_push($tmp_array[$i],$row->馬名);
                 }
             }
         }
 
-        // 結果が0件(tmp_resultに年度情報しか入っていない)の場合、処理をスキップする
+        // 全ての条件(出現回数が$j_num回)で出てきた馬名のみtmp_resultsに格納
+        foreach (array_count_values($tmp_array[$i]) as $key => $value){
+            if($value==$j_num && $key!=null){
+                array_push($tmp_results[$i],$key);
+            }
+        }
+
+        // 結果が0件(tmp_resultsに年度情報しか入っていない)の場合、処理をスキップする
         if(count($tmp_results[$i])==1){
             $i++;
             continue;
