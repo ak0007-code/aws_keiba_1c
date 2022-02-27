@@ -343,17 +343,35 @@ if(!(in_array(1,$j_result_flg))){
         $i++;
     }
 
+    // print_r($win_rates);
+    // echo "<br/>";
+
     $win_rates_sum=array(); // 勝率合計
     $i=0;
     foreach ($win_rates as $win_rate){
+        // 配列の値がNANの場合は処理をスキップする
+        if(is_nan($win_rate[0]) || is_nan($win_rate[1]) || is_nan($win_rate[2])){
+            continue;
+        }
+
         $win_rates_sum[0]=$win_rates_sum[0]+$win_rate[0];
         $win_rates_sum[1]=$win_rates_sum[1]+$win_rate[1];
         $win_rates_sum[2]=$win_rates_sum[2]+$win_rate[2];
         $i++;
+        // print_r($win_rates_sum);
+        // echo "<br/>";
     }
     $win_rates_sum[0]=($win_rates_sum[0]/$i);
     $win_rates_sum[1]=($win_rates_sum[1]/$i);
     $win_rates_sum[2]=($win_rates_sum[2]/$i);
+
+    //print_r($win_rates[1][0]);
+    // echo "$diff";
+    // echo "<br/>";
+    // $tmp=0;
+    // $tmp=$tmp+$win_rates[1][1];
+    // echo $tmp;
+    // print_r($win_rates);
 
     // 結果が0件(year_result_flgに1が無い)の場合は警告を出して結果格納処理はスキップする
     if(!(in_array(1,$year_result_flg))){
@@ -606,9 +624,9 @@ if(!(in_array(1,$year_result_flg))){
         <p><?php echo "単勝率:".round($win_rates[$diff-$i][0],1)."%"." 連体率:".round($win_rates[$diff-$i][1],1)."%"." 複勝率:".round($win_rates[$diff-$i][2],1)."%"; ?></p>
         <div class="scroll">
             <table class="table4" border="1">
-                <tr><th>年度</th><th>馬名</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>タイム</th><th>通過</th><th>上り</th><th>単勝</th><th>人気</th><th>馬体重</th><th>着順</th></tr>
+                <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>タイム</th><th>通過</th><th>上り</th><th>単勝</th><th>馬体重</th></tr>
                     <?php foreach ($year_results[$diff-$i] as $row) : ?>
-                        <tr><td bgcolor="white"><?php echo $row->年度 ?></td><td bgcolor="white"><?php echo $row->馬名 ?></td><td bgcolor="white"><?php echo $row->馬番 ?></td><td bgcolor="white"><?php echo $row->枠番 ?></td><td><?php echo $row->性齢 ?></td><td bgcolor="white"><?php echo $row->斤量 ?></td><td bgcolor="white"><?php echo substr_replace(substr($row->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $row->通過 ?></td><td bgcolor="white"><?php echo $row->上り ?></td><td bgcolor="white"><?php echo $row->単勝 ?></td><td bgcolor="white"><?php echo $row->人気 ?></td><td bgcolor="white"><?php echo $row->馬体重 ?></td><td bgcolor="white"><?php echo $row->着順 ?></td></tr>
+                        <tr><td bgcolor="white"><?php echo $row->年度 ?></td><td bgcolor="white"><?php echo $row->馬名 ?></td><td bgcolor="white"><?php echo $row->着順 ?></td><td bgcolor="white"><?php echo $row->人気 ?></td><td bgcolor="white"><?php echo $row->馬番 ?></td><td bgcolor="white"><?php echo $row->枠番 ?></td><td><?php echo $row->性齢 ?></td><td bgcolor="white"><?php echo $row->斤量 ?></td><td bgcolor="white"><?php echo substr_replace(substr($row->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $row->通過 ?></td><td bgcolor="white"><?php echo $row->上り ?></td><td bgcolor="white"><?php echo $row->単勝 ?></td><td bgcolor="white"><?php echo $row->馬体重 ?></td></tr>
                     <?php endforeach; ?>
             </table>
         </div>
