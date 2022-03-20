@@ -9,6 +9,7 @@ const SEIREI_MAX=9; // 性齢MAX
 const KINRYO_MIN=52; // 斤量MIN
 const KINRYO_MAX=59; // 斤量MAX
 const NINKI_MAX=25; // 人気MAX
+const CHAKUJUN_MAX=25; // 着順MAX
 
 // DBアクセス準備
 require_once( dirname( __FILE__ ) . '/wp-load.php' );
@@ -46,6 +47,7 @@ $agari_max_array=array(); // 上り最大値
 $tansho_min_array=array(); // 単勝最小値
 $tansho_max_array=array(); // 単勝最大値
 $ninki_array=array(); // 人気
+$chakujun_array=array(); // 着順
 
 // 条件を確認 j:条件 i:個別番号
 for ($j=0;$j<J_MAX;$j++){
@@ -109,6 +111,11 @@ for ($j=0;$j<J_MAX;$j++){
     for($i=0;$i<NINKI_MAX;$i++){
         $ninki_array[$j][$i]=$_POST["j".($j+1)."_ninki_".($i+1)];
     }
+
+    // 着順格納
+    for($i=0;$i<CHAKUJUN_MAX;$i++){
+        $chakujun_array[$j][$i]=$_POST["j".($j+1)."_chakujun_".($i+1)];
+    }
 }
 
 // 結果フラグ 0:結果無し 1:結果有り
@@ -119,130 +126,195 @@ for ($j=0;$j<J_MAX;$j++){
 
     // レース名が「選択無し」以外かつ削除ボタンが押されていない条件のみ実行
     if($race_name_array_eng[$j] != "" && $delete_check_btn_array[$j] != 1){
+        // いずれかの選択がされているか確認(0=全て選択無し、1=選択有り)
+        $all_result_check_flg=0;
+
         // 馬番
-        $umaban_regexp[$j]=".*";
+        $umaban_regexp[$j]="99";
         for($i=0;$i<UMABAN_MAX;$i++){
             if($umaban_array[$j][$i]){
-                if($umaban_regexp[$j]==".*"){
+                if($umaban_regexp[$j]=="99"){
                     $umaban_regexp[$j]=(string)$umaban_array[$j][$i];
                 }else{
                     $umaban_regexp[$j]="$umaban_regexp[$j]"."|".(string)$umaban_array[$j][$i];
                 }
+                $all_result_check_flg=1;
             }
         }
 
         // 枠番
-        $wakuban_regexp[$j]=".*";
+        $wakuban_regexp[$j]="99";
         for($i=0;$i<WAKUBAN_MAX;$i++){
             if($wakuban_array[$j][$i]){
-                if($wakuban_regexp[$j]==".*"){
+                if($wakuban_regexp[$j]=="99"){
                     $wakuban_regexp[$j]=(string)$wakuban_array[$j][$i];
                 }else{
                     $wakuban_regexp[$j]="$wakuban_regexp[$j]"."|".(string)$wakuban_array[$j][$i];
                 }
+                $all_result_check_flg=1;
             }
         }
 
         // 性齢
-        $seirei_regexp[$j]=".*";
+        $seirei_regexp[$j]="99";
         for($i=0;$i<(SEIREI_MAX-SEIREI_MIN-1);$i++){
             if($seirei_h_array[$j][$i]){
-                if($seirei_regexp[$j]==".*"){
+                if($seirei_regexp[$j]=="99"){
                     $seirei_regexp[$j]=(string)$seirei_h_array[$j][$i];
                 }else{
                     $seirei_regexp[$j]="$seirei_regexp[$j]"."|".(string)$seirei_h_array[$j][$i];
                 }
+                $all_result_check_flg=1;
             }
             if($seirei_b_array[$j][$i]){
-                if($seirei_regexp[$j]==".*"){
+                if($seirei_regexp[$j]=="99"){
                     $seirei_regexp[$j]=(string)$seirei_b_array[$j][$i];
                 }else{
                     $seirei_regexp[$j]="$seirei_regexp[$j]"."|".(string)$seirei_b_array[$j][$i];
                 }
+                $all_result_check_flg=1;
             }
         }
 
         // 斤量
-        $kinryo_regexp[$j]=".*";
+        $kinryo_regexp[$j]="99";
         for($i=0,$k=KINRYO_MIN;$k<=KINRYO_MAX;$i++,$k=$k+0.5){
             if($kinryo_array[$j][$i]){
-                if($kinryo_regexp[$j]==".*"){
+                if($kinryo_regexp[$j]=="99"){
                     $kinryo_regexp[$j]=(string)$kinryo_array[$j][$i];
                 }else{
                     $kinryo_regexp[$j]="$kinryo_regexp[$j]"."|".(string)$kinryo_array[$j][$i];
                 }
+                $all_result_check_flg=1;
             }
         }
 
+        // タイムフラグ:最小値か最大値に選択があれば1を入れる
+        $time_check_flg=0;
         // タイム最小値
         $time_min_regexp="0:00";
         if($time_min_array[$j]){
             $time_min_regexp=$time_min_array[$j];
+            $all_result_check_flg=1;
+            $time_check_flg=1;
         }
         // タイム最大値
-        $time_max_regexp="9:59";
+        $time_max_regexp="9:99";
         if($time_max_array[$j]){
             $time_max_regexp=$time_max_array[$j];
+            $all_result_check_flg=1;
+            $time_check_flg=1;
+        }
+        if($time_check_flg == 0){
+            $time_min_regexp="9:99";
+            $time_max_regexp="9:99";
         }
 
+        // 通過フラグ：1~4コーナーまでひとつでも選択があれば1を入れる
+        $tuka_check_flg=0;
         // 通過(第１コーナー)
         $tuka_1_regexp="[0-9]{1,2}";
         if($tuka_1_array[$j]){
             $tuka_1_regexp=$tuka_1_array[$j];
+            $all_result_check_flg=1;
+            $tuka_check_flg=1;
         }
         // 通過(第2コーナー)
         $tuka_2_regexp="[0-9]{1,2}";
         if($tuka_2_array[$j]){
             $tuka_2_regexp=$tuka_2_array[$j];
+            $all_result_check_flg=1;
+            $tuka_check_flg=1;
         }
         // 通過(第3コーナー)
         $tuka_3_regexp="[0-9]{1,2}";
         if($tuka_3_array[$j]){
             $tuka_3_regexp=$tuka_3_array[$j];
+            $all_result_check_flg=1;
+            $tuka_check_flg=1;
         }
         // 通過(第4コーナー)
         $tuka_4_regexp="[0-9]{1,2}";
         if($tuka_4_array[$j]){
             $tuka_4_regexp=$tuka_4_array[$j];
+            $all_result_check_flg=1;
+            $tuka_check_flg=1;
+        }
+        if($tuka_check_flg == 1){
+            // 通過は第2コーナーまでの表記しかないデータもあるので、OR条件で3表記作っておく
+            $tuka_regexp_a=$tuka_1_regexp."-".$tuka_2_regexp;
+            $tuka_regexp_b=$tuka_1_regexp."-".$tuka_2_regexp."-".$tuka_3_regexp;
+            $tuka_regexp_c=$tuka_1_regexp."-".$tuka_2_regexp."-".$tuka_3_regexp."-".$tuka_4_regexp;
+            $tuka_regexp=$tuka_regexp_a."|".$tuka_regexp_b."|".$tuka_regexp_c;
+        }else{
+            $tuka_regexp="99";
         }
 
-        // 通過は第2コーナーまでの表記しかないデータもあるので、OR条件で3表記作っておく
-        $tuka_regexp_a=$tuka_1_regexp."-".$tuka_2_regexp;
-        $tuka_regexp_b=$tuka_1_regexp."-".$tuka_2_regexp."-".$tuka_3_regexp;
-        $tuka_regexp_c=$tuka_1_regexp."-".$tuka_2_regexp."-".$tuka_3_regexp."-".$tuka_4_regexp;
-        $tuka_regexp=$tuka_regexp_a."|".$tuka_regexp_b."|".$tuka_regexp_c;
-
+        // 上りフラグ:最小値か最大値に選択があれば1を入れる
+        $agari_check_flg=0;
         // 上り最小値
         $agari_min_regexp="0";
         if($agari_min_array[$j]){
             $agari_min_regexp=$agari_min_array[$j];
+            $all_result_check_flg=1;
+            $agari_check_flg=1;
         }
         // 上り最大値
         $agari_max_regexp="99";
         if($agari_max_array[$j]){
             $agari_max_regexp=$agari_max_array[$j];
+            $all_result_check_flg=1;
+            $agari_check_flg=1;
+        }
+        if($agari_check_flg == 0){
+            $agari_min_regexp="99";
+            $agari_max_regexp="99";
         }
 
+        // 単勝フラグ:最小値か最大値に選択があれば1を入れる
+        $tansho_check_flg=0;
         // 単勝最小値
         $tansho_min_regexp="0";
         if($tansho_min_array[$j]){
             $tansho_min_regexp=$tansho_min_array[$j];
+            $all_result_check_flg=1;
+            $tansho_check_flg=1;
         }
         // 単勝最大値
-        $tansho_max_regexp="1000";
+        $tansho_max_regexp="10000";
         if($tansho_max_array[$j]){
             $tansho_max_regexp=$tansho_max_array[$j];
+            $all_result_check_flg=1;
+            $tansho_check_flg=1;
+        }
+        if($tansho_check_flg == 0){
+            $tansho_min_regexp="99999";
+            $tansho_max_regexp="99999";
         }
 
         // 人気
-        $ninki_regexp[$j]=".*";
+        $ninki_regexp[$j]="99";
         for($i=0;$i<NINKI_MAX;$i++){
             if($ninki_array[$j][$i]){
-                if($ninki_regexp[$j]==".*"){
+                if($ninki_regexp[$j]=="99"){
                     $ninki_regexp[$j]=(string)$ninki_array[$j][$i];
                 }else{
                     $ninki_regexp[$j]="$ninki_regexp[$j]"."|".(string)$ninki_array[$j][$i];
                 }
+                $all_result_check_flg=1;
+            }
+        }
+
+        // 着順
+        $chakujun_regexp[$j]="99";
+        for($i=0;$i<CHAKUJUN_MAX;$i++){
+            if($chakujun_array[$j][$i]){
+                if($chakujun_regexp[$j]=="99"){
+                    $chakujun_regexp[$j]=(string)$chakujun_array[$j][$i];
+                }else{
+                    $chakujun_regexp[$j]="$chakujun_regexp[$j]"."|".(string)$chakujun_array[$j][$i];
+                }
+                $all_result_check_flg=1;
             }
         }
 
@@ -255,18 +327,26 @@ for ($j=0;$j<J_MAX;$j++){
                 $year_regexp="$year_regexp"."|".(string)$year;
             }
         }
-        
+
         // 文字列整形
         $umaban_regexp[$j]="^(".$umaban_regexp[$j].")$";
         $wakuban_regexp[$j]="^(".$wakuban_regexp[$j].")$";
         $seirei_regexp[$j]="^(".$seirei_regexp[$j].")$";
         $kinryo_regexp[$j]="^(".$kinryo_regexp[$j].")$";
         $ninki_regexp[$j]="^(".$ninki_regexp[$j].")$";
+        $chakujun_regexp[$j]="^(".$chakujun_regexp[$j].")$";
         $tuka_regexp="^(".$tuka_regexp.")$";
         $year_regexp=="^(".$year_regexp.")$";
 
         // 条件j:SQL実行
-        $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array_eng[$j] . " WHERE 馬番 REGEXP \"$umaban_regexp[$j]\" AND 枠番 REGEXP \"$wakuban_regexp[$j]\" AND 年度 REGEXP \"$year_regexp\" AND 性齢 REGEXP \"$seirei_regexp[$j]\" AND 斤量 REGEXP \"$kinryo_regexp[$j]\" AND タイム BETWEEN \"$time_min_regexp\" AND \"$time_max_regexp\" AND 通過 REGEXP \"$tuka_regexp\" AND 上り BETWEEN \"$agari_min_regexp\" AND \"$agari_max_regexp\" AND 単勝 BETWEEN \"$tansho_min_regexp\" AND \"$tansho_max_regexp\" AND 人気 REGEXP \"$ninki_regexp[$j]\"");
+        // $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array_eng[$j] . " WHERE 馬番 REGEXP \"$umaban_regexp[$j]\" AND 枠番 REGEXP \"$wakuban_regexp[$j]\" AND 年度 REGEXP \"$year_regexp\" AND 性齢 REGEXP \"$seirei_regexp[$j]\" AND 斤量 REGEXP \"$kinryo_regexp[$j]\" AND タイム BETWEEN \"$time_min_regexp\" AND \"$time_max_regexp\" AND 通過 REGEXP \"$tuka_regexp\" AND 上り BETWEEN \"$agari_min_regexp\" AND \"$agari_max_regexp\" AND 単勝 BETWEEN \"$tansho_min_regexp\" AND \"$tansho_max_regexp\" AND 人気 REGEXP \"$ninki_regexp[$j]\"");
+        
+        // いずれかの選択がされている場合は条件通りに検索、されていない場合は全検索する
+        if($all_result_check_flg == 1){
+            $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array_eng[$j] . " WHERE 年度 REGEXP \"$year_regexp\" AND (馬番 REGEXP \"$umaban_regexp[$j]\" OR 枠番 REGEXP \"$wakuban_regexp[$j]\" OR 性齢 REGEXP \"$seirei_regexp[$j]\" OR 斤量 REGEXP \"$kinryo_regexp[$j]\" OR (タイム BETWEEN \"$time_min_regexp\" AND \"$time_max_regexp\") OR 通過 REGEXP \"$tuka_regexp\" OR (上り BETWEEN \"$agari_min_regexp\" AND \"$agari_max_regexp\") OR (単勝 BETWEEN \"$tansho_min_regexp\" AND \"$tansho_max_regexp\") OR 人気 REGEXP \"$ninki_regexp[$j]\" OR 着順 REGEXP \"$chakujun_regexp[$j]\")");
+        }else{
+            $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array_eng[$j] . " WHERE 年度 REGEXP \"$year_regexp\"");
+        }
         if(count($j_results[$j])!=0){
             $j_result_flg[$j]=1;
         }
@@ -567,6 +647,18 @@ if(!(in_array(1,$j_result_flg))){
             }
         }
     }
+    // 着順
+    function chakujunsave(){
+        <?php $json_array = json_encode($chakujun_array); ?>
+        let js_array = <?php echo $json_array; ?>;
+        for(let j=1;j<=<?php echo J_MAX; ?>;j++){
+            for(let i=1;i<=<?php echo CHAKUJUN_MAX; ?>;i++){
+                if(js_array[j-1][i-1]){
+                    document.getElementById("j"+j+"_chakujun_"+i).checked="true";
+                }
+            }
+        }
+    }
 </script>
 
 <!-- 値保持についてJavaScriptでは最初の更新しか適用されないため、下記PHPを実行する -->
@@ -584,6 +676,7 @@ if(!(in_array(1,$j_result_flg))){
 <?php echo '<script type="text/javascript">','agarisave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','tanshosave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','ninkisave();','</script>'; ?>
+<?php echo '<script type="text/javascript">','chakujunsave();','</script>'; ?>
 
 <?php
 // 検索結果が0件(j_result_flgに1が無い)の場合、処理を終了する

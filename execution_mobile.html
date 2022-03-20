@@ -85,6 +85,7 @@
         const KINRYO_MIN=52;
         const KINRYO_MAX=59;
         const NINKI_MAX=25;
+        const CHAKUJUN_MAX=25;
         for(let i=1;i<=J_MAX;i++){
             var f='<div id="j_tmp">'
                 +'<div style="text-align: center;background-color:#87ceeb;"><b style="font-weight:bold; color:white;" id="j_no_tmp"></b></div>'
@@ -702,6 +703,35 @@
                 +'<input type="checkbox" id="j_ninki_24_tmp" name="j_ninki_24_tmp" value="24">24'
                 +'<input type="checkbox" id="j_ninki_25_tmp" name="j_ninki_25_tmp" value="25">25'
                 +'</p>'
+		        +'<p style="margin-left: 50px;">着順<br>'
+                +'<input type="checkbox" id="j_chakujun_1_tmp" name="j_chakujun_1_tmp" value="1">1'
+                +'<input type="checkbox" id="j_chakujun_2_tmp" name="j_chakujun_2_tmp" value="2">2'
+                +'<input type="checkbox" id="j_chakujun_3_tmp" name="j_chakujun_3_tmp" value="3">3'
+                +'<input type="checkbox" id="j_chakujun_4_tmp" name="j_chakujun_4_tmp" value="4">4'
+                +'<input type="checkbox" id="j_chakujun_5_tmp" name="j_chakujun_5_tmp" value="5">5'
+                +'<input type="checkbox" id="j_chakujun_6_tmp" name="j_chakujun_6_tmp" value="6">6'
+                +'<input type="checkbox" id="j_chakujun_7_tmp" name="j_chakujun_7_tmp" value="7">7'
+                +'<input type="checkbox" id="j_chakujun_8_tmp" name="j_chakujun_8_tmp" value="8">8'
+                +'<input type="checkbox" id="j_chakujun_9_tmp" name="j_chakujun_9_tmp" value="9">9'
+                +'<input type="checkbox" id="j_chakujun_10_tmp" name="j_chakujun_10_tmp" value="10">10'
+                +'<br>'
+                +'<input type="checkbox" id="j_chakujun_11_tmp" name="j_chakujun_11_tmp" value="11">11'
+                +'<input type="checkbox" id="j_chakujun_12_tmp" name="j_chakujun_12_tmp" value="12">12'
+                +'<input type="checkbox" id="j_chakujun_13_tmp" name="j_chakujun_13_tmp" value="13">13'
+                +'<input type="checkbox" id="j_chakujun_14_tmp" name="j_chakujun_14_tmp" value="14">14'
+                +'<input type="checkbox" id="j_chakujun_15_tmp" name="j_chakujun_15_tmp" value="15">15'
+                +'<input type="checkbox" id="j_chakujun_16_tmp" name="j_chakujun_16_tmp" value="16">16'
+                +'<input type="checkbox" id="j_chakujun_17_tmp" name="j_chakujun_17_tmp" value="17">17'
+                +'<input type="checkbox" id="j_chakujun_18_tmp" name="j_chakujun_18_tmp" value="18">18'
+                +'<br>'
+                +'<input type="checkbox" id="j_chakujun_19_tmp" name="j_chakujun_19_tmp" value="19">19'
+                +'<input type="checkbox" id="j_chakujun_20_tmp" name="j_chakujun_20_tmp" value="20">20'
+                +'<input type="checkbox" id="j_chakujun_21_tmp" name="j_chakujun_21_tmp" value="21">21'
+                +'<input type="checkbox" id="j_chakujun_22_tmp" name="j_chakujun_22_tmp" value="22">22'
+                +'<input type="checkbox" id="j_chakujun_23_tmp" name="j_chakujun_23_tmp" value="23">23'
+                +'<input type="checkbox" id="j_chakujun_24_tmp" name="j_chakujun_24_tmp" value="24">24'
+                +'<input type="checkbox" id="j_chakujun_25_tmp" name="j_chakujun_25_tmp" value="25">25'
+                +'</p>'
                 +'<button id="j_add_button_tmp" type="button">条件追加</button>'
                 +'</div>';
             document.write(f);
@@ -831,6 +861,13 @@
                 tmp_array[i]=document.getElementById("j_ninki_"+j+"_tmp");
                 tmp_array[i].id="j"+i+"_ninki_"+j;
                 tmp_array[i].name="j"+i+"_ninki_"+j;
+            }
+
+            // 条件i>着順(1~CHAKUJUN_MAX)
+            for(let j=1;j<=CHAKUJUN_MAX;j++){
+                tmp_array[i]=document.getElementById("j_chakujun_"+j+"_tmp");
+                tmp_array[i].id="j"+i+"_chakujun_"+j;
+                tmp_array[i].name="j"+i+"_chakujun_"+j;
             }
         }
 
