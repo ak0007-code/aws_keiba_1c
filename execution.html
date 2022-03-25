@@ -5,21 +5,63 @@
             <p style="font-weight:bold; color:white;">ターゲットレース</p>
         </div>
         <p style="font-size:medium;">過去の結果を確認したいレースと期間を選択します</p>
-        <p>レース名
-            <select name="race_name" style="width: auto">
-                <option value="有馬記念">有馬記念</option>
-                <option value="日本ダービー">日本ダービー</option>
-                <option value="安田記念">安田記念</option>
+        <p><u>レース名</u>
+            <select name="race_name" id="race_name" style="width: auto">
+                <optgroup label="G1">
+                    <option value="有馬記念">　有馬記念</option>
+                    <option value="チャンピオンズC">　チャンピオンズC</option>
+                    <option value="ジャパンC">　ジャパンC</option>
+                    <option value="ヴィクトリアマイル">　ヴィクトリアマイル</option>
+                    <option value="NHKマイルC">　NHKマイルC</option>
+                    <option value="マイルチャンピオンS">　マイルチャンピオンS</option>
+                    <option value="スプリンターズS">　スプリンターズS</option>
+                    <option value="フェブラリーS">　フェブラリーS</option>
+                    <option value="ホープフルS">　ホープフルS</option>
+                    <option value="優駿牝馬">　優駿牝馬</option>
+                    <option value="大阪杯">　大阪杯</option>
+                    <option value="天皇賞(春)">　天皇賞(春)</option>
+                    <option value="天皇賞(秋)">　天皇賞(秋)</option>
+                    <option value="エリザベス女王杯">　エリザベス女王杯</option>
+                    <option value="安田記念">　安田記念</option>
+                    <option value="宝塚記念">　宝塚記念</option>
+                    <option value="朝日フューチュリティ">　朝日フューチュリティ</option>
+                    <option value="東京優駿">　東京優駿</option>
+                    <option value="桜花賞">　桜花賞</option>
+                    <option value="皐月賞">　皐月賞</option>
+                    <option value="秋華賞">　秋華賞</option>
+                    <option value="菊花賞">　菊花賞</option>
+                    <option value="阪神ジュベナイルF">　阪神ジュベナイルF</option>
+                    <option value="高松宮記念">　高松宮記念</option>
+                </optgroup>
             </select>
-            &nbsp;開始年 ~ 終了年
-            <select name="year_s" style="width: auto;">
+
+            <u style="margin-left: 3%;">開始年 ~ 終了年</u>
+            <select name="year_s" id="year_s" style="width: auto;">
+                <option value="2021">2021</option>
                 <option value="2020">2020</option>
                 <option value="2019">2019</option>
+                <option value="2018">2018</option>
+                <option value="2017">2017</option>
+                <option value="2016">2016</option>
+                <option value="2015">2015</option>
+                <option value="2014">2014</option>
+                <option value="2013">2013</option>
+                <option value="2012">2012</option>
+                <option value="2011">2011</option>
             </select>
                 ~
-            <select name="year_e" style="width: auto;">
+            <select name="year_e" id="year_e" style="width: auto;">
+                <option value="2021">2021</option>
                 <option value="2020">2020</option>
                 <option value="2019">2019</option>
+                <option value="2018">2018</option>
+                <option value="2017">2017</option>
+                <option value="2016">2016</option>
+                <option value="2015">2015</option>
+                <option value="2014">2014</option>
+                <option value="2013">2013</option>
+                <option value="2012">2012</option>
+                <option value="2011">2011</option>
             </select>
         </p>
     </div>
@@ -29,6 +71,7 @@
 
     <script>
         var tmp_array=new Array();
+        const J_MAX=9;
         const UMABAN_MAX=25;
         const WAKUBAN_MAX=15;
         const SEIREI_MIN=2;
@@ -36,14 +79,43 @@
         const KINRYO_MIN=52;
         const KINRYO_MAX=59;
         const NINKI_MAX=25;
-        for(let i=1;i<=10;i++){
+        const CHAKUJUN_MAX=25;
+        for(let i=1;i<=J_MAX;i++){
             var f='<div id="j_tmp">'
                 +'<div style="text-align: center;background-color:#87ceeb;"><b style="font-weight:bold; color:white;" id="j_no_tmp"></b></div>'
-		        +'<br><p style="font-size:medium;text-align: left;margin-left: 20px;">検索条件を指定してください(有馬記念、馬番1と2など)</p>'
+                +'<button id="j_delete_button_tmp" type="button">条件削除</button>'
+                +'<button id="j_clear_button_tmp" type="button">条件クリア</button>'
+                +'<input type="checkbox" id="j_delete_checkbox_tmp" name="j_delete_checkbox_tmp" value="1" style="display:none">' //削除ボタンが押されているかを確認するためのチェックボックス
+                +'<br><p style="font-size:medium;text-align: left;margin-left: 20px;">検索条件を指定してください(有馬記念、馬番1と2など)</p>'
                 +'<p style="margin-left: 50px;">レース名<br>'
                 +'<select id="j_race_name_tmp" name="j_race_name_tmp" style="width: auto;">'
-                +'<option value="">選択無し</option>'
-                +'<option value="有馬記念">有馬記念</option>'
+                +'<option value="">-</option>'
+                +'<optgroup label="G1">'
+                +'<option value="有馬記念">　有馬記念</option>'
+                +'<option value="チャンピオンズC">　チャンピオンズC</option>'
+                +'<option value="ジャパンC">　ジャパンC</option>'
+                +'<option value="ヴィクトリアマイル">　ヴィクトリアマイル</option>'
+                +'<option value="NHKマイルC">　NHKマイルC</option>'
+                +'<option value="マイルチャンピオンS">　マイルチャンピオンS</option>'
+                +'<option value="スプリンターズS">　スプリンターズS</option>'
+                +'<option value="フェブラリーS">　フェブラリーS</option>'
+                +'<option value="ホープフルS">　ホープフルS</option>'
+                +'<option value="優駿牝馬">　優駿牝馬</option>'
+                +'<option value="大阪杯">　大阪杯</option>'
+                +'<option value="天皇賞(春)">　天皇賞(春)</option>'
+                +'<option value="天皇賞(秋)">　天皇賞(秋)</option>'
+                +'<option value="エリザベス女王杯">　エリザベス女王杯</option>'
+                +'<option value="安田記念">　安田記念</option>'
+                +'<option value="宝塚記念">　宝塚記念</option>'
+                +'<option value="朝日フューチュリティ">　朝日フューチュリティ</option>'
+                +'<option value="東京優駿">　東京優駿</option>'
+                +'<option value="桜花賞">　桜花賞</option>'
+                +'<option value="皐月賞">　皐月賞</option>'
+                +'<option value="秋華賞">　秋華賞</option>'
+                +'<option value="菊花賞">　菊花賞</option>'
+                +'<option value="阪神ジュベナイルF">　阪神ジュベナイルF</option>'
+                +'<option value="高松宮記念">　高松宮記念</option>'
+                +'</optgroup>'
                 +'</select>'
                 +'</p>'
 		        +'<p style="margin-left: 50px;">馬番<br>'
@@ -128,6 +200,106 @@
 		        +'<p style="margin-left: 50px;">タイム<br>'
                 +'<select id="j_time_min_tmp" name="j_time_min_tmp" style="width: auto;">'
                 +'<option value="">-</option>'
+                +'<option value="0:50">0:50</option>'
+                +'<option value="0:51">0:51</option>'
+                +'<option value="0:52">0:52</option>'
+                +'<option value="0:53">0:53</option>'
+                +'<option value="0:54">0:54</option>'
+                +'<option value="0:55">0:55</option>'
+                +'<option value="0:56">0:56</option>'
+                +'<option value="0:57">0:57</option>'
+                +'<option value="0:58">0:58</option>'
+                +'<option value="0:59">0:59</option>'
+                +'<option value="1:00">1:00</option>'
+                +'<option value="1:01">1:01</option>'
+                +'<option value="1:02">1:02</option>'
+                +'<option value="1:03">1:03</option>'
+                +'<option value="1:04">1:04</option>'
+                +'<option value="1:05">1:05</option>'
+                +'<option value="1:06">1:06</option>'
+                +'<option value="1:07">1:07</option>'
+                +'<option value="1:08">1:08</option>'
+                +'<option value="1:09">1:09</option>'
+                +'<option value="1:10">1:10</option>'
+                +'<option value="1:11">1:11</option>'
+                +'<option value="1:12">1:12</option>'
+                +'<option value="1:13">1:13</option>'
+                +'<option value="1:14">1:14</option>'
+                +'<option value="1:15">1:15</option>'
+                +'<option value="1:16">1:16</option>'
+                +'<option value="1:17">1:17</option>'
+                +'<option value="1:18">1:18</option>'
+                +'<option value="1:19">1:19</option>'
+                +'<option value="1:20">1:20</option>'
+                +'<option value="1:21">1:21</option>'
+                +'<option value="1:22">1:22</option>'
+                +'<option value="1:23">1:23</option>'
+                +'<option value="1:24">1:24</option>'
+                +'<option value="1:25">1:25</option>'
+                +'<option value="1:26">1:26</option>'
+                +'<option value="1:27">1:27</option>'
+                +'<option value="1:28">1:28</option>'
+                +'<option value="1:29">1:29</option>'
+                +'<option value="1:30">1:30</option>'
+                +'<option value="1:31">1:31</option>'
+                +'<option value="1:32">1:32</option>'
+                +'<option value="1:33">1:33</option>'
+                +'<option value="1:34">1:34</option>'
+                +'<option value="1:35">1:35</option>'
+                +'<option value="1:36">1:36</option>'
+                +'<option value="1:37">1:37</option>'
+                +'<option value="1:38">1:38</option>'
+                +'<option value="1:39">1:39</option>'
+                +'<option value="1:40">1:40</option>'
+                +'<option value="1:41">1:41</option>'
+                +'<option value="1:42">1:42</option>'
+                +'<option value="1:43">1:43</option>'
+                +'<option value="1:44">1:44</option>'
+                +'<option value="1:45">1:45</option>'
+                +'<option value="1:46">1:46</option>'
+                +'<option value="1:47">1:47</option>'
+                +'<option value="1:48">1:48</option>'
+                +'<option value="1:49">1:49</option>'
+                +'<option value="1:50">1:50</option>'
+                +'<option value="1:51">1:51</option>'
+                +'<option value="1:52">1:52</option>'
+                +'<option value="1:53">1:53</option>'
+                +'<option value="1:54">1:54</option>'
+                +'<option value="1:55">1:55</option>'
+                +'<option value="1:56">1:56</option>'
+                +'<option value="1:57">1:57</option>'
+                +'<option value="1:58">1:58</option>'
+                +'<option value="1:59">1:59</option>'
+                +'<option value="2:00">2:00</option>'
+                +'<option value="2:01">2:01</option>'
+                +'<option value="2:02">2:02</option>'
+                +'<option value="2:03">2:03</option>'
+                +'<option value="2:04">2:04</option>'
+                +'<option value="2:05">2:05</option>'
+                +'<option value="2:06">2:06</option>'
+                +'<option value="2:07">2:07</option>'
+                +'<option value="2:08">2:08</option>'
+                +'<option value="2:09">2:09</option>'
+                +'<option value="2:10">2:10</option>'
+                +'<option value="2:11">2:11</option>'
+                +'<option value="2:12">2:12</option>'
+                +'<option value="2:13">2:13</option>'
+                +'<option value="2:14">2:14</option>'
+                +'<option value="2:15">2:15</option>'
+                +'<option value="2:16">2:16</option>'
+                +'<option value="2:17">2:17</option>'
+                +'<option value="2:18">2:18</option>'
+                +'<option value="2:19">2:19</option>'
+                +'<option value="2:20">2:20</option>'
+                +'<option value="2:21">2:21</option>'
+                +'<option value="2:22">2:22</option>'
+                +'<option value="2:23">2:23</option>'
+                +'<option value="2:24">2:24</option>'
+                +'<option value="2:25">2:25</option>'
+                +'<option value="2:26">2:26</option>'
+                +'<option value="2:27">2:27</option>'
+                +'<option value="2:28">2:28</option>'
+                +'<option value="2:29">2:29</option>'
                 +'<option value="2:30">2:30</option>'
                 +'<option value="2:31">2:31</option>'
                 +'<option value="2:32">2:32</option>'
@@ -135,9 +307,192 @@
                 +'<option value="2:34">2:34</option>'
                 +'<option value="2:35">2:35</option>'
                 +'<option value="2:36">2:36</option>'
+                +'<option value="2:37">2:37</option>'
+                +'<option value="2:38">2:38</option>'
+                +'<option value="2:39">2:39</option>'
+                +'<option value="2:40">2:40</option>'
+                +'<option value="2:41">2:41</option>'
+                +'<option value="2:42">2:42</option>'
+                +'<option value="2:43">2:43</option>'
+                +'<option value="2:44">2:44</option>'
+                +'<option value="2:45">2:45</option>'
+                +'<option value="2:46">2:46</option>'
+                +'<option value="2:47">2:47</option>'
+                +'<option value="2:48">2:48</option>'
+                +'<option value="2:49">2:49</option>'
+                +'<option value="2:50">2:50</option>'
+                +'<option value="2:51">2:51</option>'
+                +'<option value="2:52">2:52</option>'
+                +'<option value="2:53">2:53</option>'
+                +'<option value="2:54">2:54</option>'
+                +'<option value="2:55">2:55</option>'
+                +'<option value="2:56">2:56</option>'
+                +'<option value="2:57">2:57</option>'
+                +'<option value="2:58">2:58</option>'
+                +'<option value="2:59">2:59</option>'
+                +'<option value="3:00">3:00</option>'
+                +'<option value="3:01">3:01</option>'
+                +'<option value="3:02">3:02</option>'
+                +'<option value="3:03">3:03</option>'
+                +'<option value="3:04">3:04</option>'
+                +'<option value="3:05">3:05</option>'
+                +'<option value="3:06">3:06</option>'
+                +'<option value="3:07">3:07</option>'
+                +'<option value="3:08">3:08</option>'
+                +'<option value="3:09">3:09</option>'
+                +'<option value="3:10">3:10</option>'
+                +'<option value="3:11">3:11</option>'
+                +'<option value="3:12">3:12</option>'
+                +'<option value="3:13">3:13</option>'
+                +'<option value="3:14">3:14</option>'
+                +'<option value="3:15">3:15</option>'
+                +'<option value="3:16">3:16</option>'
+                +'<option value="3:17">3:17</option>'
+                +'<option value="3:18">3:18</option>'
+                +'<option value="3:19">3:19</option>'
+                +'<option value="3:20">3:20</option>'
+                +'<option value="3:21">3:21</option>'
+                +'<option value="3:22">3:22</option>'
+                +'<option value="3:23">3:23</option>'
+                +'<option value="3:24">3:24</option>'
+                +'<option value="3:25">3:25</option>'
+                +'<option value="3:26">3:26</option>'
+                +'<option value="3:27">3:27</option>'
+                +'<option value="3:28">3:28</option>'
+                +'<option value="3:29">3:29</option>'
+                +'<option value="3:30">3:30</option>'
+                +'<option value="3:31">3:31</option>'
+                +'<option value="3:32">3:32</option>'
+                +'<option value="3:33">3:33</option>'
+                +'<option value="3:34">3:34</option>'
+                +'<option value="3:35">3:35</option>'
+                +'<option value="3:36">3:36</option>'
+                +'<option value="3:37">3:37</option>'
+                +'<option value="3:38">3:38</option>'
+                +'<option value="3:39">3:39</option>'
+                +'<option value="3:40">3:40</option>'
+                +'<option value="3:41">3:41</option>'
+                +'<option value="3:42">3:42</option>'
+                +'<option value="3:43">3:43</option>'
+                +'<option value="3:44">3:44</option>'
+                +'<option value="3:45">3:45</option>'
+                +'<option value="3:46">3:46</option>'
+                +'<option value="3:47">3:47</option>'
+                +'<option value="3:48">3:48</option>'
+                +'<option value="3:49">3:49</option>'
+                +'<option value="3:50">3:50</option>'
+                +'<option value="3:51">3:51</option>'
+                +'<option value="3:52">3:52</option>'
+                +'<option value="3:53">3:53</option>'
+                +'<option value="3:54">3:54</option>'
+                +'<option value="3:55">3:55</option>'
+                +'<option value="3:56">3:56</option>'
+                +'<option value="3:57">3:57</option>'
+                +'<option value="3:58">3:58</option>'
+                +'<option value="3:59">3:59</option>'
                 +'</select> ~ '
                 +'<select id="j_time_max_tmp" name="j_time_max_tmp" style="width: auto;">'
                 +'<option value="">-</option>'
+                +'<option value="0:50">0:50</option>'
+                +'<option value="0:51">0:51</option>'
+                +'<option value="0:52">0:52</option>'
+                +'<option value="0:53">0:53</option>'
+                +'<option value="0:54">0:54</option>'
+                +'<option value="0:55">0:55</option>'
+                +'<option value="0:56">0:56</option>'
+                +'<option value="0:57">0:57</option>'
+                +'<option value="0:58">0:58</option>'
+                +'<option value="0:59">0:59</option>'
+                +'<option value="1:00">1:00</option>'
+                +'<option value="1:01">1:01</option>'
+                +'<option value="1:02">1:02</option>'
+                +'<option value="1:03">1:03</option>'
+                +'<option value="1:04">1:04</option>'
+                +'<option value="1:05">1:05</option>'
+                +'<option value="1:06">1:06</option>'
+                +'<option value="1:07">1:07</option>'
+                +'<option value="1:08">1:08</option>'
+                +'<option value="1:09">1:09</option>'
+                +'<option value="1:10">1:10</option>'
+                +'<option value="1:11">1:11</option>'
+                +'<option value="1:12">1:12</option>'
+                +'<option value="1:13">1:13</option>'
+                +'<option value="1:14">1:14</option>'
+                +'<option value="1:15">1:15</option>'
+                +'<option value="1:16">1:16</option>'
+                +'<option value="1:17">1:17</option>'
+                +'<option value="1:18">1:18</option>'
+                +'<option value="1:19">1:19</option>'
+                +'<option value="1:20">1:20</option>'
+                +'<option value="1:21">1:21</option>'
+                +'<option value="1:22">1:22</option>'
+                +'<option value="1:23">1:23</option>'
+                +'<option value="1:24">1:24</option>'
+                +'<option value="1:25">1:25</option>'
+                +'<option value="1:26">1:26</option>'
+                +'<option value="1:27">1:27</option>'
+                +'<option value="1:28">1:28</option>'
+                +'<option value="1:29">1:29</option>'
+                +'<option value="1:30">1:30</option>'
+                +'<option value="1:31">1:31</option>'
+                +'<option value="1:32">1:32</option>'
+                +'<option value="1:33">1:33</option>'
+                +'<option value="1:34">1:34</option>'
+                +'<option value="1:35">1:35</option>'
+                +'<option value="1:36">1:36</option>'
+                +'<option value="1:37">1:37</option>'
+                +'<option value="1:38">1:38</option>'
+                +'<option value="1:39">1:39</option>'
+                +'<option value="1:40">1:40</option>'
+                +'<option value="1:41">1:41</option>'
+                +'<option value="1:42">1:42</option>'
+                +'<option value="1:43">1:43</option>'
+                +'<option value="1:44">1:44</option>'
+                +'<option value="1:45">1:45</option>'
+                +'<option value="1:46">1:46</option>'
+                +'<option value="1:47">1:47</option>'
+                +'<option value="1:48">1:48</option>'
+                +'<option value="1:49">1:49</option>'
+                +'<option value="1:50">1:50</option>'
+                +'<option value="1:51">1:51</option>'
+                +'<option value="1:52">1:52</option>'
+                +'<option value="1:53">1:53</option>'
+                +'<option value="1:54">1:54</option>'
+                +'<option value="1:55">1:55</option>'
+                +'<option value="1:56">1:56</option>'
+                +'<option value="1:57">1:57</option>'
+                +'<option value="1:58">1:58</option>'
+                +'<option value="1:59">1:59</option>'
+                +'<option value="2:00">2:00</option>'
+                +'<option value="2:01">2:01</option>'
+                +'<option value="2:02">2:02</option>'
+                +'<option value="2:03">2:03</option>'
+                +'<option value="2:04">2:04</option>'
+                +'<option value="2:05">2:05</option>'
+                +'<option value="2:06">2:06</option>'
+                +'<option value="2:07">2:07</option>'
+                +'<option value="2:08">2:08</option>'
+                +'<option value="2:09">2:09</option>'
+                +'<option value="2:10">2:10</option>'
+                +'<option value="2:11">2:11</option>'
+                +'<option value="2:12">2:12</option>'
+                +'<option value="2:13">2:13</option>'
+                +'<option value="2:14">2:14</option>'
+                +'<option value="2:15">2:15</option>'
+                +'<option value="2:16">2:16</option>'
+                +'<option value="2:17">2:17</option>'
+                +'<option value="2:18">2:18</option>'
+                +'<option value="2:19">2:19</option>'
+                +'<option value="2:20">2:20</option>'
+                +'<option value="2:21">2:21</option>'
+                +'<option value="2:22">2:22</option>'
+                +'<option value="2:23">2:23</option>'
+                +'<option value="2:24">2:24</option>'
+                +'<option value="2:25">2:25</option>'
+                +'<option value="2:26">2:26</option>'
+                +'<option value="2:27">2:27</option>'
+                +'<option value="2:28">2:28</option>'
+                +'<option value="2:29">2:29</option>'
                 +'<option value="2:30">2:30</option>'
                 +'<option value="2:31">2:31</option>'
                 +'<option value="2:32">2:32</option>'
@@ -145,6 +500,89 @@
                 +'<option value="2:34">2:34</option>'
                 +'<option value="2:35">2:35</option>'
                 +'<option value="2:36">2:36</option>'
+                +'<option value="2:37">2:37</option>'
+                +'<option value="2:38">2:38</option>'
+                +'<option value="2:39">2:39</option>'
+                +'<option value="2:40">2:40</option>'
+                +'<option value="2:41">2:41</option>'
+                +'<option value="2:42">2:42</option>'
+                +'<option value="2:43">2:43</option>'
+                +'<option value="2:44">2:44</option>'
+                +'<option value="2:45">2:45</option>'
+                +'<option value="2:46">2:46</option>'
+                +'<option value="2:47">2:47</option>'
+                +'<option value="2:48">2:48</option>'
+                +'<option value="2:49">2:49</option>'
+                +'<option value="2:50">2:50</option>'
+                +'<option value="2:51">2:51</option>'
+                +'<option value="2:52">2:52</option>'
+                +'<option value="2:53">2:53</option>'
+                +'<option value="2:54">2:54</option>'
+                +'<option value="2:55">2:55</option>'
+                +'<option value="2:56">2:56</option>'
+                +'<option value="2:57">2:57</option>'
+                +'<option value="2:58">2:58</option>'
+                +'<option value="2:59">2:59</option>'
+                +'<option value="3:00">3:00</option>'
+                +'<option value="3:01">3:01</option>'
+                +'<option value="3:02">3:02</option>'
+                +'<option value="3:03">3:03</option>'
+                +'<option value="3:04">3:04</option>'
+                +'<option value="3:05">3:05</option>'
+                +'<option value="3:06">3:06</option>'
+                +'<option value="3:07">3:07</option>'
+                +'<option value="3:08">3:08</option>'
+                +'<option value="3:09">3:09</option>'
+                +'<option value="3:10">3:10</option>'
+                +'<option value="3:11">3:11</option>'
+                +'<option value="3:12">3:12</option>'
+                +'<option value="3:13">3:13</option>'
+                +'<option value="3:14">3:14</option>'
+                +'<option value="3:15">3:15</option>'
+                +'<option value="3:16">3:16</option>'
+                +'<option value="3:17">3:17</option>'
+                +'<option value="3:18">3:18</option>'
+                +'<option value="3:19">3:19</option>'
+                +'<option value="3:20">3:20</option>'
+                +'<option value="3:21">3:21</option>'
+                +'<option value="3:22">3:22</option>'
+                +'<option value="3:23">3:23</option>'
+                +'<option value="3:24">3:24</option>'
+                +'<option value="3:25">3:25</option>'
+                +'<option value="3:26">3:26</option>'
+                +'<option value="3:27">3:27</option>'
+                +'<option value="3:28">3:28</option>'
+                +'<option value="3:29">3:29</option>'
+                +'<option value="3:30">3:30</option>'
+                +'<option value="3:31">3:31</option>'
+                +'<option value="3:32">3:32</option>'
+                +'<option value="3:33">3:33</option>'
+                +'<option value="3:34">3:34</option>'
+                +'<option value="3:35">3:35</option>'
+                +'<option value="3:36">3:36</option>'
+                +'<option value="3:37">3:37</option>'
+                +'<option value="3:38">3:38</option>'
+                +'<option value="3:39">3:39</option>'
+                +'<option value="3:40">3:40</option>'
+                +'<option value="3:41">3:41</option>'
+                +'<option value="3:42">3:42</option>'
+                +'<option value="3:43">3:43</option>'
+                +'<option value="3:44">3:44</option>'
+                +'<option value="3:45">3:45</option>'
+                +'<option value="3:46">3:46</option>'
+                +'<option value="3:47">3:47</option>'
+                +'<option value="3:48">3:48</option>'
+                +'<option value="3:49">3:49</option>'
+                +'<option value="3:50">3:50</option>'
+                +'<option value="3:51">3:51</option>'
+                +'<option value="3:52">3:52</option>'
+                +'<option value="3:53">3:53</option>'
+                +'<option value="3:54">3:54</option>'
+                +'<option value="3:55">3:55</option>'
+                +'<option value="3:56">3:56</option>'
+                +'<option value="3:57">3:57</option>'
+                +'<option value="3:58">3:58</option>'
+                +'<option value="3:59">3:59</option>'
                 +'</select>'
                 +'</p>'
 		        +'<p style="margin-left: 50px;">通過<br>'
@@ -152,41 +590,139 @@
                 +'<option value="">-</option>'
                 +'<option value="1">1</option>'
                 +'<option value="2">2</option>'
+                +'<option value="3">3</option>'
+                +'<option value="4">4</option>'
+                +'<option value="5">5</option>'
+                +'<option value="6">6</option>'
+                +'<option value="7">7</option>'
+                +'<option value="8">8</option>'
+                +'<option value="9">9</option>'
                 +'<option value="10">10</option>'
+                +'<option value="11">11</option>'
+                +'<option value="12">12</option>'
+                +'<option value="13">13</option>'
+                +'<option value="14">14</option>'
+                +'<option value="15">15</option>'
+                +'<option value="16">16</option>'
+                +'<option value="17">17</option>'
+                +'<option value="18">18</option>'
+                +'<option value="19">19</option>'
+                +'<option value="20">20</option>'
+                +'<option value="21">21</option>'
+                +'<option value="22">22</option>'
+                +'<option value="23">23</option>'
+                +'<option value="24">24</option>'
+                +'<option value="25">25</option>'
                 +'</select> - '
                 +'<select id="j_tuka_2_tmp" name="j_tuka_2_tmp" style="width: auto;">'
                 +'<option value="">-</option>'
                 +'<option value="1">1</option>'
                 +'<option value="2">2</option>'
+                +'<option value="3">3</option>'
+                +'<option value="4">4</option>'
+                +'<option value="5">5</option>'
+                +'<option value="6">6</option>'
+                +'<option value="7">7</option>'
+                +'<option value="8">8</option>'
+                +'<option value="9">9</option>'
                 +'<option value="10">10</option>'
+                +'<option value="11">11</option>'
+                +'<option value="12">12</option>'
+                +'<option value="13">13</option>'
+                +'<option value="14">14</option>'
+                +'<option value="15">15</option>'
+                +'<option value="16">16</option>'
+                +'<option value="17">17</option>'
+                +'<option value="18">18</option>'
+                +'<option value="19">19</option>'
+                +'<option value="20">20</option>'
+                +'<option value="21">21</option>'
+                +'<option value="22">22</option>'
+                +'<option value="23">23</option>'
+                +'<option value="24">24</option>'
+                +'<option value="25">25</option>'
                 +'</select> - '
                 +'<select id="j_tuka_3_tmp" name="j_tuka_3_tmp" style="width: auto;">'
                 +'<option value="">-</option>'
                 +'<option value="1">1</option>'
                 +'<option value="2">2</option>'
+                +'<option value="3">3</option>'
+                +'<option value="4">4</option>'
+                +'<option value="5">5</option>'
+                +'<option value="6">6</option>'
+                +'<option value="7">7</option>'
+                +'<option value="8">8</option>'
+                +'<option value="9">9</option>'
                 +'<option value="10">10</option>'
+                +'<option value="11">11</option>'
+                +'<option value="12">12</option>'
+                +'<option value="13">13</option>'
+                +'<option value="14">14</option>'
+                +'<option value="15">15</option>'
+                +'<option value="16">16</option>'
+                +'<option value="17">17</option>'
+                +'<option value="18">18</option>'
+                +'<option value="19">19</option>'
+                +'<option value="20">20</option>'
+                +'<option value="21">21</option>'
+                +'<option value="22">22</option>'
+                +'<option value="23">23</option>'
+                +'<option value="24">24</option>'
+                +'<option value="25">25</option>'
                 +'</select> - '
                 +'<select id="j_tuka_4_tmp" name="j_tuka_4_tmp" style="width: auto;">'
                 +'<option value="">-</option>'
                 +'<option value="1">1</option>'
                 +'<option value="2">2</option>'
+                +'<option value="3">3</option>'
+                +'<option value="4">4</option>'
+                +'<option value="5">5</option>'
+                +'<option value="6">6</option>'
+                +'<option value="7">7</option>'
+                +'<option value="8">8</option>'
+                +'<option value="9">9</option>'
                 +'<option value="10">10</option>'
+                +'<option value="11">11</option>'
+                +'<option value="12">12</option>'
+                +'<option value="13">13</option>'
+                +'<option value="14">14</option>'
+                +'<option value="15">15</option>'
+                +'<option value="16">16</option>'
+                +'<option value="17">17</option>'
+                +'<option value="18">18</option>'
+                +'<option value="19">19</option>'
+                +'<option value="20">20</option>'
+                +'<option value="21">21</option>'
+                +'<option value="22">22</option>'
+                +'<option value="23">23</option>'
+                +'<option value="24">24</option>'
+                +'<option value="25">25</option>'
                 +'</select>'
                 +'</p>'
 		        +'<p style="margin-left: 50px;">上り<br>'
                 +'<select id="j_agari_min_tmp" name="j_agari_min_tmp" style="width: auto;">'
                 +'<option value="">-</option>'
+                +'<option value="32">32</option>'
+                +'<option value="33">33</option>'
+                +'<option value="34">34</option>'
                 +'<option value="35">35</option>'
                 +'<option value="36">36</option>'
                 +'<option value="37">37</option>'
                 +'<option value="38">38</option>'
+                +'<option value="39">39</option>'
+                +'<option value="40">40</option>'
                 +'</select> ~ '
                 +'<select id="j_agari_max_tmp" name="j_agari_max_tmp" style="width: auto;">'
                 +'<option value="">-</option>'
+                +'<option value="32">32</option>'
+                +'<option value="33">33</option>'
+                +'<option value="34">34</option>'
                 +'<option value="35">35</option>'
                 +'<option value="36">36</option>'
                 +'<option value="37">37</option>'
                 +'<option value="38">38</option>'
+                +'<option value="39">39</option>'
+                +'<option value="40">40</option>'
                 +'</select>'
                 +'</p>'
 		        +'<p style="margin-left: 50px;">単勝<br>'
@@ -195,14 +731,56 @@
                 +'<option value="1">1</option>'
                 +'<option value="2">2</option>'
                 +'<option value="3">3</option>'
+                +'<option value="4">4</option>'
+                +'<option value="5">5</option>'
+                +'<option value="6">6</option>'
+                +'<option value="7">7</option>'
+                +'<option value="8">8</option>'
+                +'<option value="9">9</option>'
                 +'<option value="10">10</option>'
+                +'<option value="11">11</option>'
+                +'<option value="12">12</option>'
+                +'<option value="13">13</option>'
+                +'<option value="14">14</option>'
+                +'<option value="15">15</option>'
+                +'<option value="16">16</option>'
+                +'<option value="17">17</option>'
+                +'<option value="18">18</option>'
+                +'<option value="19">19</option>'
+                +'<option value="20">20</option>'
+                +'<option value="21">21</option>'
+                +'<option value="22">22</option>'
+                +'<option value="23">23</option>'
+                +'<option value="24">24</option>'
+                +'<option value="25">25</option>'
                 +'</select> ~ '
                 +'<select id="j_tansho_max_tmp" name="j_tansho_max_tmp" style="width: auto;">'
                 +'<option value="">-</option>'
                 +'<option value="1">1</option>'
                 +'<option value="2">2</option>'
                 +'<option value="3">3</option>'
+                +'<option value="4">4</option>'
+                +'<option value="5">5</option>'
+                +'<option value="6">6</option>'
+                +'<option value="7">7</option>'
+                +'<option value="8">8</option>'
+                +'<option value="9">9</option>'
                 +'<option value="10">10</option>'
+                +'<option value="11">11</option>'
+                +'<option value="12">12</option>'
+                +'<option value="13">13</option>'
+                +'<option value="14">14</option>'
+                +'<option value="15">15</option>'
+                +'<option value="16">16</option>'
+                +'<option value="17">17</option>'
+                +'<option value="18">18</option>'
+                +'<option value="19">19</option>'
+                +'<option value="20">20</option>'
+                +'<option value="21">21</option>'
+                +'<option value="22">22</option>'
+                +'<option value="23">23</option>'
+                +'<option value="24">24</option>'
+                +'<option value="25">25</option>'
                 +'</select>'
                 +'</p>'
 		        +'<p style="margin-left: 50px;">人気<br>'
@@ -232,8 +810,55 @@
                 +'<input type="checkbox" id="j_ninki_24_tmp" name="j_ninki_24_tmp" value="24">24'
                 +'<input type="checkbox" id="j_ninki_25_tmp" name="j_ninki_25_tmp" value="25">25'
                 +'</p>'
+		        +'<p style="margin-left: 50px;">着順<br>'
+                +'<input type="checkbox" id="j_chakujun_1_tmp" name="j_chakujun_1_tmp" value="1">1'
+                +'<input type="checkbox" id="j_chakujun_2_tmp" name="j_chakujun_2_tmp" value="2">2'
+                +'<input type="checkbox" id="j_chakujun_3_tmp" name="j_chakujun_3_tmp" value="3">3'
+                +'<input type="checkbox" id="j_chakujun_4_tmp" name="j_chakujun_4_tmp" value="4">4'
+                +'<input type="checkbox" id="j_chakujun_5_tmp" name="j_chakujun_5_tmp" value="5">5'
+                +'<input type="checkbox" id="j_chakujun_6_tmp" name="j_chakujun_6_tmp" value="6">6'
+                +'<input type="checkbox" id="j_chakujun_7_tmp" name="j_chakujun_7_tmp" value="7">7'
+                +'<input type="checkbox" id="j_chakujun_8_tmp" name="j_chakujun_8_tmp" value="8">8'
+                +'<input type="checkbox" id="j_chakujun_9_tmp" name="j_chakujun_9_tmp" value="9">9'
+                +'<input type="checkbox" id="j_chakujun_10_tmp" name="j_chakujun_10_tmp" value="10">10'
+                +'<input type="checkbox" id="j_chakujun_11_tmp" name="j_chakujun_11_tmp" value="11">11'
+                +'<input type="checkbox" id="j_chakujun_12_tmp" name="j_chakujun_12_tmp" value="12">12'
+                +'<input type="checkbox" id="j_chakujun_13_tmp" name="j_chakujun_13_tmp" value="13">13'
+                +'<input type="checkbox" id="j_chakujun_14_tmp" name="j_chakujun_14_tmp" value="14">14'
+                +'<input type="checkbox" id="j_chakujun_15_tmp" name="j_chakujun_15_tmp" value="15">15'
+                +'<input type="checkbox" id="j_chakujun_16_tmp" name="j_chakujun_16_tmp" value="16">16'
+                +'<input type="checkbox" id="j_chakujun_17_tmp" name="j_chakujun_17_tmp" value="17">17'
+                +'<input type="checkbox" id="j_chakujun_18_tmp" name="j_chakujun_18_tmp" value="18">18'
+                +'<input type="checkbox" id="j_chakujun_19_tmp" name="j_chakujun_19_tmp" value="19">19'
+                +'<input type="checkbox" id="j_chakujun_20_tmp" name="j_chakujun_20_tmp" value="20">20'
+                +'<input type="checkbox" id="j_chakujun_21_tmp" name="j_chakujun_21_tmp" value="21">21'
+                +'<input type="checkbox" id="j_chakujun_22_tmp" name="j_chakujun_22_tmp" value="22">22'
+                +'<input type="checkbox" id="j_chakujun_23_tmp" name="j_chakujun_23_tmp" value="23">23'
+                +'<input type="checkbox" id="j_chakujun_24_tmp" name="j_chakujun_24_tmp" value="24">24'
+                +'<input type="checkbox" id="j_chakujun_25_tmp" name="j_chakujun_25_tmp" value="25">25'
+                +'</p>'
+                +'<button id="j_add_button_tmp" type="button">条件追加</button>'
                 +'</div>';
             document.write(f);
+
+            // 条件クリアボタンi
+            tmp_array[i]=document.getElementById("j_clear_button_tmp");
+            tmp_array[i].id="j"+i+"_clear_button";
+            tmp_array[i].onclick=j_clear_buttton_click;
+
+            // 条件削除ボタンi
+            tmp_array[i]=document.getElementById("j_delete_button_tmp");
+            tmp_array[i].id="j"+i+"_delete_button";
+            tmp_array[i].onclick=j_delete_buttton_click;
+            // 条件削除チェックボックスi
+            tmp_array[i]=document.getElementById("j_delete_checkbox_tmp");
+            tmp_array[i].id="j"+i+"_delete_checkbox";
+            tmp_array[i].name="j"+i+"_delete_checkbox";
+
+            // 条件追加ボタンi
+            tmp_array[i]=document.getElementById("j_add_button_tmp");
+            tmp_array[i].id="j"+i+"_add_button";
+            tmp_array[i].onclick=j_add_buttton_click;
 
             // 条件i(div)
             tmp_array[i]=document.getElementById("j_tmp");
@@ -248,8 +873,6 @@
             tmp_array[i]=document.getElementById("j_race_name_tmp");
             tmp_array[i].id="j"+i+"_race_name";
             tmp_array[i].name="j"+i+"_race_name";
-            tmp_array[i].onchange=j_race_name_func;
-            // document.write(tmp_array[i].onchange);
 
             // 条件i>馬番(1~UMABAN_MAX)
             for(let j=1;j<=UMABAN_MAX;j++){
@@ -277,14 +900,10 @@
 
             // 条件i>斤量(KINRYO_MIN~KINRYO_MAX)
             for(let j=KINRYO_MIN;j<=KINRYO_MAX;j=j+0.5){
-                // tmp_array[i]=document.getElementById("j_kinryo_"+j.toFixed(1)+"_tmp");
-                // tmp_array[i].id="j"+i+"_kinryo_"+j.toFixed(1);
-                // tmp_array[i].name="j"+i+"_kinryo_"+j.toFixed(1);
                 k=j*10;
                 tmp_array[i]=document.getElementById("j_kinryo_"+k+"_tmp");
                 tmp_array[i].id="j"+i+"_kinryo_"+k;
                 tmp_array[i].name="j"+i+"_kinryo_"+k;
-                // document.writeln(tmp_array[i].id);
             }
 
             // タイム最小値
@@ -337,89 +956,73 @@
                 tmp_array[i].id="j"+i+"_ninki_"+j;
                 tmp_array[i].name="j"+i+"_ninki_"+j;
             }
+
+            // 条件i>着順(1~CHAKUJUN_MAX)
+            for(let j=1;j<=CHAKUJUN_MAX;j++){
+                tmp_array[i]=document.getElementById("j_chakujun_"+j+"_tmp");
+                tmp_array[i].id="j"+i+"_chakujun_"+j;
+                tmp_array[i].name="j"+i+"_chakujun_"+j;
+            }
         }
 
-        // 表示・非表示の調整
-        for(let i=2;i<=10;i++){
-            var tmp=document.getElementById("j_"+i);
-            if(i >= 3){
-                tmp.style.display="none";
-            }            
-            tmp.style.opacity=0.3;
-        }        
-        function j_race_name_func(){
-                let no=this.id.substr(1,1);
-                no=Number(no);
-                if(no == 1 || no == 10){
-                    return;
-                }
-                var info=document.getElementById("j"+no+"_race_name");
-                if(info.value == "選択無し"){
-                    var tmp=document.getElementById("j_"+no);
-                    tmp.style.opacity=0.3;
-                    no=no+1;
-                    for(let i=no;i<=10;i++){
-                        var tmp=document.getElementById("j_"+i);
-                        tmp.style.display="none";
-                    }
-                }else{
-                    var tmp=document.getElementById("j_"+no);
-                    tmp.style.opacity=1;
-                    no=no+1;
-                    tmp=document.getElementById("j_"+no);
-                    tmp.style.display="block";
-                }
+        // 条件2以降はデフォルトでは非表示にする
+        for(let i=2;i<=J_MAX;i++){
+            document.getElementById("j_"+i).style.display="none";
+        } 
+
+        // 条件削除ボタンが押されたときは該当の条件を非表示にする
+        function j_delete_buttton_click(){
+            let j_no=Number(this.id.substr(1,1));
+            if(j_no == 1){ alert('検索条件1は削除できません。'); return; }
+            document.getElementById("j_"+j_no).style.display="none";
+            document.getElementById("j"+j_no+"_delete_checkbox").checked="true";
         }
 
-        // var tmp=document.getElementById("j1_race_name");
-        // // tmp.onchange=j1_race_name_change;
-        // document.write(tmp.name);
-        // function j1_race_name_change(){
-        //     document.write("change!");
-        //     // const p1
-        //      = document.getElementById("test1");
+        // 条件クリアボタンが押されたときは該当の条件をオールクリアする
+        function j_clear_buttton_click(){
+            let j_no=Number(this.id.substr(1,1));
+            document.getElementById("j"+j_no+"_race_name").value="";
+            for(let i=1;i<=UMABAN_MAX;i++){
+                document.getElementById("j"+j_no+"_umaban_"+i).checked=0;
+            }
+            for(let i=1;i<=WAKUBAN_MAX;i++){
+                document.getElementById("j"+j_no+"_wakuban_"+i).checked=0;
+            }
+            for(let i=SEIREI_MIN;i<=SEIREI_MAX;i++){
+                document.getElementById("j"+j_no+"_seirei_h"+i).checked=0;
+                document.getElementById("j"+j_no+"_seirei_b"+i).checked=0;
+            }
+            for(let i=KINRYO_MIN;i<=KINRYO_MAX;i=i+0.5){
+                let k=i*10;
+                document.getElementById("j"+j_no+"_kinryo_"+k).checked=0;
+            }
+            document.getElementById("j"+j_no+"_time_min").value="";
+            document.getElementById("j"+j_no+"_time_max").value="";
+            document.getElementById("j"+j_no+"_tuka_1").value="";
+            document.getElementById("j"+j_no+"_tuka_2").value="";
+            document.getElementById("j"+j_no+"_tuka_3").value="";
+            document.getElementById("j"+j_no+"_tuka_4").value="";
+            document.getElementById("j"+j_no+"_agari_min").value="";
+            document.getElementById("j"+j_no+"_agari_max").value="";
+            document.getElementById("j"+j_no+"_tansho_min").value="";
+            document.getElementById("j"+j_no+"_tansho_max").value="";
+            for(let i=1;i<=NINKI_MAX;i++){
+                document.getElementById("j"+j_no+"_ninki_"+i).checked=0;
+            }
+            for(let i=1;i<=CHAKUJUN_MAX;i++){
+                document.getElementById("j"+j_no+"_chakujun_"+i).checked=0;
+            }
+        }
 
-        //     // if(p1.style.display=="block"){
-        //     //     // noneで非表示
-        //     //     p1.style.display ="none";
-        //     // }else{
-        //     //     // blockで表示
-        //     //     p1.style.display ="block";
-        //     // }    
-        // }
+        // 条件追加ボタンが押されたときは新しい条件入力を表示する
+        function j_add_buttton_click(){
+            let j_no=Number(this.id.substr(1,1));
+            if(j_no == J_MAX){ alert('検索条件をこれ以上追加できません。'); return; }
+            document.getElementById("j_"+(j_no+1)).style.display="block";
+            document.getElementById("j"+(j_no+1)+"_delete_checkbox").checked=0;
+        }
     </script>
-
-    <!-- <input type="button" value="ボタン1" onclick="clickBtn1()" /> -->
-    <!-- <script>
-        function j1_race_name_change(){
-            document.write("change!!");
-            // const p1 = document.getElementById("test1");
-
-            // if(p1.style.display=="block"){
-            //     // noneで非表示
-            //     p1.style.display ="none";
-            // }else{
-            //     // blockで表示
-            //     p1.style.display ="block";
-            // }     
-        }
-        // //初期表示は非表示
-        // document.getElementById("j_10").style.display ="none";
-        
-        // function clickBtn1(){
-        //     const p1 = document.getElementById("j_10");
-        
-        //     if(p1.style.display=="block"){
-        //         // noneで非表示
-        //         p1.style.display ="none";
-        //     }else{
-        //         // blockで表示
-        //         p1.style.display ="block";
-        //     }
-        // }
-    </script> -->
-
-    <p><input type="submit" value="分析を実行" class="submit" style="width: 100%;"></p>
+    <p><input type="submit" value="検索を実行" class="submit" style="width: 100%;"></p>
 </form>
 <div id="result"></div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" async=""></script>
