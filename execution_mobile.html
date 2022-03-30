@@ -1,4 +1,18 @@
 <!-- モバイル用表示 -->
+<!-- <style type="text/css">
+    #sample5 label {
+      display: inline-block;
+      width: 110px;
+    }
+    </style>
+    <div id="sample5">
+    <label><input type="checkbox" /> グーグル</label>
+    <label><input type="checkbox" /> ヤフー</label>
+    <label><input type="checkbox" /> エキサイト</label>
+    <label><input type="checkbox" /> インフォシーク</label>
+    <label><input type="checkbox" /> フレッシュアイ</label>
+    </div> -->
+
 <form action="/execution.php" method="post" id="AjaxForm">
     <div style="text-align: center;">
         <div style="background-color:darkgray;">
@@ -33,6 +47,45 @@
                     <option value="菊花賞">　菊花賞</option>
                     <option value="阪神ジュベナイルF">　阪神ジュベナイルF</option>
                     <option value="高松宮記念">　高松宮記念</option>
+                </optgroup>
+                <optgroup label="G2">
+                    <option value="マイラーズC">　マイラーズC</option>
+                    <option value="オールカマー">　オールカマー</option>
+                    <option value="フィリーズレビュー">　フィリーズレビュー</option>
+                    <option value="アメリカJCC">　アメリカJCC</option>
+                    <option value="ステイヤーズS">　ステイヤーズS</option>
+                    <option value="スプリングS">　スプリングS</option>
+                    <option value="セントウルS">　セントウルS</option>
+                    <option value="フローラS">　フローラS</option>
+                    <option value="ローズS">　ローズS</option>
+                    <option value="スワンS">　スワンS</option>
+                    <option value="ニュージーランドT">　ニュージーランドT</option>
+                    <option value="中山記念">　中山記念</option>
+                    <option value="京王杯2歳S">　京王杯2歳S</option>
+                    <option value="京王杯スプリングC">　京王杯スプリングC</option>
+                    <option value="京都大賞典">　京都大賞典</option>
+                    <option value="京都新聞杯">　京都新聞杯</option>
+                    <option value="京都記念">　京都記念</option>
+                    <option value="アルゼンチン共和国杯">　アルゼンチン共和国杯</option>
+                    <option value="弥生賞">　弥生賞</option>
+                    <option value="富士S">　富士S</option>
+                    <option value="府中牝馬S">　府中牝馬S</option>
+                    <option value="日経新春杯">　日経新春杯</option>
+                    <option value="日経賞">　日経賞</option>
+                    <option value="札幌記念">　札幌記念</option>
+                    <option value="デイリー杯2歳S">　デイリー杯2歳S</option>
+                    <option value="東京スポーツ杯2歳S">　東京スポーツ杯2歳S</option>
+                    <option value="東海S">　東海S</option>
+                    <option value="毎日王冠">　毎日王冠</option>
+                    <option value="目黒記念">　目黒記念</option>
+                    <option value="神戸新聞杯">　神戸新聞杯</option>
+                    <option value="セントライト記念">　セントライト記念</option>
+                    <option value="チューリップ賞">　チューリップ賞</option>
+                    <option value="金鯱賞">　金鯱賞</option>
+                    <option value="阪神カップ">　阪神カップ</option>
+                    <option value="阪神大賞典">　阪神大賞典</option>
+                    <option value="阪神牝馬S">　阪神牝馬S</option>
+                    <option value="青葉賞">　青葉賞</option>
                 </optgroup>
             </select>
             <br><br>
@@ -74,6 +127,10 @@
 
     <!-- JavaScript -->
     <script>
+        // <p>
+        //     hello
+        // </p>
+
         var tmp_array=new Array();
         const J_MAX=9;
         const UMABAN_MAX=25;
@@ -120,9 +177,75 @@
                 +'<option value="阪神ジュベナイルF">　阪神ジュベナイルF</option>'
                 +'<option value="高松宮記念">　高松宮記念</option>'
                 +'</optgroup>'
+                +'<optgroup label="G2">'
+                +'<option value="マイラーズC">　マイラーズC</option>'
+                +'<option value="オールカマー">　オールカマー</option>'
+                +'<option value="フィリーズレビュー">　フィリーズレビュー</option>'
+                +'<option value="アメリカJCC">　アメリカJCC</option>'
+                +'<option value="ステイヤーズS">　ステイヤーズS</option>'
+                +'<option value="スプリングS">　スプリングS</option>'
+                +'<option value="セントウルS">　セントウルS</option>'
+                +'<option value="フローラS">　フローラS</option>'
+                +'<option value="ローズS">　ローズS</option>'
+                +'<option value="スワンS">　スワンS</option>'
+                +'<option value="ニュージーランドT">　ニュージーランドT</option>'
+                +'<option value="中山記念">　中山記念</option>'
+                +'<option value="京王杯2歳S">　京王杯2歳S</option>'
+                +'<option value="京王杯スプリングC">　京王杯スプリングC</option>'
+                +'<option value="京都大賞典">　京都大賞典</option>'
+                +'<option value="京都新聞杯">　京都新聞杯</option>'
+                +'<option value="京都記念">　京都記念</option>'
+                +'<option value="アルゼンチン共和国杯">　アルゼンチン共和国杯</option>'
+                +'<option value="弥生賞">　弥生賞</option>'
+                +'<option value="富士S">　富士S</option>'
+                +'<option value="府中牝馬S">　府中牝馬S</option>'
+                +'<option value="日経新春杯">　日経新春杯</option>'
+                +'<option value="日経賞">　日経賞</option>'
+                +'<option value="札幌記念">　札幌記念</option>'
+                +'<option value="デイリー杯2歳S">　デイリー杯2歳S</option>'
+                +'<option value="東京スポーツ杯2歳S">　東京スポーツ杯2歳S</option>'
+                +'<option value="東海S">　東海S</option>'
+                +'<option value="毎日王冠">　毎日王冠</option>'
+                +'<option value="目黒記念">　目黒記念</option>'
+                +'<option value="神戸新聞杯">　神戸新聞杯</option>'
+                +'<option value="セントライト記念">　セントライト記念</option>'
+                +'<option value="チューリップ賞">　チューリップ賞</option>'
+                +'<option value="金鯱賞">　金鯱賞</option>'
+                +'<option value="阪神カップ">　阪神カップ</option>'
+                +'<option value="阪神大賞典">　阪神大賞典</option>'
+                +'<option value="阪神牝馬S">　阪神牝馬S</option>'
+                +'<option value="青葉賞">　青葉賞</option>'
+                +'</optgroup>'
                 +'</select>'
                 +'</p>'
 		        +'<p style="margin-left: 50px;">馬番<br>'
+                // +'<div class="jouken_umaban">'
+                // +'<label><input type="checkbox" id="j_umaban_1_tmp" name="j_umaban_1_tmp" value="1">1</label>'
+                // +'<label><input type="checkbox" id="j_umaban_2_tmp" name="j_umaban_2_tmp" value="2">2</label>'
+                // +'<label><input type="checkbox" id="j_umaban_3_tmp" name="j_umaban_3_tmp" value="3">3</label>'
+                // +'<label><input type="checkbox" id="j_umaban_4_tmp" name="j_umaban_4_tmp" value="4">4</label>'
+                // +'<label><input type="checkbox" id="j_umaban_5_tmp" name="j_umaban_5_tmp" value="5">5</label>'
+                // +'<label><input type="checkbox" id="j_umaban_6_tmp" name="j_umaban_6_tmp" value="6">6</label>'
+                // +'<label><input type="checkbox" id="j_umaban_7_tmp" name="j_umaban_7_tmp" value="7">7</label>'
+                // +'<label><input type="checkbox" id="j_umaban_8_tmp" name="j_umaban_8_tmp" value="8">8</label>'
+                // +'<label><input type="checkbox" id="j_umaban_9_tmp" name="j_umaban_9_tmp" value="9">9</label>'
+                // +'<label><input type="checkbox" id="j_umaban_10_tmp" name="j_umaban_10_tmp" value="10">10</label>'
+                // +'<label><input type="checkbox" id="j_umaban_11_tmp" name="j_umaban_11_tmp" value="11">11</label>'
+                // +'<label><input type="checkbox" id="j_umaban_12_tmp" name="j_umaban_12_tmp" value="12">12</label>'
+                // +'<label><input type="checkbox" id="j_umaban_13_tmp" name="j_umaban_13_tmp" value="13">13</label>'
+                // +'<label><input type="checkbox" id="j_umaban_14_tmp" name="j_umaban_14_tmp" value="14">14</label>'
+                // +'<label><input type="checkbox" id="j_umaban_15_tmp" name="j_umaban_15_tmp" value="15">15</label>'
+                // +'<label><input type="checkbox" id="j_umaban_16_tmp" name="j_umaban_16_tmp" value="16">16</label>'
+                // +'<label><input type="checkbox" id="j_umaban_17_tmp" name="j_umaban_17_tmp" value="17">17</label>'
+                // +'<label><input type="checkbox" id="j_umaban_18_tmp" name="j_umaban_18_tmp" value="18">18</label>'
+                // +'<label><input type="checkbox" id="j_umaban_19_tmp" name="j_umaban_19_tmp" value="19">19</label>'
+                // +'<label><input type="checkbox" id="j_umaban_20_tmp" name="j_umaban_20_tmp" value="20">20</label>'
+                // +'<label><input type="checkbox" id="j_umaban_21_tmp" name="j_umaban_21_tmp" value="21">21</label>'
+                // +'<label><input type="checkbox" id="j_umaban_22_tmp" name="j_umaban_22_tmp" value="22">22</label>'
+                // +'<label><input type="checkbox" id="j_umaban_23_tmp" name="j_umaban_23_tmp" value="23">23</label>'
+                // +'<label><input type="checkbox" id="j_umaban_24_tmp" name="j_umaban_24_tmp" value="24">24</label>'
+                // +'<label><input type="checkbox" id="j_umaban_25_tmp" name="j_umaban_25_tmp" value="25">25</label>'
+                // +'</div>'
                 +'<input type="checkbox" id="j_umaban_1_tmp" name="j_umaban_1_tmp" value="1">1'
                 +'<input type="checkbox" id="j_umaban_2_tmp" name="j_umaban_2_tmp" value="2">2'
                 +'<input type="checkbox" id="j_umaban_3_tmp" name="j_umaban_3_tmp" value="3">3'
@@ -177,6 +300,7 @@
                 +'<input type="checkbox" id="j_seirei_h6_tmp" name="j_seirei_h6_tmp" value="牝6">牝6'
                 +'<input type="checkbox" id="j_seirei_h7_tmp" name="j_seirei_h7_tmp" value="牝7">牝7'
                 +'<input type="checkbox" id="j_seirei_h8_tmp" name="j_seirei_h8_tmp" value="牝8">牝8'
+                +'<br>'
                 +'<input type="checkbox" id="j_seirei_h9_tmp" name="j_seirei_h9_tmp" value="牝9">牝9'
                 +'<input type="checkbox" id="j_seirei_b2_tmp" name="j_seirei_b2_tmp" value="牡2">牡2'
                 +'<input type="checkbox" id="j_seirei_b3_tmp" name="j_seirei_b3_tmp" value="牡3">牡3'
@@ -184,6 +308,7 @@
                 +'<input type="checkbox" id="j_seirei_b5_tmp" name="j_seirei_b5_tmp" value="牡5">牡5'
                 +'<input type="checkbox" id="j_seirei_b6_tmp" name="j_seirei_b6_tmp" value="牡6">牡6'
                 +'<input type="checkbox" id="j_seirei_b7_tmp" name="j_seirei_b7_tmp" value="牡7">牡7'
+                +'<br>'
                 +'<input type="checkbox" id="j_seirei_b8_tmp" name="j_seirei_b8_tmp" value="牡8">牡8'
                 +'<input type="checkbox" id="j_seirei_b9_tmp" name="j_seirei_b9_tmp" value="牡9">牡9'
                 +'</p>'

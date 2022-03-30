@@ -1,3 +1,20 @@
-p {
-  color: black;
+.target_race {
+  text-align: center;
 }
+/* 
+.jouken {
+  text-align: left;
+}
+
+.jouken_table {
+}
+
+.jouken_table_th {
+  background-color:lavender;
+} */
+
+/* .jouken_umaban label {
+  display: block;
+  float: left;
+  width: 30px;
+} */
