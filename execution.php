@@ -368,6 +368,10 @@ if(!(in_array(1,$j_result_flg))){
     $j_num=count($j_results); // 条件数
     $i=0;
 
+    //* テスト用 *//
+    $year_results_others=array();
+    $year_results_others_jp=array();
+
     // 開催年ごとに処理を実行していく
     foreach ($year_array as $year){
         $tmp_results[$i][0]=$year;
@@ -434,10 +438,58 @@ if(!(in_array(1,$j_result_flg))){
         $win_rates[$i][1]=(($first+$second)/$all*100); // 連体率
         $win_rates[$i][2]=(($first+$second+$third)/$all*100); // 複勝率
 
+        //* テスト用 *//
+        // foreach($delete_check_btn_array[$j] as $delete_check_btn){
+        //     if()
+        // }
+        // if(in_array())
+        // if($race_name_array_eng[$j] != "" && $delete_check_btn_array[$j] != 1){
+
+        $j=0;
+        $k=0;
+        foreach($race_name_array_eng as $race_name_eng){
+            if($race_name_eng != $target_race_name && $delete_check_btn_array[$j] != 1){
+                if(!in_array($race_name_eng,$tmp_array[$i])){
+                    array_push($tmp_array[$i],$race_name_eng);
+                    
+                    // レース名を日本語に変換して格納
+                    $year_results_others_jp[$k]=$keiba_wpdb->get_row("SELECT JP_NAME FROM RACENAME_JP_ENG_TRANS WHERE ENG_NAME = \"$race_name_eng\"")->JP_NAME;
+
+                    //続き
+                    //uma_name_regexpとレース名が$race_name_jpの条件の結果とで馬名の＆を取るイメージ
+                    //そのあと、SQL検索を実行する
+
+                    // for ($k=1;$k<count($tmp_results[$i]);$k++){
+                    //     // if($uma_name_regexp==".*"){
+                    //     //     $uma_name_regexp=(string)$tmp_results[$i][$k];
+                    //     // }else{
+                    //     //     $uma_name_regexp="$uma_name_regexp"."|".(string)$tmp_results[$i][$k];
+                    //     // }
+                    //     if(in_array($tmp_results[$i][$k],))
+                    // }
+                    // echo $year;
+                    // echo "<br/>";
+                    // echo $race_name_eng;
+                    // echo "<br/>";
+                    // echo $uma_name_regexp;
+                    // echo "<br/>";
+                    $year_results_others[$i][$k]=$keiba_wpdb->get_results("SELECT * FROM $race_name_eng WHERE 年度 = ". $year . " AND 馬名 REGEXP \"$uma_name_regexp\"");;
+                    $k++;
+                }
+                // echo $race_name_jp;
+                // echo "<br/>";
+            }
+            // echo $race_name_jp;
+            $j++;
+        }
+        //* テスト用 *//
+
         $i++;
     }
 
-    // print_r($win_rates);
+    // print_r($year_results_others_jp);
+    // echo "<br/>";
+    // print_r($year_results);
     // echo "<br/>";
 
     $win_rates_sum=array(); // 勝率合計
@@ -728,6 +780,7 @@ if(!(in_array(1,$year_result_flg))){
     <p><?php echo "単勝率:".round($win_rates_sum[0],1)."%"." 連体率:".round($win_rates_sum[1],1)."%"." 複勝率:".round($win_rates_sum[2],1)."%"; ?></p>
     <?php for($i=0,$year_tmp=$_POST['year_e'] ;$i<=$diff;$i++,$year_tmp--) : ?>
         <p><?php echo "◆".$year_tmp; ?></p>
+        <p><?php echo "■".$_POST['race_name']; ?></p>
         <p><?php echo "単勝率:".round($win_rates[$diff-$i][0],1)."%"." 連体率:".round($win_rates[$diff-$i][1],1)."%"." 複勝率:".round($win_rates[$diff-$i][2],1)."%"; ?></p>
         <div class="scroll">
             <table class="table4" border="1">
@@ -736,6 +789,15 @@ if(!(in_array(1,$year_result_flg))){
                         <tr><td bgcolor="white"><?php echo $row->年度 ?></td><td bgcolor="white"><?php echo $row->馬名 ?></td><td bgcolor="white"><?php echo $row->着順 ?></td><td bgcolor="white"><?php echo $row->人気 ?></td><td bgcolor="white"><?php echo $row->馬番 ?></td><td bgcolor="white"><?php echo $row->枠番 ?></td><td bgcolor="white"><?php echo $row->性齢 ?></td><td bgcolor="white"><?php echo $row->斤量 ?></td><td bgcolor="white"><?php echo substr_replace(substr($row->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $row->通過 ?></td><td bgcolor="white"><?php echo $row->上り ?></td><td bgcolor="white"><?php echo $row->単勝 ?></td><td bgcolor="white"><?php echo $row->馬体重 ?></td></tr>
                     <?php endforeach; ?>
             </table>
+            <?php for($k=0;$k<count($year_results_others_jp);$k++) : ?>
+                <p><?php echo "・".$year_results_others_jp[$k]; ?></p>
+                <table class="table4" border="1">
+                    <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>タイム</th><th>通過</th><th>上り</th><th>単勝</th><th>馬体重</th></tr>
+                        <?php foreach ($year_results_others[$diff-$i][$k] as $row) : ?>
+                            <tr><td bgcolor="white"><?php echo $row->年度 ?></td><td bgcolor="white"><?php echo $row->馬名 ?></td><td bgcolor="white"><?php echo $row->着順 ?></td><td bgcolor="white"><?php echo $row->人気 ?></td><td bgcolor="white"><?php echo $row->馬番 ?></td><td bgcolor="white"><?php echo $row->枠番 ?></td><td bgcolor="white"><?php echo $row->性齢 ?></td><td bgcolor="white"><?php echo $row->斤量 ?></td><td bgcolor="white"><?php echo substr_replace(substr($row->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $row->通過 ?></td><td bgcolor="white"><?php echo $row->上り ?></td><td bgcolor="white"><?php echo $row->単勝 ?></td><td bgcolor="white"><?php echo $row->馬体重 ?></td></tr>
+                        <?php endforeach; ?>
+                </table>
+            <?php endfor; ?>
         </div>
     <?php endfor; ?>
 </body>
