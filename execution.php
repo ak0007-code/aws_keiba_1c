@@ -338,9 +338,7 @@ for ($j=0;$j<J_MAX;$j++){
         $tuka_regexp="^(".$tuka_regexp.")$";
         $year_regexp=="^(".$year_regexp.")$";
 
-        // 条件j:SQL実行
-        // $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array_eng[$j] . " WHERE 馬番 REGEXP \"$umaban_regexp[$j]\" AND 枠番 REGEXP \"$wakuban_regexp[$j]\" AND 年度 REGEXP \"$year_regexp\" AND 性齢 REGEXP \"$seirei_regexp[$j]\" AND 斤量 REGEXP \"$kinryo_regexp[$j]\" AND タイム BETWEEN \"$time_min_regexp\" AND \"$time_max_regexp\" AND 通過 REGEXP \"$tuka_regexp\" AND 上り BETWEEN \"$agari_min_regexp\" AND \"$agari_max_regexp\" AND 単勝 BETWEEN \"$tansho_min_regexp\" AND \"$tansho_max_regexp\" AND 人気 REGEXP \"$ninki_regexp[$j]\"");
-        
+        // 条件j:SQL実行        
         // いずれかの選択がされている場合は条件通りに検索、されていない場合は全検索する
         if($all_result_check_flg == 1){
             $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array_eng[$j] . " WHERE 年度 REGEXP \"$year_regexp\" AND (馬番 REGEXP \"$umaban_regexp[$j]\" OR 枠番 REGEXP \"$wakuban_regexp[$j]\" OR 性齢 REGEXP \"$seirei_regexp[$j]\" OR 斤量 REGEXP \"$kinryo_regexp[$j]\" OR (タイム BETWEEN \"$time_min_regexp\" AND \"$time_max_regexp\") OR 通過 REGEXP \"$tuka_regexp\" OR (上り BETWEEN \"$agari_min_regexp\" AND \"$agari_max_regexp\") OR (単勝 BETWEEN \"$tansho_min_regexp\" AND \"$tansho_max_regexp\") OR 人気 REGEXP \"$ninki_regexp[$j]\" OR 着順 REGEXP \"$chakujun_regexp[$j]\")");
@@ -353,8 +351,6 @@ for ($j=0;$j<J_MAX;$j++){
     }
 }
 
-// print_r($j_results);
-
 // 結果が0件(j_result_flgに1が無い)の場合は警告を出して結果格納処理はスキップする
 if(!(in_array(1,$j_result_flg))){
     echo "条件が選択されていないかヒットする検索結果がありませんでした。";
@@ -365,12 +361,10 @@ if(!(in_array(1,$j_result_flg))){
     $win_rates=array(); // 年度ごとの勝率→[year][0]=勝率 [year][1]=連体率 [year][2]=複勝率
     $year_results=array(); // 開催年ごとの結果
     $year_result_flg=array(); // 開催年に値があったかどうか
+    $year_results_others=array(); // 検索条件で選ばれた別レースの結果
+    $year_results_others_jp=array(); // 別レースの一覧
     $j_num=count($j_results); // 条件数
     $i=0;
-
-    //* テスト用 *//
-    $year_results_others=array();
-    $year_results_others_jp=array();
 
     // 開催年ごとに処理を実行していく
     foreach ($year_array as $year){
@@ -438,59 +432,25 @@ if(!(in_array(1,$j_result_flg))){
         $win_rates[$i][1]=(($first+$second)/$all*100); // 連体率
         $win_rates[$i][2]=(($first+$second+$third)/$all*100); // 複勝率
 
-        //* テスト用 *//
-        // foreach($delete_check_btn_array[$j] as $delete_check_btn){
-        //     if()
-        // }
-        // if(in_array())
-        // if($race_name_array_eng[$j] != "" && $delete_check_btn_array[$j] != 1){
-
+        // 検索条件で指定されたレースの結果も格納
         $j=0;
         $k=0;
         foreach($race_name_array_eng as $race_name_eng){
             if($race_name_eng != $target_race_name && $delete_check_btn_array[$j] != 1){
                 if(!in_array($race_name_eng,$tmp_array[$i])){
-                    array_push($tmp_array[$i],$race_name_eng);
-                    
+                    array_push($tmp_array[$i],$race_name_eng);            
                     // レース名を日本語に変換して格納
                     $year_results_others_jp[$k]=$keiba_wpdb->get_row("SELECT JP_NAME FROM RACENAME_JP_ENG_TRANS WHERE ENG_NAME = \"$race_name_eng\"")->JP_NAME;
 
-                    //続き
-                    //uma_name_regexpとレース名が$race_name_jpの条件の結果とで馬名の＆を取るイメージ
-                    //そのあと、SQL検索を実行する
-
-                    // for ($k=1;$k<count($tmp_results[$i]);$k++){
-                    //     // if($uma_name_regexp==".*"){
-                    //     //     $uma_name_regexp=(string)$tmp_results[$i][$k];
-                    //     // }else{
-                    //     //     $uma_name_regexp="$uma_name_regexp"."|".(string)$tmp_results[$i][$k];
-                    //     // }
-                    //     if(in_array($tmp_results[$i][$k],))
-                    // }
-                    // echo $year;
-                    // echo "<br/>";
-                    // echo $race_name_eng;
-                    // echo "<br/>";
-                    // echo $uma_name_regexp;
-                    // echo "<br/>";
                     $year_results_others[$i][$k]=$keiba_wpdb->get_results("SELECT * FROM $race_name_eng WHERE 年度 = ". $year . " AND 馬名 REGEXP \"$uma_name_regexp\"");;
                     $k++;
                 }
-                // echo $race_name_jp;
-                // echo "<br/>";
             }
-            // echo $race_name_jp;
             $j++;
         }
-        //* テスト用 *//
 
         $i++;
     }
-
-    // print_r($year_results_others_jp);
-    // echo "<br/>";
-    // print_r($year_results);
-    // echo "<br/>";
 
     $win_rates_sum=array(); // 勝率合計
     $i=0;
@@ -504,20 +464,10 @@ if(!(in_array(1,$j_result_flg))){
         $win_rates_sum[1]=$win_rates_sum[1]+$win_rate[1];
         $win_rates_sum[2]=$win_rates_sum[2]+$win_rate[2];
         $i++;
-        // print_r($win_rates_sum);
-        // echo "<br/>";
     }
     $win_rates_sum[0]=($win_rates_sum[0]/$i);
     $win_rates_sum[1]=($win_rates_sum[1]/$i);
     $win_rates_sum[2]=($win_rates_sum[2]/$i);
-
-    //print_r($win_rates[1][0]);
-    // echo "$diff";
-    // echo "<br/>";
-    // $tmp=0;
-    // $tmp=$tmp+$win_rates[1][1];
-    // echo $tmp;
-    // print_r($win_rates);
 
     // 結果が0件(year_result_flgに1が無い)の場合は警告を出して結果格納処理はスキップする
     if(!(in_array(1,$year_result_flg))){
