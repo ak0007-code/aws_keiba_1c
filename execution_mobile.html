@@ -214,8 +214,12 @@
         for(let i=1;i<=J_MAX;i++){
             var f='<div id="j_tmp">'
                 +'<div style="text-align: center;background-color:#87ceeb;"><b style="font-weight:bold; color:white;" id="j_no_tmp"></b></div>'
-                +'<button id="j_delete_button_tmp" type="button">条件削除</button>'
+                +'<button id="j_delete_button_tmp" type="button" style="margin-top: 5%;margin-bottom: 5%">条件削除</button>'
                 +'<button id="j_clear_button_tmp" type="button">条件クリア</button>'
+                +'<select id="j_and_or_select_tmp" name="j_and_or_select_tmp" style="width: 30%;font-size: 15px;margin-left: 1%">'
+                +'<option value="AND">AND条件</option>'
+                +'<option value="OR">OR条件</option>'
+                +'</select>'
                 +'<input type="checkbox" id="j_delete_checkbox_tmp" name="j_delete_checkbox_tmp" value="1" style="display:none">' //削除ボタンが押されているかを確認するためのチェックボックス
                 +'<br><p style="font-size: small;text-align: left;margin-left: 20px;">検索条件を指定してください(有馬記念、馬番1と2など)</p>'
                 +'<p style="margin-left: 50px;">レース名(必須)'
@@ -1132,6 +1136,11 @@
             tmp_array[i]=document.getElementById("j_delete_checkbox_tmp");
             tmp_array[i].id="j"+i+"_delete_checkbox";
             tmp_array[i].name="j"+i+"_delete_checkbox";
+
+            // AND OR セレクトボックスi
+            tmp_array[i]=document.getElementById("j_and_or_select_tmp");
+            tmp_array[i].id="j"+i+"_and_or_select";
+            tmp_array[i].name="j"+i+"_and_or_select";
 
             // 条件追加ボタンi
             tmp_array[i]=document.getElementById("j_add_button_tmp");

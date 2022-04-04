@@ -193,8 +193,12 @@
             var f='<div id="j_tmp">'
                 +'<div style="text-align: center;background-color:#87ceeb;"><b style="font-weight:bold; color:white;" id="j_no_tmp"></b></div>'
                 +'<div class="jouken">'
-                +'<button id="j_delete_button_tmp" type="button">条件削除</button>'
-                +'<button id="j_clear_button_tmp" type="button">条件クリア</button>'
+                +'<button id="j_delete_button_tmp" type="button" style="margin-top: 2%">条件削除</button>'
+                +'<button id="j_clear_button_tmp" type="button" style="margin-left: 1%">条件クリア</button>'
+                +'<select id="j_and_or_select_tmp" name="j_and_or_select_tmp" style="width: 10%;font-size: 15px;margin-left: 1%">'
+                +'<option value="AND">AND条件</option>'
+                +'<option value="OR">OR条件</option>'
+                +'</select>'
                 +'<input type="checkbox" id="j_delete_checkbox_tmp" name="j_delete_checkbox_tmp" value="1" style="display:none">' //削除ボタンが押されているかを確認するためのチェックボックス
                 +'<br><p style="font-size:medium;">検索条件を指定してください(有馬記念、馬番1と2など)</p>'
                 
@@ -1124,7 +1128,7 @@
                 +'<input type="checkbox" id="j_chakujun_24_tmp" name="j_chakujun_24_tmp" value="24">24'
                 +'<input type="checkbox" id="j_chakujun_25_tmp" name="j_chakujun_25_tmp" value="25">25'
                 +'</p>'
-                +'<button id="j_add_button_tmp" type="button">条件追加</button>'
+                +'<button id="j_add_button_tmp" type="button" style="margin-bottom: 2%">条件追加</button>'
                 +'</div>'
                 +'</div>';
 
@@ -1904,6 +1908,11 @@
             tmp_array[i].id="j"+i+"_delete_checkbox";
             tmp_array[i].name="j"+i+"_delete_checkbox";
 
+            // AND OR セレクトボックスi
+            tmp_array[i]=document.getElementById("j_and_or_select_tmp");
+            tmp_array[i].id="j"+i+"_and_or_select";
+            tmp_array[i].name="j"+i+"_and_or_select";
+
             // 条件追加ボタンi
             tmp_array[i]=document.getElementById("j_add_button_tmp");
             tmp_array[i].id="j"+i+"_add_button";
@@ -2072,7 +2081,6 @@
         }
     </script>
         <p><input id="search_submit" type="submit" value="検索を実行" class="submit" style="width: 50%;margin-left: 25%;display: inline-block;padding: 0.5em 1em;text-decoration: none;background: #668ad8;color: #FFF;border-bottom: solid 4px #627295;border-radius: 3px;"></p>
-    <!-- <p><input type="submit" value="検索を実行" class="submit" style="width: 100%;"></p> -->
 </form>
 <div id="result"></div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" async=""></script>
