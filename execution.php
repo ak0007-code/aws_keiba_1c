@@ -382,7 +382,7 @@ for ($j=0;$j<J_MAX;$j++){
             if($and_or_select_array[$j]=='OR'){
                 $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array_eng[$j] . " WHERE 年度 REGEXP \"$year_regexp\" AND (馬番 REGEXP \"$umaban_regexp[$j]\" OR 枠番 REGEXP \"$wakuban_regexp[$j]\" OR 性齢 REGEXP \"$seirei_regexp[$j]\" OR 斤量 REGEXP \"$kinryo_regexp[$j]\" OR (タイム BETWEEN \"$time_min_regexp\" AND \"$time_max_regexp\") OR 通過 REGEXP \"$tuka_regexp\" OR (上り BETWEEN \"$agari_min_regexp\" AND \"$agari_max_regexp\") OR (単勝 BETWEEN \"$tansho_min_regexp\" AND \"$tansho_max_regexp\") OR 人気 REGEXP \"$ninki_regexp[$j]\" OR 着順 REGEXP \"$chakujun_regexp[$j]\")");
             }else{
-                $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array_eng[$j] . " WHERE 年度 REGEXP \"$year_regexp\" AND 馬番 REGEXP \"$umaban_regexp[$j]\" AND 枠番 REGEXP \"$wakuban_regexp[$j]\" AND 性齢 REGEXP \"$seirei_regexp[$j]\" AND 斤量 REGEXP \"$kinryo_regexp[$j]\" AND タイム BETWEEN \"$time_min_regexp\" AND \"$time_max_regexp\" AND 通過 REGEXP \"$tuka_regexp\" AND 上り BETWEEN \"$agari_min_regexp\" AND \"$agari_max_regexp\" AND 単勝 BETWEEN \"$tansho_min_regexp\" AND \"$tansho_max_regexp\" AND 人気 REGEXP \"$ninki_regexp[$j]\"");
+                $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array_eng[$j] . " WHERE 年度 REGEXP \"$year_regexp\" AND 馬番 REGEXP \"$umaban_regexp[$j]\" AND 枠番 REGEXP \"$wakuban_regexp[$j]\" AND 性齢 REGEXP \"$seirei_regexp[$j]\" AND 斤量 REGEXP \"$kinryo_regexp[$j]\" AND タイム BETWEEN \"$time_min_regexp\" AND \"$time_max_regexp\" AND 通過 REGEXP \"$tuka_regexp\" AND 上り BETWEEN \"$agari_min_regexp\" AND \"$agari_max_regexp\" AND 単勝 BETWEEN \"$tansho_min_regexp\" AND \"$tansho_max_regexp\" AND 人気 REGEXP \"$ninki_regexp[$j]\" AND 着順 REGEXP \"$chakujun_regexp[$j]\"");
             }
         }else{
             $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array_eng[$j] . " WHERE 年度 REGEXP \"$year_regexp\"");
@@ -495,22 +495,29 @@ if(!(in_array(1,$j_result_flg))){
         $i++;
     }
 
-    $win_rates_sum=array(); // 勝率合計
-    $i=0;
-    foreach ($win_rates as $win_rate){
-        // 配列の値がNANの場合は処理をスキップする
-        if(is_nan($win_rate[0]) || is_nan($win_rate[1]) || is_nan($win_rate[2])){
-            continue;
+    // 全体勝率計算
+    $all_num=0;
+    $first_num=0;
+    $second_num=0;
+    $third_num=0;
+    foreach ($year_results as $year_result){
+        foreach($year_result as $row){
+            if($row->着順==3 || $row->着順==2 || $row->着順==1){
+                $third_num++;
+            }
+            if($row->着順==2 || $row->着順==1){
+                $second_num++;
+            }
+            if($row->着順==1){
+                $first_num++;
+            }
+            $all_num++;
         }
-
-        $win_rates_sum[0]=$win_rates_sum[0]+$win_rate[0];
-        $win_rates_sum[1]=$win_rates_sum[1]+$win_rate[1];
-        $win_rates_sum[2]=$win_rates_sum[2]+$win_rate[2];
-        $i++;
     }
-    $win_rates_sum[0]=($win_rates_sum[0]/$i);
-    $win_rates_sum[1]=($win_rates_sum[1]/$i);
-    $win_rates_sum[2]=($win_rates_sum[2]/$i);
+    $win_rates_sum=array(); // 勝率合計
+    $win_rates_sum[0]=($first_num/$all_num)*100;
+    $win_rates_sum[1]=($second_num/$all_num)*100;
+    $win_rates_sum[2]=($third_num/$all_num)*100;
 
     // 結果が0件(year_result_flgに1が無い)の場合は警告を出して結果格納処理はスキップする
     if(!(in_array(1,$year_result_flg))){
@@ -805,7 +812,7 @@ if(!(in_array(1,$year_result_flg))){
 </head>
 <body>
     <p>◆全体平均</p>
-    <p style="margin-top: -3%;"><?php echo "単勝率:".round($win_rates_sum[0],1)."%"." 連体率:".round($win_rates_sum[1],1)."%"." 複勝率:".round($win_rates_sum[2],1)."%"; ?></p>
+    <p style="margin-top: -3%;"><?php echo "単勝率:".round($win_rates_sum[0],1)."%"."(".$first_num."/".$all_num.")"." 連体率:".round($win_rates_sum[1],1)."%"."(".$second_num."/".$all_num.")"." 複勝率:".round($win_rates_sum[2],1)."%"."(".$third_num."/".$all_num.")"; ?></p>
     <?php for($i=0,$year_tmp=$_POST['year_e'] ;$i<=$diff;$i++,$year_tmp--) : ?>
         <p><?php echo "◆".$year_tmp." - ".$_POST['race_name']; ?></p>
         <p style="margin-top: -3%;"><?php echo "単勝率:".round($win_rates[$diff-$i][0],1)."%"." 連体率:".round($win_rates[$diff-$i][1],1)."%"." 複勝率:".round($win_rates[$diff-$i][2],1)."%"; ?></p>
