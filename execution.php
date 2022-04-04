@@ -10,6 +10,8 @@ const KINRYO_MIN=52; // 斤量MIN
 const KINRYO_MAX=59; // 斤量MAX
 const NINKI_MAX=25; // 人気MAX
 const CHAKUJUN_MAX=25; // 着順MAX
+const TUKA_MAX=25; //通過MAX
+const TUKA_MIN=1; // 通過MIN
 
 // DBアクセス準備
 require_once( dirname( __FILE__ ) . '/wp-load.php' );
@@ -43,6 +45,10 @@ $tuka_1_array=array(); // 通過(第1コーナー)
 $tuka_2_array=array(); // 通過(第2コーナー)
 $tuka_3_array=array(); // 通過(第3コーナー)
 $tuka_4_array=array(); // 通過(第4コーナー)
+$tuka_1_symbol_array=array(); // 通過記号(第1コーナー)
+$tuka_2_symbol_array=array(); // 通過記号(第2コーナー)
+$tuka_3_symbol_array=array(); // 通過記号(第3コーナー)
+$tuka_4_symbol_array=array(); // 通過記号(第4コーナー)
 $agari_min_array=array(); // 上り最小値
 $agari_max_array=array(); // 上り最大値
 $tansho_min_array=array(); // 単勝最小値
@@ -103,6 +109,15 @@ for ($j=0;$j<J_MAX;$j++){
     $tuka_3_array[$j]=$_POST["j".($j+1)."_tuka_3"];
     // 通過(第4コーナー)格納
     $tuka_4_array[$j]=$_POST["j".($j+1)."_tuka_4"];
+
+    // 通過(第1コーナー)格納
+    $tuka_1_symbol_array[$j]=$_POST["j".($j+1)."_tuka_1_symbol"];
+    // 通過(第2コーナー)格納
+    $tuka_2_symbol_array[$j]=$_POST["j".($j+1)."_tuka_2_symbol"];
+    // 通過(第3コーナー)格納
+    $tuka_3_symbol_array[$j]=$_POST["j".($j+1)."_tuka_3_symbol"];
+    // 通過(第4コーナー)格納
+    $tuka_4_symbol_array[$j]=$_POST["j".($j+1)."_tuka_4_symbol"];
 
     // 上り最小値格納
     $agari_min_array[$j]=$_POST["j".($j+1)."_agari_min"];
@@ -254,25 +269,101 @@ for ($j=0;$j<J_MAX;$j++){
         $tuka_check_flg=0;
         // 通過(第１コーナー)
         if($tuka_1_array[$j]){
-            $tuka_1_regexp=$tuka_1_array[$j];
+            if($tuka_1_symbol_array[$j]=="eq"){
+                $tuka_1_regexp=$tuka_1_array[$j];
+            }else if($tuka_1_symbol_array[$j]=="ge"){
+                for($i=$tuka_1_array[$j];$i<=TUKA_MAX;$i++){
+                    if($i==$tuka_1_array[$j]){
+                        $tuka_1_regexp=$tuka_1_array[$j];
+                    }else{
+                        $tuka_1_regexp="$tuka_1_regexp"."|"."$i";
+                    }
+                }
+            }else if($tuka_1_symbol_array[$j]=="le"){
+                for($i=$tuka_1_array[$j];$i>=TUKA_MIN;$i--){
+                    if($i==$tuka_1_array[$j]){
+                        $tuka_1_regexp=$tuka_1_array[$j];
+                    }else{
+                        $tuka_1_regexp="$tuka_1_regexp"."|"."$i";
+                    }
+                }
+            }
+            $tuka_1_regexp="(".$tuka_1_regexp.")";
             $all_result_check_flg=1;
             $tuka_check_flg=1;
         }
         // 通過(第2コーナー)
         if($tuka_2_array[$j]){
-            $tuka_2_regexp=$tuka_2_array[$j];
+            if($tuka_2_symbol_array[$j]=="eq"){
+                $tuka_2_regexp=$tuka_2_array[$j];
+            }else if($tuka_2_symbol_array[$j]=="ge"){
+                for($i=$tuka_2_array[$j];$i<=TUKA_MAX;$i++){
+                    if($i==$tuka_2_array[$j]){
+                        $tuka_2_regexp=$tuka_2_array[$j];
+                    }else{
+                        $tuka_2_regexp="$tuka_2_regexp"."|"."$i";
+                    }
+                }
+            }else if($tuka_2_symbol_array[$j]=="le"){
+                for($i=$tuka_2_array[$j];$i>=TUKA_MIN;$i--){
+                    if($i==$tuka_2_array[$j]){
+                        $tuka_2_regexp=$tuka_2_array[$j];
+                    }else{
+                        $tuka_2_regexp="$tuka_2_regexp"."|"."$i";
+                    }
+                }
+            }
+            $tuka_2_regexp="(".$tuka_2_regexp.")";
             $all_result_check_flg=1;
             $tuka_check_flg=1;
         }
         // 通過(第3コーナー)
         if($tuka_3_array[$j]){
-            $tuka_3_regexp=$tuka_3_array[$j];
+            if($tuka_3_symbol_array[$j]=="eq"){
+                $tuka_3_regexp=$tuka_3_array[$j];
+            }else if($tuka_3_symbol_array[$j]=="ge"){
+                for($i=$tuka_3_array[$j];$i<=TUKA_MAX;$i++){
+                    if($i==$tuka_3_array[$j]){
+                        $tuka_3_regexp=$tuka_3_array[$j];
+                    }else{
+                        $tuka_3_regexp="$tuka_3_regexp"."|"."$i";
+                    }
+                }
+            }else if($tuka_3_symbol_array[$j]=="le"){
+                for($i=$tuka_3_array[$j];$i>=TUKA_MIN;$i--){
+                    if($i==$tuka_3_array[$j]){
+                        $tuka_3_regexp=$tuka_3_array[$j];
+                    }else{
+                        $tuka_3_regexp="$tuka_3_regexp"."|"."$i";
+                    }
+                }
+            }
+            $tuka_3_regexp="(".$tuka_3_regexp.")";
             $all_result_check_flg=1;
             $tuka_check_flg=1;
         }
         // 通過(第4コーナー)
         if($tuka_4_array[$j]){
-            $tuka_4_regexp=$tuka_4_array[$j];
+            if($tuka_4_symbol_array[$j]=="eq"){
+                $tuka_4_regexp=$tuka_4_array[$j];
+            }else if($tuka_4_symbol_array[$j]=="ge"){
+                for($i=$tuka_4_array[$j];$i<=TUKA_MAX;$i++){
+                    if($i==$tuka_4_array[$j]){
+                        $tuka_4_regexp=$tuka_4_array[$j];
+                    }else{
+                        $tuka_4_regexp="$tuka_4_regexp"."|"."$i";
+                    }
+                }
+            }else if($tuka_4_symbol_array[$j]=="le"){
+                for($i=$tuka_4_array[$j];$i>=TUKA_MIN;$i--){
+                    if($i==$tuka_4_array[$j]){
+                        $tuka_4_regexp=$tuka_4_array[$j];
+                    }else{
+                        $tuka_4_regexp="$tuka_4_regexp"."|"."$i";
+                    }
+                }
+            }
+            $tuka_4_regexp="(".$tuka_4_regexp.")";
             $all_result_check_flg=1;
             $tuka_check_flg=1;
         }
@@ -667,6 +758,31 @@ if(!(in_array(1,$j_result_flg))){
             }
         }
     }
+    // 通過記号
+    function tukasymbolsave(){
+        <?php $json_array_a = json_encode($tuka_1_symbol_array); ?>
+        <?php $json_array_b = json_encode($tuka_2_symbol_array); ?>
+        <?php $json_array_c = json_encode($tuka_3_symbol_array); ?>
+        <?php $json_array_d = json_encode($tuka_4_symbol_array); ?>
+        let js_array_a = <?php echo $json_array_a; ?>;
+        let js_array_b = <?php echo $json_array_b; ?>;
+        let js_array_c = <?php echo $json_array_c; ?>;
+        let js_array_d = <?php echo $json_array_d; ?>;
+        for(let j=1;j<=<?php echo J_MAX; ?>;j++){
+            if(js_array_a[j-1]){
+                document.getElementById("j"+j+"_tuka_1_symbol").value=js_array_a[j-1];
+            }
+            if(js_array_b[j-1]){
+                document.getElementById("j"+j+"_tuka_2_symbol").value=js_array_b[j-1];
+            }
+            if(js_array_c[j-1]){
+                document.getElementById("j"+j+"_tuka_3_symbol").value=js_array_c[j-1];
+            }
+            if(js_array_d[j-1]){
+                document.getElementById("j"+j+"_tuka_4_symbol").value=js_array_d[j-1];
+            }
+        }
+    }
     // 上り
     function agarisave(){
         <?php $json_array_a = json_encode($agari_min_array); ?>
@@ -736,6 +852,7 @@ if(!(in_array(1,$j_result_flg))){
 <?php echo '<script type="text/javascript">','kinryosave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','timesave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','tukasave();','</script>'; ?>
+<?php echo '<script type="text/javascript">','tukasymbolsave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','agarisave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','tanshosave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','ninkisave();','</script>'; ?>

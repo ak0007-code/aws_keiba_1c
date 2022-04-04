@@ -989,6 +989,26 @@
                 +'<option value="24">24</option>'
                 +'<option value="25">25</option>'
                 +'</select>'
+                +'（ <select id="j_tuka_1_symbol_tmp" name="j_tuka_1_symbol_tmp" style="width: 5.5%;text-align: center;">'
+                +'<option value="eq">=</option>'
+                +'<option value="ge">>= (以上)</option>'
+                +'<option value="le"><= (以下)</option>'
+                +'</select> - '
+                +'<select id="j_tuka_2_symbol_tmp" name="j_tuka_2_symbol_tmp" style="width: 5.5%;text-align: center;">'
+                +'<option value="eq">=</option>'
+                +'<option value="ge">>= (以上)</option>'
+                +'<option value="le"><= (以下)</option>'
+                +'</select> - '
+                +'<select id="j_tuka_3_symbol_tmp" name="j_tuka_3_symbol_tmp" style="width: 5.5%;text-align: center;">'
+                +'<option value="eq">=</option>'
+                +'<option value="ge">>= (以上)</option>'
+                +'<option value="le"><= (以下)</option>'
+                +'</select> - '
+                +'<select id="j_tuka_4_symbol_tmp" name="j_tuka_4_symbol_tmp" style="width: 5.5%;text-align: center;">'
+                +'<option value="eq">=</option>'
+                +'<option value="ge">>= (以上)</option>'
+                +'<option value="le"><= (以下)</option>'
+                +'</select> ）'
                 +'</p>'
 		        +'<p style="margin-left: 50px;">上り<br>'
                 +'<select id="j_agari_min_tmp" name="j_agari_min_tmp" style="width: auto;">'
@@ -1990,6 +2010,23 @@
             tmp_array[i].id="j"+i+"_tuka_4";
             tmp_array[i].name="j"+i+"_tuka_4";
 
+            // 通過記号(第1コーナー)
+            tmp_array[i]=document.getElementById("j_tuka_1_symbol_tmp");
+            tmp_array[i].id="j"+i+"_tuka_1_symbol";
+            tmp_array[i].name="j"+i+"_tuka_1_symbol";
+            // 通過記号(第2コーナー)
+            tmp_array[i]=document.getElementById("j_tuka_2_symbol_tmp");
+            tmp_array[i].id="j"+i+"_tuka_2_symbol";
+            tmp_array[i].name="j"+i+"_tuka_2_symbol";
+            // 通過記号(第3コーナー)
+            tmp_array[i]=document.getElementById("j_tuka_3_symbol_tmp");
+            tmp_array[i].id="j"+i+"_tuka_3_symbol";
+            tmp_array[i].name="j"+i+"_tuka_3_symbol";
+            // 通過記号(第4コーナー)
+            tmp_array[i]=document.getElementById("j_tuka_4_symbol_tmp");
+            tmp_array[i].id="j"+i+"_tuka_4_symbol";
+            tmp_array[i].name="j"+i+"_tuka_4_symbol";
+
             // 上り最小値
             tmp_array[i]=document.getElementById("j_agari_min_tmp");
             tmp_array[i].id="j"+i+"_agari_min";
@@ -2060,6 +2097,10 @@
             document.getElementById("j"+j_no+"_tuka_2").value="";
             document.getElementById("j"+j_no+"_tuka_3").value="";
             document.getElementById("j"+j_no+"_tuka_4").value="";
+            document.getElementById("j"+j_no+"_tuka_1_symbol").value="eq";
+            document.getElementById("j"+j_no+"_tuka_2_symbol").value="eq";
+            document.getElementById("j"+j_no+"_tuka_3_symbol").value="eq";
+            document.getElementById("j"+j_no+"_tuka_4_symbol").value="eq";
             document.getElementById("j"+j_no+"_agari_min").value="";
             document.getElementById("j"+j_no+"_agari_max").value="";
             document.getElementById("j"+j_no+"_tansho_min").value="";
