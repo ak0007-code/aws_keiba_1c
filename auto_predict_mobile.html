@@ -1,218 +1,218 @@
 <!-- モバイル用表示 -->
+<div class="main_div">
+    <form action="/auto_predict.php" method="post" id="AjaxForm">
+        <div style="text-align: center;">
+            <div style="background-color:rgb(37, 192, 133);">
+                <p style="font-weight:bold; color:white;">予想レース</p>
+            </div>
+            <p style="font-size: 10px;text-align: center;margin-left: 5px;">予想したいレース名とその期間・着順を選択肢し、過去の傾向を調べます</p>
+            <div style="text-align: left;margin-left: 20px;">
+                <b>レース名</b>
+                <select name="race_name" id="race_name" style="width: 50%;margin-left: 50px;">
+                    <optgroup label="G1">
+                        <option value="有馬記念">　有馬記念</option>
+                        <option value="チャンピオンズC">　チャンピオンズC</option>
+                        <option value="ジャパンC">　ジャパンC</option>
+                        <option value="ヴィクトリアマイル">　ヴィクトリアマイル</option>
+                        <option value="NHKマイルC">　NHKマイルC</option>
+                        <option value="マイルチャンピオンS">　マイルチャンピオンS</option>
+                        <option value="スプリンターズS">　スプリンターズS</option>
+                        <option value="フェブラリーS">　フェブラリーS</option>
+                        <option value="ホープフルS">　ホープフルS</option>
+                        <option value="優駿牝馬">　優駿牝馬</option>
+                        <option value="大阪杯">　大阪杯</option>
+                        <option value="天皇賞(春)">　天皇賞(春)</option>
+                        <option value="天皇賞(秋)">　天皇賞(秋)</option>
+                        <option value="エリザベス女王杯">　エリザベス女王杯</option>
+                        <option value="安田記念">　安田記念</option>
+                        <option value="宝塚記念">　宝塚記念</option>
+                        <option value="朝日フューチュリティ">　朝日フューチュリティ</option>
+                        <option value="東京優駿">　東京優駿</option>
+                        <option value="桜花賞">　桜花賞</option>
+                        <option value="皐月賞">　皐月賞</option>
+                        <option value="秋華賞">　秋華賞</option>
+                        <option value="菊花賞">　菊花賞</option>
+                        <option value="阪神ジュベナイルF">　阪神ジュベナイルF</option>
+                        <option value="高松宮記念">　高松宮記念</option>
+                    </optgroup>
+                    <optgroup label="G2">
+                        <option value="マイラーズC">　マイラーズC</option>
+                        <option value="オールカマー">　オールカマー</option>
+                        <option value="フィリーズレビュー">　フィリーズレビュー</option>
+                        <option value="アメリカJCC">　アメリカJCC</option>
+                        <option value="ステイヤーズS">　ステイヤーズS</option>
+                        <option value="スプリングS">　スプリングS</option>
+                        <option value="セントウルS">　セントウルS</option>
+                        <option value="フローラS">　フローラS</option>
+                        <option value="ローズS">　ローズS</option>
+                        <option value="スワンS">　スワンS</option>
+                        <option value="ニュージーランドT">　ニュージーランドT</option>
+                        <option value="中山記念">　中山記念</option>
+                        <option value="京王杯2歳S">　京王杯2歳S</option>
+                        <option value="京王杯スプリングC">　京王杯スプリングC</option>
+                        <option value="京都大賞典">　京都大賞典</option>
+                        <option value="京都新聞杯">　京都新聞杯</option>
+                        <option value="京都記念">　京都記念</option>
+                        <option value="アルゼンチン共和国杯">　アルゼンチン共和国杯</option>
+                        <option value="弥生賞">　弥生賞</option>
+                        <option value="富士S">　富士S</option>
+                        <option value="府中牝馬S">　府中牝馬S</option>
+                        <option value="日経新春杯">　日経新春杯</option>
+                        <option value="日経賞">　日経賞</option>
+                        <option value="札幌記念">　札幌記念</option>
+                        <option value="デイリー杯2歳S">　デイリー杯2歳S</option>
+                        <option value="東京スポーツ杯2歳S">　東京スポーツ杯2歳S</option>
+                        <option value="東海S">　東海S</option>
+                        <option value="毎日王冠">　毎日王冠</option>
+                        <option value="目黒記念">　目黒記念</option>
+                        <option value="神戸新聞杯">　神戸新聞杯</option>
+                        <option value="セントライト記念">　セントライト記念</option>
+                        <option value="チューリップ賞">　チューリップ賞</option>
+                        <option value="金鯱賞">　金鯱賞</option>
+                        <option value="阪神カップ">　阪神カップ</option>
+                        <option value="阪神大賞典">　阪神大賞典</option>
+                        <option value="阪神牝馬S">　阪神牝馬S</option>
+                        <option value="青葉賞">　青葉賞</option>
+                    </optgroup>
+                    <optgroup label="G3">
+                        <option value="CBC賞">　CBC賞</option>
+                        <option value="アーリントンC">　アーリントンC</option>
+                        <option value="チャレンジC">　チャレンジC</option>
+                        <option value="フラワーC">　フラワーC</option>
+                        <option value="クイーンC">　クイーンC</option>
+                        <option value="エプソムC">　エプソムC</option>
+                        <option value="キーンランドカップ">　キーンランドカップ</option>
+                        <option value="ラジオNIKKEI賞">　ラジオNIKKEI賞</option>
+                        <option value="サウジアラビアRC">　サウジアラビアRC</option>
+                        <option value="ファンタジーS">　ファンタジーS</option>
+                        <option value="ダイヤモンドS">　ダイヤモンドS</option>
+                        <option value="シルクロードS">　シルクロードS</option>
+                        <option value="ユニコーンS">　ユニコーンS</option>
+                        <option value="マーメイドS">　マーメイドS</option>
+                        <option value="プロキオンS">　プロキオンS</option>
+                        <option value="フェアリーS">　フェアリーS</option>
+                        <option value="ファルコンS">　ファルコンS</option>
+                        <option value="ターコイズS">　ターコイズS</option>
+                        <option value="オーシャンS">　オーシャンS</option>
+                        <option value="アンタレスS">　アンタレスS</option>
+                        <option value="アルテミスS">　アルテミスS</option>
+                        <option value="レパードS">　レパードS</option>
+                        <option value="シリウスS">　シリウスS</option>
+                        <option value="クイーンS">　クイーンS</option>
+                        <option value="マーチS">　マーチS</option>
+                        <option value="カペラS">　カペラS</option>
+                        <option value="エルムS">　エルムS</option>
+                        <option value="みやこS">　みやこS</option>
+                        <option value="アイビスSD">　アイビスSD</option>
+                        <option value="七夕賞">　七夕賞</option>
+                        <option value="中京記念">　中京記念</option>
+                        <option value="中山牝馬S">　中山牝馬S</option>
+                        <option value="中山金杯">　中山金杯</option>
+                        <option value="中日新聞杯">　中日新聞杯</option>
+                        <option value="京成杯AH">　京成杯AH</option>
+                        <option value="京成杯">　京成杯</option>
+                        <option value="京都2歳S">　京都2歳S</option>
+                        <option value="京都牝馬S">　京都牝馬S</option>
+                        <option value="京都金杯">　京都金杯</option>
+                        <option value="京阪杯">　京阪杯</option>
+                        <option value="共同通信杯">　共同通信杯</option>
+                        <option value="函館2歳S">　函館2歳S</option>
+                        <option value="函館スプリントS">　函館スプリントS</option>
+                        <option value="函館記念">　函館記念</option>
+                        <option value="北九州記念">　北九州記念</option>
+                        <option value="ダービー卿CT">　ダービー卿CT</option>
+                        <option value="小倉2歳S">　小倉2歳S</option>
+                        <option value="小倉大賞典">　小倉大賞典</option>
+                        <option value="小倉記念">　小倉記念</option>
+                        <option value="平安S">　平安S</option>
+                        <option value="愛知杯">　愛知杯</option>
+                        <option value="新潟2歳S">　新潟2歳S</option>
+                        <option value="新潟大賞典">　新潟大賞典</option>
+                        <option value="新潟記念">　新潟記念</option>
+                        <option value="札幌2歳S">　札幌2歳S</option>
+                        <option value="東京新聞杯">　東京新聞杯</option>
+                        <option value="根岸S">　根岸S</option>
+                        <option value="武蔵野S">　武蔵野S</option>
+                        <option value="毎日杯">　毎日杯</option>
+                        <option value="福島牝馬S">　福島牝馬S</option>
+                        <option value="福島記念">　福島記念</option>
+                        <option value="紫苑S">　紫苑S</option>
+                        <option value="葵ステークス">　葵ステークス</option>
+                        <option value="シンザン記念">　シンザン記念</option>
+                        <option value="きさらぎ賞">　きさらぎ賞</option>
+                        <option value="関屋記念">　関屋記念</option>
+                        <option value="阪急杯">　阪急杯</option>
+                        <option value="鳴尾記念">　鳴尾記念</option>
+                    </optgroup>
+                </select>
+                <br><br>
 
-<form action="/auto_predict.php" method="post" id="AjaxForm">
-    <div style="text-align: center;">
-        <div style="background-color:darkgray;">
-        <p style="font-weight:bold; color:white;">予想レース</p>
+                <b>開始年 ~ 終了年</b>
+                <select name="year_s" id="year_s" style="width: auto;">
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                    <option value="2019">2019</option>
+                    <option value="2018">2018</option>
+                    <option value="2017">2017</option>
+                    <option value="2016">2016</option>
+                    <option value="2015">2015</option>
+                    <option value="2014">2014</option>
+                    <option value="2013">2013</option>
+                    <option value="2012">2012</option>
+                    <option value="2011" selected>2011</option>
+                </select>
+                    ~
+                <select name="year_e" id="year_e" style="width: auto;">
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                    <option value="2019">2019</option>
+                    <option value="2018">2018</option>
+                    <option value="2017">2017</option>
+                    <option value="2016">2016</option>
+                    <option value="2015">2015</option>
+                    <option value="2014">2014</option>
+                    <option value="2013">2013</option>
+                    <option value="2012">2012</option>
+                    <option value="2011">2011</option>
+                </select>
+
+                <br><br>
+
+                <b>着順</b>
+                <select name="chakujun_min" id="chakujun_min" style="width: auto; margin-left: 25%;">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+                    ~
+                <select name="chakujun_max" id="chakujun_max" style="width: auto;">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3" selected>3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
         </div>
-        <p style="font-size: small;text-align: left;margin-left: 20px;">過去の結果を確認したいレースと期間を選択します</p>
-        <div style="text-align: left;margin-left: 20px;">
-            <u>レース名</u>
-            <select name="race_name" id="race_name" style="width: 50%;margin-left: 50px;">
-                <optgroup label="G1">
-                    <option value="有馬記念">　有馬記念</option>
-                    <option value="チャンピオンズC">　チャンピオンズC</option>
-                    <option value="ジャパンC">　ジャパンC</option>
-                    <option value="ヴィクトリアマイル">　ヴィクトリアマイル</option>
-                    <option value="NHKマイルC">　NHKマイルC</option>
-                    <option value="マイルチャンピオンS">　マイルチャンピオンS</option>
-                    <option value="スプリンターズS">　スプリンターズS</option>
-                    <option value="フェブラリーS">　フェブラリーS</option>
-                    <option value="ホープフルS">　ホープフルS</option>
-                    <option value="優駿牝馬">　優駿牝馬</option>
-                    <option value="大阪杯">　大阪杯</option>
-                    <option value="天皇賞(春)">　天皇賞(春)</option>
-                    <option value="天皇賞(秋)">　天皇賞(秋)</option>
-                    <option value="エリザベス女王杯">　エリザベス女王杯</option>
-                    <option value="安田記念">　安田記念</option>
-                    <option value="宝塚記念">　宝塚記念</option>
-                    <option value="朝日フューチュリティ">　朝日フューチュリティ</option>
-                    <option value="東京優駿">　東京優駿</option>
-                    <option value="桜花賞">　桜花賞</option>
-                    <option value="皐月賞">　皐月賞</option>
-                    <option value="秋華賞">　秋華賞</option>
-                    <option value="菊花賞">　菊花賞</option>
-                    <option value="阪神ジュベナイルF">　阪神ジュベナイルF</option>
-                    <option value="高松宮記念">　高松宮記念</option>
-                </optgroup>
-                <optgroup label="G2">
-                    <option value="マイラーズC">　マイラーズC</option>
-                    <option value="オールカマー">　オールカマー</option>
-                    <option value="フィリーズレビュー">　フィリーズレビュー</option>
-                    <option value="アメリカJCC">　アメリカJCC</option>
-                    <option value="ステイヤーズS">　ステイヤーズS</option>
-                    <option value="スプリングS">　スプリングS</option>
-                    <option value="セントウルS">　セントウルS</option>
-                    <option value="フローラS">　フローラS</option>
-                    <option value="ローズS">　ローズS</option>
-                    <option value="スワンS">　スワンS</option>
-                    <option value="ニュージーランドT">　ニュージーランドT</option>
-                    <option value="中山記念">　中山記念</option>
-                    <option value="京王杯2歳S">　京王杯2歳S</option>
-                    <option value="京王杯スプリングC">　京王杯スプリングC</option>
-                    <option value="京都大賞典">　京都大賞典</option>
-                    <option value="京都新聞杯">　京都新聞杯</option>
-                    <option value="京都記念">　京都記念</option>
-                    <option value="アルゼンチン共和国杯">　アルゼンチン共和国杯</option>
-                    <option value="弥生賞">　弥生賞</option>
-                    <option value="富士S">　富士S</option>
-                    <option value="府中牝馬S">　府中牝馬S</option>
-                    <option value="日経新春杯">　日経新春杯</option>
-                    <option value="日経賞">　日経賞</option>
-                    <option value="札幌記念">　札幌記念</option>
-                    <option value="デイリー杯2歳S">　デイリー杯2歳S</option>
-                    <option value="東京スポーツ杯2歳S">　東京スポーツ杯2歳S</option>
-                    <option value="東海S">　東海S</option>
-                    <option value="毎日王冠">　毎日王冠</option>
-                    <option value="目黒記念">　目黒記念</option>
-                    <option value="神戸新聞杯">　神戸新聞杯</option>
-                    <option value="セントライト記念">　セントライト記念</option>
-                    <option value="チューリップ賞">　チューリップ賞</option>
-                    <option value="金鯱賞">　金鯱賞</option>
-                    <option value="阪神カップ">　阪神カップ</option>
-                    <option value="阪神大賞典">　阪神大賞典</option>
-                    <option value="阪神牝馬S">　阪神牝馬S</option>
-                    <option value="青葉賞">　青葉賞</option>
-                </optgroup>
-                <optgroup label="G3">
-                    <option value="CBC賞">　CBC賞</option>
-                    <option value="アーリントンC">　アーリントンC</option>
-                    <option value="チャレンジC">　チャレンジC</option>
-                    <option value="フラワーC">　フラワーC</option>
-                    <option value="クイーンC">　クイーンC</option>
-                    <option value="エプソムC">　エプソムC</option>
-                    <option value="キーンランドカップ">　キーンランドカップ</option>
-                    <option value="ラジオNIKKEI賞">　ラジオNIKKEI賞</option>
-                    <option value="サウジアラビアRC">　サウジアラビアRC</option>
-                    <option value="ファンタジーS">　ファンタジーS</option>
-                    <option value="ダイヤモンドS">　ダイヤモンドS</option>
-                    <option value="シルクロードS">　シルクロードS</option>
-                    <option value="ユニコーンS">　ユニコーンS</option>
-                    <option value="マーメイドS">　マーメイドS</option>
-                    <option value="プロキオンS">　プロキオンS</option>
-                    <option value="フェアリーS">　フェアリーS</option>
-                    <option value="ファルコンS">　ファルコンS</option>
-                    <option value="ターコイズS">　ターコイズS</option>
-                    <option value="オーシャンS">　オーシャンS</option>
-                    <option value="アンタレスS">　アンタレスS</option>
-                    <option value="アルテミスS">　アルテミスS</option>
-                    <option value="レパードS">　レパードS</option>
-                    <option value="シリウスS">　シリウスS</option>
-                    <option value="クイーンS">　クイーンS</option>
-                    <option value="マーチS">　マーチS</option>
-                    <option value="カペラS">　カペラS</option>
-                    <option value="エルムS">　エルムS</option>
-                    <option value="みやこS">　みやこS</option>
-                    <option value="アイビスSD">　アイビスSD</option>
-                    <option value="七夕賞">　七夕賞</option>
-                    <option value="中京記念">　中京記念</option>
-                    <option value="中山牝馬S">　中山牝馬S</option>
-                    <option value="中山金杯">　中山金杯</option>
-                    <option value="中日新聞杯">　中日新聞杯</option>
-                    <option value="京成杯AH">　京成杯AH</option>
-                    <option value="京成杯">　京成杯</option>
-                    <option value="京都2歳S">　京都2歳S</option>
-                    <option value="京都牝馬S">　京都牝馬S</option>
-                    <option value="京都金杯">　京都金杯</option>
-                    <option value="京阪杯">　京阪杯</option>
-                    <option value="共同通信杯">　共同通信杯</option>
-                    <option value="函館2歳S">　函館2歳S</option>
-                    <option value="函館スプリントS">　函館スプリントS</option>
-                    <option value="函館記念">　函館記念</option>
-                    <option value="北九州記念">　北九州記念</option>
-                    <option value="ダービー卿CT">　ダービー卿CT</option>
-                    <option value="小倉2歳S">　小倉2歳S</option>
-                    <option value="小倉大賞典">　小倉大賞典</option>
-                    <option value="小倉記念">　小倉記念</option>
-                    <option value="平安S">　平安S</option>
-                    <option value="愛知杯">　愛知杯</option>
-                    <option value="新潟2歳S">　新潟2歳S</option>
-                    <option value="新潟大賞典">　新潟大賞典</option>
-                    <option value="新潟記念">　新潟記念</option>
-                    <option value="札幌2歳S">　札幌2歳S</option>
-                    <option value="東京新聞杯">　東京新聞杯</option>
-                    <option value="根岸S">　根岸S</option>
-                    <option value="武蔵野S">　武蔵野S</option>
-                    <option value="毎日杯">　毎日杯</option>
-                    <option value="福島牝馬S">　福島牝馬S</option>
-                    <option value="福島記念">　福島記念</option>
-                    <option value="紫苑S">　紫苑S</option>
-                    <option value="葵ステークス">　葵ステークス</option>
-                    <option value="シンザン記念">　シンザン記念</option>
-                    <option value="きさらぎ賞">　きさらぎ賞</option>
-                    <option value="関屋記念">　関屋記念</option>
-                    <option value="阪急杯">　阪急杯</option>
-                    <option value="鳴尾記念">　鳴尾記念</option>
-                </optgroup>
-            </select>
-            <br><br>
 
-            <u>開始年 ~ 終了年</u>
-            <select name="year_s" id="year_s" style="width: auto;">
-                <option value="2021">2021</option>
-                <option value="2020">2020</option>
-                <option value="2019">2019</option>
-                <option value="2018">2018</option>
-                <option value="2017">2017</option>
-                <option value="2016">2016</option>
-                <option value="2015">2015</option>
-                <option value="2014">2014</option>
-                <option value="2013">2013</option>
-                <option value="2012">2012</option>
-                <option value="2011" selected>2011</option>
-            </select>
-                ~
-            <select name="year_e" id="year_e" style="width: auto;">
-                <option value="2021">2021</option>
-                <option value="2020">2020</option>
-                <option value="2019">2019</option>
-                <option value="2018">2018</option>
-                <option value="2017">2017</option>
-                <option value="2016">2016</option>
-                <option value="2015">2015</option>
-                <option value="2014">2014</option>
-                <option value="2013">2013</option>
-                <option value="2012">2012</option>
-                <option value="2011">2011</option>
-            </select>
-
-            <br><br>
-
-            <u>着順</u>
-            <select name="chakujun_min" id="chakujun_min" style="width: auto; margin-left: 25%;">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-            </select>
-                ~
-            <select name="chakujun_max" id="chakujun_max" style="width: auto;">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3" selected>3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-            </select>
-        </div>
-    </div>
-
-    <br>
-    <hr>
-    <br>
-    <p><input id="search_submit" type="submit" value="検索を実行" class="submit" style="width: 70%;margin-left: 50px;display: inline-block;padding: 0.5em 1em;text-decoration: none;background: #668ad8;color: #FFF;border-bottom: solid 4px #627295;border-radius: 3px;"></p>
-</form>
-<div id="result"></div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" async=""></script>
-<script src="/exectl.js"></script>
-
+        <br>
+        <hr>
+        <br>
+        <p><input id="search_submit" type="submit" value="検索を実行" class="submit" style="width: 70%;margin-left: 50px;display: inline-block;padding: 0.5em 1em;text-decoration: none;background: #668ad8;color: #FFF;border-bottom: solid 4px #627295;border-radius: 3px;"></p>
+    </form>
+    <div id="result"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" async=""></script>
+    <script src="/exectl.js"></script>
+</div>

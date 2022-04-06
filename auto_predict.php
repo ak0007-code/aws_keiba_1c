@@ -177,9 +177,9 @@ for($i=0;$i<count($all_table);$i++){
     </style>
 </head>
 <body>
-    <p><?php echo "◆".$race_name[$target_num]; ?></p>
+    <b><?php echo $race_name[$target_num]; ?></b>
     <div class="tatget_scroll">
-        <table class="target_table" border="1" style="margin-top: -3%;">
+        <table class="target_table" border="1" style="margin-top: 0%;">
             <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>単勝</th><th>馬体重</th></tr>
             <?php for($j=0;$j<count($race_results[$target_num]);$j++) : ?>
                 <?php for($k=0;$k<count($race_results[$target_num][$j]);$k++) : ?>
@@ -189,13 +189,13 @@ for($i=0;$i<count($all_table);$i++){
         </table>
     </div>
 
-    <p><?php echo "以下、参考レース"; ?></p>
+    <p><?php echo "<以下関連レース>"; ?></p>
 
     <?php for($i=0;$i<count($race_name);$i++) : ?>
         <?php if($i==$target_num){ break;} ?>
-        <p><?php echo "◆".$race_name[$i]; ?></p>
+        <b><?php echo $race_name[$i]; ?></b>
         <div class="tatget_scroll">
-            <table class="target_table" border="1" style="margin-top: -3%;">
+            <table class="target_table" border="1" style="margin-top: 0%;">
                 <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>単勝</th><th>馬体重</th></tr>
                 <?php for($j=0;$j<count($race_results[$i]);$j++) : ?>
                     <?php for($k=0;$k<count($race_results[$i][$j]);$k++) : ?>

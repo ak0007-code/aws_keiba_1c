@@ -1,0 +1,19 @@
+ /*** PC用 ***/
+#main {
+  background: #eff4f7;
+}
+
+/* セレクトボックス */
+.main_div select {
+  background-color: #eff4f7;
+  color: #777;
+}
+
+/*** モバイル用 ***/
+@media screen and (max-width: 768px) {
+  /* セレクトボックス */
+  .main_div select {
+    background-color: #eff4f7;
+    color: #777;
+  }
+}

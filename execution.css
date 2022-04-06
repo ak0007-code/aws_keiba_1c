@@ -1,10 +1,93 @@
+/*** PC用 ***/
+@media screen and (min-width: 768px) {
+  #main {
+    background: #eff4f7;
+  }
+
+  /* セレクトボックス */
+  .main_mobile select {
+    background-color: #eff4f7;
+    color: #777;
+  }
+  
+  /* ボタン */
+  .main_mobile button {
+    color:cadetblue;
+    background-color:whitesmoke;
+    border-radius: 10vh;
+    font-weight:normal;
+    border: none;
+  }
+  .main_mobile button:hover {
+    opacity: 0.7;
+  }
+
+  .jouken {
+    margin-left: 18%;
+  }
+
+  .jouken_table {
+    width: auto;
+    height: auto;
+  }
+
+  .jouken_table td {
+    background-color: #eff4f7;
+    padding: 0px 0px 0px 0px;
+    border: 0px;
+    font-size: 16px;
+    width: 45px;
+  }
+}
+
+/*** モバイル用 ***/
+@media screen and (max-width: 768px) {
+  #main {
+    background: #eff4f7;
+  }
+
+  .main_mobile select {
+    background-color: #eff4f7;
+    color: #777;
+  }
+  
+  .main_mobile button {
+    color:cadetblue;
+    background-color:whitesmoke;
+    border-radius: 10vh;
+    font-weight:normal;
+    border: none;
+    font-weight: bold;
+
+    /* color:cadetblue;
+    background-color:whitesmoke;
+    border-radius: 50vh;
+    font-weight: bold; */
+  }
+
+  .jouken {
+    margin-left: -8%;
+  }
+
+  .jouken_table {
+    width: auto;
+    height: auto;
+  }
+
+  .jouken_table td {
+    background-color: #eff4f7;
+    padding: 0px 0px 0px 0px;
+    border: 0px;
+    font-size: 12px;
+    width: 50px;
+  }
+}
+
+
 .target_race {
   text-align: center;
 }
 /* 
-.jouken {
-  text-align: left;
-}
 
 .jouken_table {
 }

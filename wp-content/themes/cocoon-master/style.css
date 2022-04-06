@@ -11064,16 +11064,29 @@ pre {
 }
 
 /*** 以下追記 ***/
-@media screen and (max-width: 768px) {
 
-	/* モバイルメニュー */
+/* PC表示 */
+#navi .navi-in > ul li{
+  width: 33%;
+}
+#navi .navi-in > ul li a{
+  font-size: 20px;
+  font-weight: bold;
+  font-family: "arial";
+}
+#navi .navi-in > ul li a:hover {
+  opacity: 0.7;
+}
+
+/* モバイル表示 */
+@media screen and (max-width: 768px) {
 	#navi .navi-in > .menu-mobile li {
 		width: 33%;
 		height: 50px;
     background-color: #EFF4F7;
 	}
 	#navi .navi-in > .menu-mobile li a {
-		font-size: 16px; /*場合によってフォントサイズを小さく*/
+		font-size: 14px; /*場合によってフォントサイズを小さく*/
     color:#777;
     font-weight: bold;
     font-family: "arial";
@@ -11083,7 +11096,7 @@ pre {
 		margin-top: 14%;
 	}
 	.navi-menu-button.menu-button{
-        	height: 55px;
+    height: 55px;
 	}
 
   /* モバイルヘッダーボタン */
