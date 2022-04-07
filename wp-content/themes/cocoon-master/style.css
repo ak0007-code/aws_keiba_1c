@@ -11067,7 +11067,7 @@ pre {
 
 /* PC表示 */
 #navi .navi-in > ul li{
-  width: 33%;
+  /* width: 33%; */
 }
 #navi .navi-in > ul li a{
   font-size: 20px;
@@ -11086,7 +11086,7 @@ pre {
     background-color: #EFF4F7;
 	}
 	#navi .navi-in > .menu-mobile li a {
-		font-size: 14px; /*場合によってフォントサイズを小さく*/
+		font-size: 14px;
     color:#777;
     font-weight: bold;
     font-family: "arial";
