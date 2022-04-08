@@ -94,5 +94,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . '/' );
 }
 
+/*** 追記 ***/
+$_SERVER['HTTPS']='on';
+define('FORCE_SSL_LOGIN', true);
+define('FORCE_SSL_ADMIN', true);
+/*** 追記 ***/
+
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
