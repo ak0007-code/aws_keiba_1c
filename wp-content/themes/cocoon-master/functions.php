@@ -465,7 +465,7 @@ function includeFile() {
         }else{
                 $file = '../../../execution_mobile.html';
         }
-	return file_get_contents(dirname(__FILE__) . '/' . $file);
+        return file_get_contents(dirname(__FILE__) . '/' . $file);
 }
 add_shortcode('include', 'includeFile');
 
@@ -481,12 +481,12 @@ function auto_predict_includeFile() {
 }
 add_shortcode('auto_predict', 'auto_predict_includeFile');
 
-// 固定ページ(ID:81)でCSSファイルを読み込む
+// 固定ページでCSSファイルを読み込む
 function add_files() {
-    if( is_page('81') ){
+    if( is_page('9') ){
         wp_enqueue_style( 'challenge', get_template_directory_uri() . '/../../../execution.css');
-    }else if( is_page('108') ){
-	wp_enqueue_style( 'challenge', get_template_directory_uri() . '/../../../auto_predict.css');
+    }else if( is_page('11') ){
+        wp_enqueue_style( 'challenge', get_template_directory_uri() . '/../../../auto_predict.css');
     }
 }
 add_action( 'wp_enqueue_scripts', 'add_files' );

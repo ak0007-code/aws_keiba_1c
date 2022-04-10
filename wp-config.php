@@ -1,4 +1,10 @@
 <?php
+//Begin Really Simple SSL session cookie settings
+@ini_set('session.cookie_httponly', true);
+@ini_set('session.cookie_secure', true);
+@ini_set('session.use_only_cookies', true);
+//END Really Simple SSL
+
 /**
  * WordPress の基本設定
  *
@@ -26,10 +32,10 @@
 
 // ** MySQL 設定 - この情報はホスティング先から入手してください。 ** //
 /** WordPress のためのデータベース名 */
-define( 'DB_NAME', 'aws_and_infra' );
+define( 'DB_NAME', 'aws_and_infra_1c' );
 
 /** MySQL データベースのユーザー名 */
-define( 'DB_USER', 'aws_and_infra' );
+define( 'DB_USER', 'root' );
 
 /** MySQL データベースのパスワード */
 define( 'DB_PASSWORD', 'password' );
@@ -52,14 +58,14 @@ define( 'DB_COLLATE', '' );
  *
  * @since 2.6.0
  */
-define( 'AUTH_KEY',         'y<[qW 75b; 7EaN7vre|Fj^K==&K&v2E7hj3Bu}95v:Lq:>c>+_QSac*A=p]x=#>' );
-define( 'SECURE_AUTH_KEY',  '&Whi7><4h_lZ7-8XpS`~*amT fM{s]/2Cmy7=O*+/pSJ%yPF@`)j~_rivJO`e fL' );
-define( 'LOGGED_IN_KEY',    '(Ns_D7&{+5m`nt<+K81R.yoH^giF?Vg z__u, I]Z%6?j!=C-N17b1W`Kyb/C#NH' );
-define( 'NONCE_KEY',        'o)z0=iY(C?`XtL >0);7Q}N#z2x?Yl`MdS/OM3fZhj73,>LQ}DvCv<*2`G1cO^Mb' );
-define( 'AUTH_SALT',        'Ifa9!YB>R<aEPC}.]agqZ%%mcc|@Cn<gPJVU#N~fXG!p,.Y:lAX*l :n#p59.C_W' );
-define( 'SECURE_AUTH_SALT', ' g.mMwjR#~_x](*)aVl$-m&L**2$G I%V,3B1O=:G1i9[[%dZ)Q{U5EL~a[/G(HC' );
-define( 'LOGGED_IN_SALT',   '|g/hyD4^N>-+U(,UZ>;73.oiJ&@$UB7DQaMz<F)c18N,D:i|xGXz1;qx5)Y&(W(Z' );
-define( 'NONCE_SALT',       'm2!N)Zst^[2N-9/UmmYhBC$puYz57%(PC*p;}c!p*FyHTT<Q?Uf/0~Vblg;DP]XE' );
+define( 'AUTH_KEY',         '1|:5^P@!y1oC@xL%1)DYLrVT{cIFNg<p=f%CC2smzjvUQLN%Pd|QI=fwhz2::/Ql' );
+define( 'SECURE_AUTH_KEY',  '8Zm(Qk.Mg85ROr#jhQ5Jv;yuN0{l~`J%5IoYUOO{x44^+hvjQ5d!-.fnQq(zM!Xj' );
+define( 'LOGGED_IN_KEY',    '?9A*4=HpV!@wr~d&Hq-o[gx|D16=>RE.&*,CF4>qRhcp|TBcWt$F:J-k`K`jbz x' );
+define( 'NONCE_KEY',        'Y3Dd(=TAP+-9bzrok}IFG&?s%NH!q`O/m0u`.:uo=/WON~c[_<*fPpfS1k+jjeUu' );
+define( 'AUTH_SALT',        '$7J6`k`=A7(-UXTdkSoW+nC:N)PUi*<CoAZD952=p.wsm]?#<?Tx0~1z_mBeRR1{' );
+define( 'SECURE_AUTH_SALT', 'P62oR1*s>F(oFA1A^O;N!h1]*k%EZBK1/UKyE!>EJf3T7q&yov{%+)qM +Kjo$TL' );
+define( 'LOGGED_IN_SALT',   'mrJ^[>DRFlh+@))6w!`s*_myeCDX`W^1CsmWA{bnBZqnYmg2YNuGXGq@Fj*g@lYQ' );
+define( 'NONCE_SALT',       ':ib!~He~oku)tOgCiP2kj0Xu;y$`O%C ((o+ktWgL3PM1?pbfJ&II;Mwft#ugBAu' );
 
 /**#@-*/
 
@@ -93,6 +99,12 @@ define( 'WP_DEBUG', false );
 if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . '/' );
 }
+
+/*** 追記 ***/
+$_SERVER['HTTPS']='on';
+define('FORCE_SSL_LOGIN', true);
+define('FORCE_SSL_ADMIN', true);
+/*** 追記 ***/
 
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';

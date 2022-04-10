@@ -85,6 +85,31 @@ for($i=0;$i<count($all_table);$i++){
     }
 }
 
+$copy=$race_results[$target_num][0][0];
+// print_r($race_results[$target_num]);
+// print_r($copy);
+
+$race_results_as_umamei=array();
+// 予想レースは1頭ごとに結果表を作る
+for($i=0;$i<count($race_results[$target_num]);$i++){
+    for($j=0;$j<count($race_results[$target_num][$i]);$j++){
+        $uma_name=$race_results[$target_num][$i][$j]->馬名;
+
+        // 予想レースの馬名ごとに結果表を作成
+        for($x=0;$x<count($race_name);$x++){
+            $tmp_num=0;
+            for($y=0;$y<count($race_results[$x]);$y++){
+                for($z=0;$z<count($race_results[$x][$y]);$z++){
+                    if($race_results[$x][$y][$z]->馬名==$uma_name){
+                        $race_results_as_umamei[$uma_name][$x][$tmp_num]=$race_results[$x][$y][$z];
+                        $tmp_num++;
+                    }
+                }
+            }
+        }
+    }
+}
+
 // print($target_num);
 // print_r($race_name);
 // print_r($race_results[$target_num]);
@@ -158,7 +183,8 @@ for($i=0;$i<count($all_table);$i++){
         .jouken_table td {
             border: 1px solid gray;
             text-align:left;
-            font-size: 12px;
+            font-size: 13px;
+            color:black;
         }
 
         .tatget_scroll{
@@ -174,6 +200,32 @@ for($i=0;$i<count($all_table);$i++){
         .tatget_scroll::-webkit-scrollbar-thumb { /*tableにスクロールバーを追加*/
             background: #BCBCBC;
         }
+
+        /* .target_table_wakuban {
+            background-color: red;;
+        } */
+
+        /* ポップアップ表示 */
+        #popup{
+            width:auto;
+            height:auto;
+            background:ghostwhite;
+            padding:0 4%;
+            box-sizing:border-box;
+            display:none;
+            position:fixed;
+            top:50%;
+            left:50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+        input[type="checkbox"]{
+            display:none;
+        }
+        input[type="checkbox"]:checked + #popup{
+            display:block;
+            transition:.2s;
+        }        
     </style>
 </head>
 <body>
@@ -183,23 +235,49 @@ for($i=0;$i<count($all_table);$i++){
             <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>単勝</th><th>馬体重</th></tr>
             <?php for($j=0;$j<count($race_results[$target_num]);$j++) : ?>
                 <?php for($k=0;$k<count($race_results[$target_num][$j]);$k++) : ?>
-                    <tr><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->年度 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->馬名 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->着順 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->人気 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->馬番 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->枠番 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->性齢 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->斤量 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results[$target_num][$j][$k]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results[$target_num][$j][$k]->通過 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->上り ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->単勝 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->馬体重 ?></td></tr>
+                    <tr><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->年度 ?></td>
+                    <td bgcolor="white">
+                    <label>
+                        <span><u style="color: blue;"><?php echo $race_results[$target_num][$j][$k]->馬名 ?><u></span>
+                        <input type="checkbox" name="checkbox">
+                        <div id="popup">
+                            <div class="tatget_scroll">
+                                <table class="jouken_table">
+                                <p style="margin-bottom: 0%;color: black;font-size: 15px">関連レース</p>
+                                <tr><th>レース名</th><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>単勝</th><th>馬体重</th></tr>
+                                    <?php $umamei=$race_results[$target_num][$j][$k]->馬名 ?>
+                                    <?php for($x=0;$x<count($race_name);$x++) : ?>
+                                        <?php if(!$race_results_as_umamei["$umamei"][$x]){ continue; } ?>
+                                        <?php for($y=0;$y<count($race_results_as_umamei["$umamei"][$x]);$y++) : ?>
+                                            <tr><td bgcolor="white"><?php echo $race_name[$x]; ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->年度 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬名 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->着順 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->人気 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->枠番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->性齢 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->斤量 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results_as_umamei["$umamei"][$x][$y]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->通過 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->上り ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->単勝 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬体重 ?></td></tr>
+                                        <?php endfor ?>
+                                    <?php endfor ?>
+                                </table>
+                            </div>
+                        </div>
+                    </label>
+                    </td>
+                    <td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->着順 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->人気 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->馬番 ?></td>
+                    <td bgcolor="white" class="target_table_wakuban_<?php echo $j."_".$k ?>" id="target_table_wakuban_<?php echo $j."_".$k ?>"><?php echo $race_results[$target_num][$j][$k]->枠番 ?></td>
+                    <td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->性齢 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->斤量 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results[$target_num][$j][$k]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results[$target_num][$j][$k]->通過 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->上り ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->単勝 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->馬体重 ?></td></tr>
                 <?php endfor ?>
             <?php endfor; ?>
         </table>
     </div>
 
-    <p><?php echo "<以下関連レース>"; ?></p>
+    <p><?php echo "<以下関連レース>"; ?></p>  
 
     <?php for($i=0;$i<count($race_name);$i++) : ?>
-        <?php if($i==$target_num){ break;} ?>
+        <?php if($i==$target_num){ continue;} ?>
         <b><?php echo $race_name[$i]; ?></b>
         <div class="tatget_scroll">
             <table class="target_table" border="1" style="margin-top: 0%;">
                 <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>単勝</th><th>馬体重</th></tr>
                 <?php for($j=0;$j<count($race_results[$i]);$j++) : ?>
                     <?php for($k=0;$k<count($race_results[$i][$j]);$k++) : ?>
-                        <tr><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->年度 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->馬名 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->着順 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->人気 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->馬番 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->枠番 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->性齢 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->斤量 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results[$i][$j][$k]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results[$i][$j][$k]->通過 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->上り ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->単勝 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->馬体重 ?></td></tr>
+                        <tr><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->年度 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->馬名 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->着順 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->人気 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->馬番 ?></td>
+                        <td bgcolor="white" class="jouken_table_wakuban_<?php echo $i."_".$j."_".$k ?>" id="jouken_table_wakuban_<?php echo $i."_".$j."_".$k ?>"><?php echo $race_results[$i][$j][$k]->枠番 ?></td>
+                        <td bgcolor="white"><?php echo $race_results[$i][$j][$k]->性齢 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->斤量 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results[$i][$j][$k]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results[$i][$j][$k]->通過 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->上り ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->単勝 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->馬体重 ?></td></tr>
                     <?php endfor ?>
                 <?php endfor; ?>
             </table>
@@ -207,5 +285,85 @@ for($i=0;$i<count($all_table);$i++){
     <?php endfor; ?>
 </body>
 </html>
+
+<!-- 結果表の色を変える -->
+<!-- 枠番 -->
+<script type="text/javascript">
+    // ターゲットレース
+    function wakuban_color_edit_target(i,k){
+        var num=document.getElementById('target_table_wakuban_'+i+'_'+k).innerHTML;
+        
+        if(num == 1){
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.backgroundColor = '#FEFEFE';
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.color = "black";
+        }else if(num == 2){
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.backgroundColor = '#444444';
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.color = "white";
+        }else if(num == 3){
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.backgroundColor = '#E95556';
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.color = "white";
+        }else if(num == 4){
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.backgroundColor = '#416CBA';
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.color = "white";
+        }else if(num == 5){
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.backgroundColor = '#E7C52C';
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.color = "white";
+        }else if(num == 6){
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.backgroundColor = '#45AF4C';
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.color = "white";
+        }else if(num == 7){
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.backgroundColor = '#EE9738';
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.color = "white";
+        }else if(num == 8){
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.backgroundColor = '#EF8FA0';
+            document.querySelector('.target_table_wakuban_'+i+'_'+k).style.color = "white";
+        }
+    }
+    // 関連レース
+    function wakuban_color_edit_jouken(i,k,j){
+        var num=document.getElementById('jouken_table_wakuban_'+i+'_'+k+'_'+j).innerHTML;
+        
+        if(num == 1){
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.backgroundColor = '#FEFEFE';
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.color = "black";
+        }else if(num == 2){
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.backgroundColor = '#444444';
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.color = "white";
+        }else if(num == 3){
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.backgroundColor = '#E95556';
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.color = "white";
+        }else if(num == 4){
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.backgroundColor = '#416CBA';
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.color = "white";
+        }else if(num == 5){
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.backgroundColor = '#E7C52C';
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.color = "white";
+        }else if(num == 6){
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.backgroundColor = '#45AF4C';
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.color = "white";
+        }else if(num == 7){
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.backgroundColor = '#EE9738';
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.color = "white";
+        }else if(num == 8){
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.backgroundColor = '#EF8FA0';
+            document.querySelector('.jouken_table_wakuban_'+i+'_'+k+'_'+j).style.color = "white";
+        }
+    }
+</script>
+<?php
+for($i=0;$i<count($race_results[$target_num]);$i++){
+    for($k=0;$k<count($race_results[$target_num][$i]);$k++){
+        echo '<script type="text/javascript">',"wakuban_color_edit_target($i,$k);",'</script>';
+    }
+}
+for($i=0;$i<count($race_results);$i++){
+    if($i==$target_num){ continue; }
+    for($k=0;$k<count($race_results[$i]);$k++){
+        for($j=0;$j<count($race_results[$i][$k]);$j++){
+            echo '<script type="text/javascript">',"wakuban_color_edit_jouken($i,$k,$j);",'</script>';
+        }
+    }
+}
+?>
 
 <?php return 0; ?>

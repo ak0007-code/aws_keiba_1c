@@ -11080,34 +11080,35 @@ pre {
 
 /* モバイル表示 */
 @media screen and (max-width: 768px) {
-	#navi .navi-in > .menu-mobile li {
-		width: 33%;
-		height: 50px;
+  #navi .navi-in > .menu-mobile li {
+    width: 33%;
+    height: 50px;
     background-color: #EFF4F7;
-	}
-	#navi .navi-in > .menu-mobile li a {
-		font-size: 14px;
+    visibility: hidden;
+  }
+  #navi .navi-in > .menu-mobile li a {
+    font-size: 14px;
     color:#777;
     font-weight: bold;
     font-family: "arial";
     vertical-align: middle;
-		line-height: 20px;
-		text-align: center;
-		margin-top: 14%;
-	}
-	.navi-menu-button.menu-button{
+    line-height: 20px;
+    text-align: center;
+    margin-top: 14%;
+  }
+  .navi-menu-button.menu-button{
     height: 55px;
-	}
+  }
 
   /* モバイルヘッダーボタン */
-	img.site-logo-image{
-		visibility: hidden;
-	}
-	.logo-menu-button.menu-button{
-		background-image: url(http://18.183.137.50/wp-content/uploads/2022/04/logo5.png);
-		background-size: auto 130px;
-		background-position: center;
-		background-repeat: no-repeat;
+  img.site-logo-image{
+    visibility: hidden;
+  }
+  .logo-menu-button.menu-button{
+    background-image: url(https://umaban.net/wp-content/uploads/2022/04/logo5.png);
+    background-size: auto 130px;
+    background-position: center;
+    background-repeat: no-repeat;
     right: 30%;
   }
   .search-menu-button {
@@ -11124,5 +11125,4 @@ pre {
   .mobile-menu-buttons{
     background:#EFF4F7;
   }
-
 }
