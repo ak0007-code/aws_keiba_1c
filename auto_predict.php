@@ -12,6 +12,9 @@ $keiba_wpdb = new wpdb($db_user, $db_passwd, 'keiba', $db_host);
 $target_race_name_jp=$_POST['race_name'];
 $target_race_name_eng=$keiba_wpdb->get_row("SELECT ENG_NAME FROM RACENAME_JP_ENG_TRANS WHERE JP_NAME = \"$_POST[race_name] \"")->ENG_NAME;
 
+// 前年検索
+$pre_year=$_POST['pre_year_select'];
+
 // 開始年～終了年を配列に格納(老番から格納する)
 $year_array=array();
 $diff = $_POST['year_e'] - $_POST['year_s'];
@@ -52,6 +55,8 @@ for($i=0;$i<count($year_array);$i++){
     $umamei_regexp[$i]="^(".$umamei_regexp[$i].")$";
 }
 
+// print_r($umamei_regexp);
+
 // DBに格納しているレース名を格納(RACE_NAME_ENG_JPテーブルも含まれることに注意)
 // $all_table=$keiba_wpdb->get_results("SHOW TABLES;");
 $all_table=$keiba_wpdb->get_results("SELECT * FROM RACE_DATE_SORT");
@@ -61,6 +66,11 @@ $race_results=array(); // [レース番号][開催年][行]
 $race_name=array();
 $num=0;
 $target_num=0;
+
+// array_push($year_array,($year_array[count($year_array)-1]-1));
+// print_r($year_array);
+// return 0;
+
 for($i=0;$i<count($all_table);$i++){
     $table_name_jp=$all_table[$i]->RACE_NAME;
     $table_name_eng=$keiba_wpdb->get_row("SELECT ENG_NAME FROM RACENAME_JP_ENG_TRANS WHERE JP_NAME = \"$table_name_jp\"")->ENG_NAME;
@@ -68,12 +78,30 @@ for($i=0;$i<count($all_table);$i++){
     $add_num=0;
     for($j=0;$j<count($year_array);$j++){
         $tmp_array=array();
-        $tmp_array=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$year_array[$j]\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
+        if($pre_year=="PRE" && $table_name_eng!=$target_race_name_jp){
+            $tg_year=$year_array[$j]."|".($year_array[$j]-1);
+        }else{
+            $tg_year=$year_array[$j];
+        }
+        $tmp_array=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$tg_year\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
+        // if($table_name_eng=="Hanshin_Juvenile_Fillies"){
+        //     print_r($tmp_array);
+        //     // return 0;
+        // }
+        //$tmp_array=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$year_array[$j]\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
         if($tmp_array){
-            $race_results[$num][$add_num]=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$year_array[$j]\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
+            $race_results[$num][$add_num]=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$tg_year\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
             $add_num++;
         }
     }
+    // for($j=0;$j<count($year_array);$j++){
+    //     $tmp_array=array();
+    //     $tmp_array=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$year_array[$j]\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
+    //     if($tmp_array){
+    //         $race_results[$num][$add_num]=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$year_array[$j]\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
+    //         $add_num++;
+    //     }
+    // }
 
     if($race_results[$num]){
         $race_name[$num]=$table_name_jp;
@@ -85,7 +113,10 @@ for($i=0;$i<count($all_table);$i++){
     }
 }
 
-$copy=$race_results[$target_num][0][0];
+// $unique = array_unique($race_results[$target_num]);
+// print_r($unique);
+
+// $copy=$race_results[$target_num][0][0];
 // print_r($race_results[$target_num]);
 // print_r($copy);
 
@@ -136,12 +167,17 @@ for($i=0;$i<count($race_results[$target_num]);$i++){
         document.getElementById("chakujun_min").value=<?php echo $_POST['chakujun_min']; ?>;
         document.getElementById("chakujun_max").value=<?php echo $_POST['chakujun_max']; ?>;
     }
+    // 前年検索着順
+    function preyearselectsave(){
+        document.getElementById("pre_year_select").value="<?php echo $_POST["pre_year_select"]; ?>";
+    }
 </script>
 
 <!-- 値保持についてJavaScriptでは最初の更新しか適用されないため、下記PHPを実行する -->
 <?php echo '<script type="text/javascript">','targetracesave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','targetyearsave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','targetchakujunsave();','</script>'; ?>
+<?php echo '<script type="text/javascript">','preyearselectsave();','</script>'; ?>
 
 <html lang="ja">
 <head>

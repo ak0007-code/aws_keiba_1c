@@ -34,6 +34,7 @@ $target_race_name=$keiba_wpdb->get_row("SELECT ENG_NAME FROM RACENAME_JP_ENG_TRA
 // データ格納用配列
 $delete_check_btn_array=array(); // 削除ボタンの押下状況
 $and_or_select_array=array(); // ANN・ORのセレクト状況
+$pre_year_select_array=array(); // 前年検索のセレクト状況
 $race_name_array_eng=array(); //レース名
 $umaban_array=array(); // 馬番
 $wakuban_array=array(); // 枠番
@@ -65,6 +66,9 @@ $chakujun_array=array(); // 着順
 for ($j=0;$j<J_MAX;$j++){
     // ANN・ORのセレクト状況
     $and_or_select_array[$j]=$_POST["j".($j+1)."_and_or_select"];
+
+    // 前年検索のセレクト状況
+    $pre_year_select_array[$j]=$_POST["j".($j+1)."_pre_year_select"];
 
     // 削除ボタン
     $delete_check_btn_array[$j]=$_POST["j".($j+1)."_delete_checkbox"];
@@ -146,6 +150,8 @@ for ($j=0;$j<J_MAX;$j++){
         $chakujun_array[$j][$i]=$_POST["j".($j+1)."_chakujun_".($i+1)];
     }
 }
+
+// print_r($pre_year_select_array);
 
 // 結果フラグ 0:結果無し 1:結果有り
 $j_result_flg=array();
@@ -471,6 +477,9 @@ for ($j=0;$j<J_MAX;$j++){
         // 年度
         $year_regexp=".*";
         foreach ($year_array as $year){
+            if($pre_year_select_array[$j]=="PRE"){
+                $year=$year-1;
+            }
             if($year_regexp==".*"){
                 $year_regexp=(string)$year;
             }else{
@@ -487,7 +496,9 @@ for ($j=0;$j<J_MAX;$j++){
         $agarijun_regexp[$j]="^(".$agarijun_regexp[$j].")$";
         $chakujun_regexp[$j]="^(".$chakujun_regexp[$j].")$";
         $tuka_regexp="^(".$tuka_regexp.")$";
-        $year_regexp=="^(".$year_regexp.")$";
+        $year_regexp="^(".$year_regexp.")$";
+
+        // echo $year_regexp;
 
         // 条件j:SQL実行        
         // いずれかの選択がされている場合は条件通りに検索、されていない場合は全検索する
@@ -523,16 +534,22 @@ if(!(in_array(1,$j_result_flg))){
 
     // 開催年ごとに処理を実行していく
     foreach ($year_array as $year){
+
         $tmp_results[$i][0]=$year;
         $tmp_array[$i][0]=null; // 0番目にnullを入れないとarray_pushが使えないため
 
         // 全条件に対して開催年=$yearに合致する要素を取り出す
-        foreach ($j_results as $result){
-            if(count($result)==0){
+        for ($k=0;$k<count($j_results);$k++){
+            if(count($j_results[$k])==0){
                 continue;
             }
-            foreach ($result as $row){
-                if($row->年度 == $year){
+            if($pre_year_select_array[$k]=="PRE"){
+                $tg_year=$year-1;
+            }else{
+                $tg_year=$year;
+            }
+            foreach ($j_results[$k] as $row){
+                if($row->年度 == $tg_year){
                     array_push($tmp_array[$i],$row->馬名);
                 }
             }
@@ -597,7 +614,12 @@ if(!(in_array(1,$j_result_flg))){
                     // レース名を日本語に変換して格納
                     $year_results_others_jp[$k]=$keiba_wpdb->get_row("SELECT JP_NAME FROM RACENAME_JP_ENG_TRANS WHERE ENG_NAME = \"$race_name_eng\"")->JP_NAME;
 
-                    $year_results_others[$i][$k]=$keiba_wpdb->get_results("SELECT * FROM $race_name_eng WHERE 年度 = ". $year . " AND 馬名 REGEXP \"$uma_name_regexp\"");;
+                    if($pre_year_select_array[$j]=="PRE"){
+                        $tg_year=$year-1;
+                    }else{
+                        $tg_year=$year;
+                    }
+                    $year_results_others[$i][$k]=$keiba_wpdb->get_results("SELECT * FROM $race_name_eng WHERE 年度 = ". $tg_year . " AND 馬名 REGEXP \"$uma_name_regexp\"");;
                     $k++;
                 }
 
@@ -667,6 +689,16 @@ if(!(in_array(1,$j_result_flg))){
         for(let j=1;j<=<?php echo J_MAX; ?>;j++){
             if(js_array[j-1]){
                 document.getElementById("j"+j+"_and_or_select").value=js_array[j-1];
+            }
+        }
+    }
+    // PRE YEARセレクト
+    function preyearselectsave(){
+        <?php $json_array = json_encode($pre_year_select_array); ?>
+        let js_array = <?php echo $json_array; ?>;
+        for(let j=1;j<=<?php echo J_MAX; ?>;j++){
+            if(js_array[j-1]){
+                document.getElementById("j"+j+"_pre_year_select").value=js_array[j-1];
             }
         }
     }
@@ -878,6 +910,7 @@ if(!(in_array(1,$j_result_flg))){
 <?php echo '<script type="text/javascript">','targetyearsave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','deletebtnsave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','andorselectsave();','</script>'; ?>
+<?php echo '<script type="text/javascript">','preyearselectsave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','racesave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','umabansave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','wakubansave();','</script>'; ?>
