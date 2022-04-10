@@ -188,6 +188,7 @@
             const SEIREI_MAX=9;
             const KINRYO_MIN=52;
             const KINRYO_MAX=59;
+            const AGARIJUN_MAX=25;
             const NINKI_MAX=25;
             const CHAKUJUN_MAX=25;
             for(let i=1;i<=J_MAX;i++){
@@ -1085,6 +1086,41 @@
                     +'<td><input type="checkbox" id="j_ninki_23_tmp" name="j_ninki_23_tmp" value="23">23</td>'
                     +'<td><input type="checkbox" id="j_ninki_24_tmp" name="j_ninki_24_tmp" value="24">24</td>'
                     +'<td><input type="checkbox" id="j_ninki_25_tmp" name="j_ninki_25_tmp" value="25">25</td>'
+                    +'</tr>'  
+                    +'</table>'
+                    +'</p>'
+                    +'<p style="margin-left: 50px;">上り順位<br>'
+                    +'<table class="jouken_table" style="margin-left: 50px;margin-top: -40px;">'
+                    +'<tr>'
+                    +'<td><input type="checkbox" id="j_agarijun_1_tmp" name="j_agarijun_1_tmp" value="1">1</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_2_tmp" name="j_agarijun_2_tmp" value="2">2</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_3_tmp" name="j_agarijun_3_tmp" value="3">3</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_4_tmp" name="j_agarijun_4_tmp" value="4">4</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_5_tmp" name="j_agarijun_5_tmp" value="5">5</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_6_tmp" name="j_agarijun_6_tmp" value="6">6</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_7_tmp" name="j_agarijun_7_tmp" value="7">7</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_8_tmp" name="j_agarijun_8_tmp" value="8">8</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_9_tmp" name="j_agarijun_9_tmp" value="9">9</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_10_tmp" name="j_agarijun_10_tmp" value="10">10</td>'
+                    +'</tr>'
+                    +'<tr>'
+                    +'<td><input type="checkbox" id="j_agarijun_11_tmp" name="j_agarijun_11_tmp" value="11">11</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_12_tmp" name="j_agarijun_12_tmp" value="12">12</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_13_tmp" name="j_agarijun_13_tmp" value="13">13</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_14_tmp" name="j_agarijun_14_tmp" value="14">14</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_15_tmp" name="j_agarijun_15_tmp" value="15">15</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_16_tmp" name="j_agarijun_16_tmp" value="16">16</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_17_tmp" name="j_agarijun_17_tmp" value="17">17</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_18_tmp" name="j_agarijun_18_tmp" value="18">18</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_19_tmp" name="j_agarijun_19_tmp" value="19">19</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_20_tmp" name="j_agarijun_20_tmp" value="20">20</td>'
+                    +'</tr>'
+                    +'<tr>'
+                    +'<td><input type="checkbox" id="j_agarijun_21_tmp" name="j_agarijun_21_tmp" value="21">21</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_22_tmp" name="j_agarijun_22_tmp" value="22">22</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_23_tmp" name="j_agarijun_23_tmp" value="23">23</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_24_tmp" name="j_agarijun_24_tmp" value="24">24</td>'
+                    +'<td><input type="checkbox" id="j_agarijun_25_tmp" name="j_agarijun_25_tmp" value="25">25</td>'
                     +'</tr>'  
                     +'</table>'
                     +'</p>'
@@ -2019,6 +2055,13 @@
                 tmp_array[i]=document.getElementById("j_tansho_max_tmp");
                 tmp_array[i].id="j"+i+"_tansho_max";
                 tmp_array[i].name="j"+i+"_tansho_max";
+
+                // 条件i>上り順位(1~AGARIJUN_MAX)
+                for(let j=1;j<=AGARIJUN_MAX;j++){
+                    tmp_array[i]=document.getElementById("j_agarijun_"+j+"_tmp");
+                    tmp_array[i].id="j"+i+"_agarijun_"+j;
+                    tmp_array[i].name="j"+i+"_agarijun_"+j;
+                }
 
                 // 条件i>人気(1~NINKI_MAX)
                 for(let j=1;j<=NINKI_MAX;j++){
