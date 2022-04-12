@@ -90,8 +90,14 @@ for($i=0;$i<count($all_table);$i++){
         // }
         //$tmp_array=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$year_array[$j]\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
         if($tmp_array){
-            $race_results[$num][$add_num]=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$tg_year\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
-            $add_num++;
+            // プログラムの都合上、第2添字が0の要素に結果を追加する
+            foreach($tmp_array as $tmp){
+                $race_results[$num][0][]=$tmp;
+            }
+            // $race_results[$num][$add_num]=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$tg_year\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
+            // $race_results[$num][0]=$race_results[$num][0]+$tmp_array;
+            // $race_results[$num][]=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$tg_year\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
+            // $add_num++;
         }
     }
     // for($j=0;$j<count($year_array);$j++){
@@ -113,8 +119,17 @@ for($i=0;$i<count($all_table);$i++){
     }
 }
 
-// $unique = array_unique($race_results[$target_num]);
-// print_r($unique);
+// print_r($race_results[$target_num][0]);
+
+// 重複レコードを削除する
+for($i=0;$i<count($race_results);$i++){
+    $race_results[$i][0]=array_values(array_unique($race_results[$i][0],SORT_REGULAR));
+}
+
+//$unique=array_unique($race_results[$target_num][0],SORT_REGULAR);
+// print_r(array_values($unique));
+// $race_results[$target_num][0]=array_values($unique);
+// print_r(array_unique($race_results[$target_num][0],SORT_REGULAR));
 
 // $copy=$race_results[$target_num][0][0];
 // print_r($race_results[$target_num]);
