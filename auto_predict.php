@@ -164,6 +164,38 @@ for($i=0;$i<count($race_results[$target_num]);$i++){
 // print_r($race_results[0]);
 // print_r($race_name[0]);
 // return 0;
+
+// レースごとの要素情報をカウントする
+// 人気
+$ninki_percent=array();
+for($i=0;$i<count($race_results);$i++){
+    for($j=0;$j<count($race_results[$i][0]);$j++){
+        $ninki_num=$race_results[$i][0][$j]->人気;
+        if(array_key_exists($ninki_num."番人気", $ninki_percent[$i])){
+            $ninki_percent[$i][$ninki_num."番人気"]=$ninki_percent[$i][$ninki_num."番人気"]+1;
+        }else{
+            $ninki_percent[$i][$ninki_num."番人気"]=1;
+        }
+    }
+}
+
+// 添え字をソートして格納
+for($i=0;$i<count($race_results);$i++){
+    $ninki_percent_index[$i]=array_keys($ninki_percent[$i]);
+    sort($ninki_percent_index[$i],SORT_NATURAL);
+}
+
+$tmp=$ninki_percent_index[34][0];
+print_r($ninki_percent[34]["$tmp"]);
+// sort($ninki_percent[34]);
+// print_r($ninki_percent[34]);
+// $tmp=array_keys($ninki_percent[34]);
+// sort($tmp,SORT_NATURAL);
+// print_r($ninki_percent_index[34]);
+// sort($ninki_percent[34]);
+// print_r($ninki_percent[34]);
+// print(array_sum($ninki_percent[18]));
+
 ?>
 
 <!-- 入力情報を保存する -->
@@ -198,7 +230,9 @@ for($i=0;$i<count($race_results[$target_num]);$i++){
 <head>
     <meta charset="UTF-8">
     <title>Hello!</title>
-    <link rel="stylesheet" href="/execution.css">
+    <!-- <link rel="stylesheet" href="/execution.css"> -->
+    <link rel="stylesheet" href="/graph.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/theus/chart.css/v1.0.0/dist/chart.css" />
     <style>
         .target_table {
             border-collapse: collapse;
@@ -258,7 +292,7 @@ for($i=0;$i<count($race_results[$target_num]);$i++){
 
         /* ポップアップ表示 */
         #popup{
-            width:auto;
+            width:70%;
             height:auto;
             background:ghostwhite;
             padding:0 4%;
@@ -266,7 +300,7 @@ for($i=0;$i<count($race_results[$target_num]);$i++){
             display:none;
             position:fixed;
             top:50%;
-            left:50%;
+            left:35%;
             -webkit-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
         }
@@ -276,14 +310,29 @@ for($i=0;$i<count($race_results[$target_num]);$i++){
         input[type="checkbox"]:checked + #popup{
             display:block;
             transition:.2s;
-        }        
+        }
     </style>
 </head>
 <body>
     <b><?php echo $race_name[$target_num]; ?></b>
     <div class="tatget_scroll">
         <table class="target_table" border="1" style="margin-top: 0%;">
-            <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
+            <tr><th>年度</th><th>馬名</th><th>着順</th>
+            <th>
+            <label>
+                <span><u style="color: blue;">人気<u></span>
+                <input type="checkbox" name="checkbox">
+                <div id="popup">
+                    <div class="charts">
+                        <?php foreach($ninki_percent[$target_num] as $index => $value) : ?>
+                            <span style="text-align: left;"><?php echo $index;echo "(".$value."/".array_sum($ninki_percent[$target_num]).")" ?></span>
+                            <div class="charts__chart chart--p<?php echo floor(($value/array_sum($ninki_percent[$target_num])*100)); ?> chart--blue" data-percent></div>
+                        <?php endforeach ?>        
+                    </div>
+                </div>
+            </label>
+            </th>
+            <th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
             <?php for($j=0;$j<count($race_results[$target_num]);$j++) : ?>
                 <?php for($k=0;$k<count($race_results[$target_num][$j]);$k++) : ?>
                     <tr><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->年度 ?></td>
