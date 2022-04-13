@@ -201,6 +201,12 @@ for($i=0;$i<count($race_results);$i++){
         }else{
             $tuka_last_percent[$i][$tuka_last_num[0]."番手"]=1;
         }
+        $agarijun_num=$race_results[$i][0][$j]->上り順位;
+        if(array_key_exists($agarijun_num."位", $agarijun_percent[$i])){
+            $agarijun_percent[$i][$agarijun_num."位"]=$agarijun_percent[$i][$agarijun_num."位"]+1;
+        }else{
+            $agarijun_percent[$i][$agarijun_num."位"]=1;
+        }
     }
 }
 
@@ -219,6 +225,8 @@ for($i=0;$i<count($race_results);$i++){
     sort($wakuban_percent_index[$i],SORT_NATURAL);
     $tuka_last_percent_index[$i]=array_keys($tuka_last_percent[$i]);
     sort($tuka_last_percent_index[$i],SORT_NATURAL);
+    $agarijun_percent_index[$i]=array_keys($agarijun_percent[$i]);
+    sort($agarijun_percent_index[$i],SORT_NATURAL);
 }
 
 // print_r($umaban_percent[34]);
@@ -363,7 +371,7 @@ for($i=0;$i<count($race_results);$i++){
                         <span><u style="border-bottom: none;">人気<u></span>
                         <input type="checkbox" name="checkbox">
                         <div id="popup">
-                            <p style="color: blue;">【人気順位】</p>
+                            <p style="color: blue;">【人気】</p>
                             <div class="charts">
                                 <?php foreach($ninki_percent_index[$target_num] as $index) : ?>
                                     <span style="text-align: left;color: blue"><?php echo $index;echo "(".$ninki_percent[$target_num][$index]."/".array_sum($ninki_percent[$target_num]).")" ?></span>
@@ -378,7 +386,7 @@ for($i=0;$i<count($race_results);$i++){
                         <span><u>馬番<u></span>
                         <input type="checkbox" name="checkbox">
                         <div id="popup">
-                            <p style="color: blue;">【馬番順位】</p>
+                            <p style="color: blue;">【馬番】</p>
                             <div class="charts">
                                 <?php foreach($umaban_percent_index[$target_num] as $index) : ?>
                                     <span style="text-align: left;color: blue"><?php echo $index;echo "(".$umaban_percent[$target_num][$index]."/".array_sum($umaban_percent[$target_num]).")" ?></span>
@@ -393,7 +401,7 @@ for($i=0;$i<count($race_results);$i++){
                         <span><u>枠番<u></span>
                         <input type="checkbox" name="checkbox">
                         <div id="popup">
-                            <p style="color: blue;">【枠番順位】</p>
+                            <p style="color: blue;">【枠番】</p>
                             <div class="charts">
                                 <?php foreach($wakuban_percent_index[$target_num] as $index) : ?>
                                     <span style="text-align: left;color: blue"><?php echo $index;echo "(".$wakuban_percent[$target_num][$index]."/".array_sum($wakuban_percent[$target_num]).")" ?></span>
@@ -419,7 +427,23 @@ for($i=0;$i<count($race_results);$i++){
                         </div>
                     </label>
                 </th>
-                <th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th>
+                <th>上り</th>
+                <th>
+                    <label>
+                        <span><u>上り順位<u></span>
+                        <input type="checkbox" name="checkbox">
+                        <div id="popup">
+                            <p style="color: blue;">【上り順位】</p>
+                            <div class="charts">
+                                <?php foreach($agarijun_percent_index[$target_num] as $index) : ?>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$agarijun_percent[$target_num][$index]."/".array_sum($agarijun_percent[$target_num]).")" ?></span>
+                                    <div class="charts__chart chart--p<?php echo floor(($agarijun_percent[$target_num][$index]/array_sum($agarijun_percent[$target_num])*100)); ?> chart--blue" data-percent></div>
+                                <?php endforeach ?>
+                            </div>
+                        </div>
+                    </label>
+                </th>
+                <th>単勝</th><th>馬体重</th>
             </tr>
             <!-- <tr>
                 <th style="border-top: 0ch;"></th><th style="border-top: none;"></th><th style="border-top: none;"></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>1</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
@@ -484,7 +508,7 @@ for($i=0;$i<count($race_results);$i++){
                         <span><u>人気<u></span>
                         <input type="checkbox" name="checkbox">
                         <div id="popup">
-                            <p style="color: blue;">【人気順位】</p>
+                            <p style="color: blue;">【人気】</p>
                             <div class="charts">
                                 <?php foreach($ninki_percent_index[$i] as $index) : ?>
                                     <span style="text-align: left;color: blue"><?php echo $index;echo "(".$ninki_percent[$i][$index]."/".array_sum($ninki_percent[$i]).")" ?></span>
@@ -499,7 +523,7 @@ for($i=0;$i<count($race_results);$i++){
                         <span><u>馬番<u></span>
                         <input type="checkbox" name="checkbox">
                         <div id="popup">
-                            <p style="color: blue;">【馬番順位】</p>
+                            <p style="color: blue;">【馬番】</p>
                             <div class="charts">
                                 <?php foreach($umaban_percent_index[$i] as $index) : ?>
                                     <span style="text-align: left;color: blue"><?php echo $index;echo "(".$umaban_percent[$i][$index]."/".array_sum($umaban_percent[$i]).")" ?></span>
@@ -514,7 +538,7 @@ for($i=0;$i<count($race_results);$i++){
                         <span><u>枠番<u></span>
                         <input type="checkbox" name="checkbox">
                         <div id="popup">
-                            <p style="color: blue;">【枠番順位】</p>
+                            <p style="color: blue;">【枠番】</p>
                             <div class="charts">
                                 <?php foreach($wakuban_percent_index[$i] as $index) : ?>
                                     <span style="text-align: left;color: blue"><?php echo $index;echo "(".$wakuban_percent[$i][$index]."/".array_sum($wakuban_percent[$i]).")" ?></span>
@@ -539,7 +563,23 @@ for($i=0;$i<count($race_results);$i++){
                         </div>
                     </label>
                 </th>
-                <th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
+                <th>上り</th>
+                <th>
+                    <label>
+                        <span><u>上り順位<u></span>
+                        <input type="checkbox" name="checkbox">
+                        <div id="popup">
+                            <p style="color: blue;">【上り順位】</p>
+                            <div class="charts">
+                                <?php foreach($agarijun_percent_index[$i] as $index) : ?>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$agarijun_percent[$i][$index]."/".array_sum($agarijun_percent[$i]).")" ?></span>
+                                    <div class="charts__chart chart--p<?php echo floor(($agarijun_percent[$i][$index]/array_sum($agarijun_percent[$i])*100)); ?> chart--blue" data-percent></div>
+                                <?php endforeach ?>
+                            </div>
+                        </div>
+                    </label>
+                </th>
+                <th>単勝</th><th>馬体重</th></tr>
                 <?php for($j=0;$j<count($race_results[$i]);$j++) : ?>
                     <?php for($k=0;$k<count($race_results[$i][$j]);$k++) : ?>
                         <tr><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->年度 ?></td>
