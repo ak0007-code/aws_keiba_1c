@@ -166,35 +166,63 @@ for($i=0;$i<count($race_results[$target_num]);$i++){
 // return 0;
 
 // レースごとの要素情報をカウントする
-// 人気
-$ninki_percent=array();
+// $ninki_percent=array();
+// $umaban_percent=array();
 for($i=0;$i<count($race_results);$i++){
     for($j=0;$j<count($race_results[$i][0]);$j++){
+        $chakujun_num=$race_results[$i][0][$j]->着順;
+        if(array_key_exists($chakujun_num."着", $chakujun_percent[$i])){
+            $chakujun_percent[$i][$chakujun_num."着"]=$chakujun_percent[$i][$chakujun_num."着"]+1;
+        }else{
+            $chakujun_percent[$i][$chakujun_num."着"]=1;
+        }
         $ninki_num=$race_results[$i][0][$j]->人気;
         if(array_key_exists($ninki_num."番人気", $ninki_percent[$i])){
             $ninki_percent[$i][$ninki_num."番人気"]=$ninki_percent[$i][$ninki_num."番人気"]+1;
         }else{
             $ninki_percent[$i][$ninki_num."番人気"]=1;
         }
+        $umaban_num=$race_results[$i][0][$j]->馬番;
+        if(array_key_exists("馬番".$umaban_num, $umaban_percent[$i])){
+            $umaban_percent[$i]["馬番".$umaban_num]=$umaban_percent[$i]["馬番".$umaban_num]+1;
+        }else{
+            $umaban_percent[$i]["馬番".$umaban_num]=1;
+        }
+        $wakuban_num=$race_results[$i][0][$j]->枠番;
+        if(array_key_exists("枠番".$wakuban_num, $wakuban_percent[$i])){
+            $wakuban_percent[$i]["枠番".$wakuban_num]=$wakuban_percent[$i]["枠番".$wakuban_num]+1;
+        }else{
+            $wakuban_percent[$i]["枠番".$wakuban_num]=1;
+        }
+        $tuka_num=$race_results[$i][0][$j]->通過;
+        preg_match('|\d{1,2}$|',$tuka_num,$tuka_last_num);
+        if(array_key_exists($tuka_last_num[0]."番手", $tuka_last_percent[$i])){
+            $tuka_last_percent[$i][$tuka_last_num[0]."番手"]=$tuka_last_percent[$i][$tuka_last_num[0]."番手"]+1;
+        }else{
+            $tuka_last_percent[$i][$tuka_last_num[0]."番手"]=1;
+        }
     }
 }
 
+// $ret=preg_match('|\d{1,2}$|','1-2-3-14',$tmp_1234);
+// print_r($tuka_last_percent);
+
 // 添え字をソートして格納
 for($i=0;$i<count($race_results);$i++){
+    $chakujun_percent_index[$i]=array_keys($chakujun_percent[$i]);
+    sort($chakujun_percent_index[$i],SORT_NATURAL);
     $ninki_percent_index[$i]=array_keys($ninki_percent[$i]);
     sort($ninki_percent_index[$i],SORT_NATURAL);
+    $umaban_percent_index[$i]=array_keys($umaban_percent[$i]);
+    sort($umaban_percent_index[$i],SORT_NATURAL);
+    $wakuban_percent_index[$i]=array_keys($wakuban_percent[$i]);
+    sort($wakuban_percent_index[$i],SORT_NATURAL);
+    $tuka_last_percent_index[$i]=array_keys($tuka_last_percent[$i]);
+    sort($tuka_last_percent_index[$i],SORT_NATURAL);
 }
 
-$tmp=$ninki_percent_index[34][0];
-print_r($ninki_percent[34]["$tmp"]);
-// sort($ninki_percent[34]);
-// print_r($ninki_percent[34]);
-// $tmp=array_keys($ninki_percent[34]);
-// sort($tmp,SORT_NATURAL);
-// print_r($ninki_percent_index[34]);
-// sort($ninki_percent[34]);
-// print_r($ninki_percent[34]);
-// print(array_sum($ninki_percent[18]));
+// print_r($umaban_percent[34]);
+// print_r($umaban_percent_index[34]);
 
 ?>
 
@@ -286,10 +314,6 @@ print_r($ninki_percent[34]["$tmp"]);
             background: #BCBCBC;
         }
 
-        /* .target_table_wakuban {
-            background-color: red;;
-        } */
-
         /* ポップアップ表示 */
         #popup{
             width:70%;
@@ -317,45 +341,112 @@ print_r($ninki_percent[34]["$tmp"]);
     <b><?php echo $race_name[$target_num]; ?></b>
     <div class="tatget_scroll">
         <table class="target_table" border="1" style="margin-top: 0%;">
-            <tr><th>年度</th><th>馬名</th><th>着順</th>
-            <th>
-            <label>
-                <span><u style="color: blue;">人気<u></span>
-                <input type="checkbox" name="checkbox">
-                <div id="popup">
-                    <div class="charts">
-                        <?php foreach($ninki_percent[$target_num] as $index => $value) : ?>
-                            <span style="text-align: left;"><?php echo $index;echo "(".$value."/".array_sum($ninki_percent[$target_num]).")" ?></span>
-                            <div class="charts__chart chart--p<?php echo floor(($value/array_sum($ninki_percent[$target_num])*100)); ?> chart--blue" data-percent></div>
-                        <?php endforeach ?>        
-                    </div>
-                </div>
-            </label>
-            </th>
-            <th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
+            <tr class="item_name">
+                <th>年度</th><th>馬名</th>
+                <th>
+                    <label>
+                        <span><u>着順<u></span>
+                        <input type="checkbox" name="checkbox">
+                        <div id="popup">
+                            <p style="color: blue;">【着順】</p>
+                            <div class="charts">
+                                <?php foreach($chakujun_percent_index[$target_num] as $index) : ?>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$chakujun_percent[$target_num][$index]."/".array_sum($chakujun_percent[$target_num]).")" ?></span>
+                                    <div class="charts__chart chart--p<?php echo floor(($chakujun_percent[$target_num][$index]/array_sum($chakujun_percent[$target_num])*100)); ?> chart--blue" data-percent></div>
+                                <?php endforeach ?>
+                            </div>
+                        </div>
+                    </label>
+                </th>
+                <th style="border-bottom: none;">
+                    <label style="border-bottom: none;">
+                        <span><u style="border-bottom: none;">人気<u></span>
+                        <input type="checkbox" name="checkbox">
+                        <div id="popup">
+                            <p style="color: blue;">【人気順位】</p>
+                            <div class="charts">
+                                <?php foreach($ninki_percent_index[$target_num] as $index) : ?>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$ninki_percent[$target_num][$index]."/".array_sum($ninki_percent[$target_num]).")" ?></span>
+                                    <div class="charts__chart chart--p<?php echo floor(($ninki_percent[$target_num][$index]/array_sum($ninki_percent[$target_num])*100)); ?> chart--blue" data-percent></div>
+                                <?php endforeach ?>
+                            </div>
+                        </div>
+                    </label>
+                </th>
+                <th>
+                    <label>
+                        <span><u>馬番<u></span>
+                        <input type="checkbox" name="checkbox">
+                        <div id="popup">
+                            <p style="color: blue;">【馬番順位】</p>
+                            <div class="charts">
+                                <?php foreach($umaban_percent_index[$target_num] as $index) : ?>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$umaban_percent[$target_num][$index]."/".array_sum($umaban_percent[$target_num]).")" ?></span>
+                                    <div class="charts__chart chart--p<?php echo floor(($umaban_percent[$target_num][$index]/array_sum($umaban_percent[$target_num])*100)); ?> chart--blue" data-percent></div>
+                                <?php endforeach ?>
+                            </div>
+                        </div>
+                    </label>
+                </th>
+                <th>
+                    <label>
+                        <span><u>枠番<u></span>
+                        <input type="checkbox" name="checkbox">
+                        <div id="popup">
+                            <p style="color: blue;">【枠番順位】</p>
+                            <div class="charts">
+                                <?php foreach($wakuban_percent_index[$target_num] as $index) : ?>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$wakuban_percent[$target_num][$index]."/".array_sum($wakuban_percent[$target_num]).")" ?></span>
+                                    <div class="charts__chart chart--p<?php echo floor(($wakuban_percent[$target_num][$index]/array_sum($wakuban_percent[$target_num])*100)); ?> chart--blue" data-percent></div>
+                                <?php endforeach ?>
+                            </div>
+                        </div>
+                    </label>
+                </th>
+                <th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th>
+                <th>
+                    <label>
+                        <span><u>通過<u></span>
+                        <input type="checkbox" name="checkbox">
+                        <div id="popup">
+                            <p style="color: blue;">【最終コーナー】</p>
+                            <div class="charts">
+                                <?php foreach($tuka_last_percent_index[$target_num] as $index) : ?>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$tuka_last_percent[$target_num][$index]."/".array_sum($tuka_last_percent[$target_num]).")" ?></span>
+                                    <div class="charts__chart chart--p<?php echo floor(($tuka_last_percent[$target_num][$index]/array_sum($tuka_last_percent[$target_num])*100)); ?> chart--blue" data-percent></div>
+                                <?php endforeach ?>
+                            </div>
+                        </div>
+                    </label>
+                </th>
+                <th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th>
+            </tr>
+            <!-- <tr>
+                <th style="border-top: 0ch;"></th><th style="border-top: none;"></th><th style="border-top: none;"></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>1</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
+            </tr> -->
             <?php for($j=0;$j<count($race_results[$target_num]);$j++) : ?>
                 <?php for($k=0;$k<count($race_results[$target_num][$j]);$k++) : ?>
                     <tr><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->年度 ?></td>
                     <td bgcolor="white">
-                    <label>
-                        <span><u style="color: blue;"><?php echo $race_results[$target_num][$j][$k]->馬名 ?><u></span>
-                        <input type="checkbox" name="checkbox">
-                        <div id="popup">
-                            <div class="tatget_scroll">
-                                <table class="jouken_table">
-                                <p style="margin-bottom: 0%;color: black;font-size: 15px">関連レース</p>
-                                <tr><th>レース名</th><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
-                                    <?php $umamei=$race_results[$target_num][$j][$k]->馬名 ?>
-                                    <?php for($x=0;$x<count($race_name);$x++) : ?>
-                                        <?php if(!$race_results_as_umamei["$umamei"][$x]){ continue; } ?>
-                                        <?php for($y=0;$y<count($race_results_as_umamei["$umamei"][$x]);$y++) : ?>
-                                            <tr><td bgcolor="white"><?php echo $race_name[$x]; ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->年度 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬名 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->着順 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->人気 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->枠番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->性齢 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->斤量 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results_as_umamei["$umamei"][$x][$y]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->通過 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->上り ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->上り順位 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->単勝 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬体重 ?></td></tr>
+                        <label>
+                            <span><u style="color: blue;"><?php echo $race_results[$target_num][$j][$k]->馬名 ?><u></span>
+                            <input type="checkbox" name="checkbox">
+                            <div id="popup">
+                                <div class="tatget_scroll">
+                                    <table class="jouken_table">
+                                    <p style="margin-bottom: 0%;color: black;font-size: 15px">関連レース</p>
+                                    <tr><th>レース名</th><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
+                                        <?php $umamei=$race_results[$target_num][$j][$k]->馬名 ?>
+                                        <?php for($x=0;$x<count($race_name);$x++) : ?>
+                                            <?php if(!$race_results_as_umamei["$umamei"][$x]){ continue; } ?>
+                                            <?php for($y=0;$y<count($race_results_as_umamei["$umamei"][$x]);$y++) : ?>
+                                                <tr><td bgcolor="white"><?php echo $race_name[$x]; ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->年度 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬名 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->着順 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->人気 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->枠番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->性齢 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->斤量 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results_as_umamei["$umamei"][$x][$y]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->通過 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->上り ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->上り順位 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->単勝 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬体重 ?></td></tr>
+                                            <?php endfor ?>
                                         <?php endfor ?>
-                                    <?php endfor ?>
-                                </table>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                    </label>
+                        </label>
                     </td>
                     <td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->着順 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->人気 ?></td><td bgcolor="white"><?php echo $race_results[$target_num][$j][$k]->馬番 ?></td>
                     <td bgcolor="white" class="target_table_wakuban_<?php echo $j."_".$k ?>" id="target_table_wakuban_<?php echo $j."_".$k ?>"><?php echo $race_results[$target_num][$j][$k]->枠番 ?></td>
@@ -372,10 +463,108 @@ print_r($ninki_percent[34]["$tmp"]);
         <b><?php echo $race_name[$i]; ?></b>
         <div class="tatget_scroll">
             <table class="target_table" border="1" style="margin-top: 0%;">
-                <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
+                <tr><th>年度</th><th>馬名</th>
+                <th>
+                    <label>
+                        <span><u>着順<u></span>
+                        <input type="checkbox" name="checkbox">
+                        <div id="popup">
+                            <p style="color: blue;">【着順】</p>
+                            <div class="charts">
+                                <?php foreach($chakujun_percent_index[$i] as $index) : ?>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$chakujun_percent[$i][$index]."/".array_sum($chakujun_percent[$i]).")" ?></span>
+                                    <div class="charts__chart chart--p<?php echo floor(($chakujun_percent[$i][$index]/array_sum($chakujun_percent[$i])*100)); ?> chart--blue" data-percent></div>
+                                <?php endforeach ?>
+                            </div>
+                        </div>
+                    </label>
+                </th>
+                <th>
+                    <label>
+                        <span><u>人気<u></span>
+                        <input type="checkbox" name="checkbox">
+                        <div id="popup">
+                            <p style="color: blue;">【人気順位】</p>
+                            <div class="charts">
+                                <?php foreach($ninki_percent_index[$i] as $index) : ?>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$ninki_percent[$i][$index]."/".array_sum($ninki_percent[$i]).")" ?></span>
+                                    <div class="charts__chart chart--p<?php echo floor(($ninki_percent[$i][$index]/array_sum($ninki_percent[$i])*100)); ?> chart--blue" data-percent></div>
+                                <?php endforeach ?>    
+                            </div>
+                        </div>
+                    </label>
+                </th>
+                <th>
+                    <label>
+                        <span><u>馬番<u></span>
+                        <input type="checkbox" name="checkbox">
+                        <div id="popup">
+                            <p style="color: blue;">【馬番順位】</p>
+                            <div class="charts">
+                                <?php foreach($umaban_percent_index[$i] as $index) : ?>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$umaban_percent[$i][$index]."/".array_sum($umaban_percent[$i]).")" ?></span>
+                                    <div class="charts__chart chart--p<?php echo floor(($umaban_percent[$i][$index]/array_sum($umaban_percent[$i])*100)); ?> chart--blue" data-percent></div>
+                                <?php endforeach ?>
+                            </div>
+                        </div>
+                    </label>
+                </th>
+                <th>
+                    <label>
+                        <span><u>枠番<u></span>
+                        <input type="checkbox" name="checkbox">
+                        <div id="popup">
+                            <p style="color: blue;">【枠番順位】</p>
+                            <div class="charts">
+                                <?php foreach($wakuban_percent_index[$i] as $index) : ?>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$wakuban_percent[$i][$index]."/".array_sum($wakuban_percent[$i]).")" ?></span>
+                                    <div class="charts__chart chart--p<?php echo floor(($wakuban_percent[$i][$index]/array_sum($wakuban_percent[$i])*100)); ?> chart--blue" data-percent></div>
+                                <?php endforeach ?>
+                            </div>
+                        </div>
+                    </label>
+                </th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th>
+                <th>
+                    <label>
+                        <span><u>通過<u></span>
+                        <input type="checkbox" name="checkbox">
+                        <div id="popup">
+                            <p style="color: blue;">【最終コーナー】</p>
+                            <div class="charts">
+                                <?php foreach($tuka_last_percent_index[$i] as $index) : ?>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$tuka_last_percent[$i][$index]."/".array_sum($tuka_last_percent[$i]).")" ?></span>
+                                    <div class="charts__chart chart--p<?php echo floor(($tuka_last_percent[$i][$index]/array_sum($tuka_last_percent[$i])*100)); ?> chart--blue" data-percent></div>
+                                <?php endforeach ?>
+                            </div>
+                        </div>
+                    </label>
+                </th>
+                <th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
                 <?php for($j=0;$j<count($race_results[$i]);$j++) : ?>
                     <?php for($k=0;$k<count($race_results[$i][$j]);$k++) : ?>
-                        <tr><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->年度 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->馬名 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->着順 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->人気 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->馬番 ?></td>
+                        <tr><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->年度 ?></td>
+                        <td bgcolor="white">
+                            <label>
+                                <span><u style="color: blue;"><?php echo $race_results[$i][$j][$k]->馬名 ?><u></span>
+                                <input type="checkbox" name="checkbox">
+                                <div id="popup">
+                                    <div class="tatget_scroll">
+                                        <table class="jouken_table">
+                                        <p style="margin-bottom: 0%;color: black;font-size: 15px">関連レース</p>
+                                        <tr><th>レース名</th><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
+                                            <?php $umamei=$race_results[$i][$j][$k]->馬名 ?>
+                                            <?php for($x=0;$x<count($race_name);$x++) : ?>
+                                                <?php if(!$race_results_as_umamei["$umamei"][$x]){ continue; } ?>
+                                                <?php for($y=0;$y<count($race_results_as_umamei["$umamei"][$x]);$y++) : ?>
+                                                    <tr><td bgcolor="white"><?php echo $race_name[$x]; ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->年度 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬名 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->着順 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->人気 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->枠番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->性齢 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->斤量 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results_as_umamei["$umamei"][$x][$y]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->通過 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->上り ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->上り順位 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->単勝 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬体重 ?></td></tr>
+                                                <?php endfor ?>
+                                            <?php endfor ?>
+                                        </table>
+                                    </div>
+                                </div>
+                            </label>
+                        </td>
+                        <td bgcolor="white"><?php echo $race_results[$i][$j][$k]->着順 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->人気 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->馬番 ?></td>
                         <td bgcolor="white" class="jouken_table_wakuban_<?php echo $i."_".$j."_".$k ?>" id="jouken_table_wakuban_<?php echo $i."_".$j."_".$k ?>"><?php echo $race_results[$i][$j][$k]->枠番 ?></td>
                         <td bgcolor="white"><?php echo $race_results[$i][$j][$k]->性齢 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->斤量 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results[$i][$j][$k]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results[$i][$j][$k]->通過 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->上り ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->上り順位 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->単勝 ?></td><td bgcolor="white"><?php echo $race_results[$i][$j][$k]->馬体重 ?></td></tr>
                     <?php endfor ?>
