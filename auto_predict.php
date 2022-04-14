@@ -55,10 +55,7 @@ for($i=0;$i<count($year_array);$i++){
     $umamei_regexp[$i]="^(".$umamei_regexp[$i].")$";
 }
 
-// print_r($umamei_regexp);
-
 // DBに格納しているレース名を格納(RACE_NAME_ENG_JPテーブルも含まれることに注意)
-// $all_table=$keiba_wpdb->get_results("SHOW TABLES;");
 $all_table=$keiba_wpdb->get_results("SELECT * FROM RACE_DATE_SORT");
 
 // レース名ごとに結果を格納
@@ -68,10 +65,7 @@ $race_results_all=array(); // [レース番号][0][全結果]
 $num=0;
 $target_num=0;
 
-// array_push($year_array,($year_array[count($year_array)-1]-1));
-// print_r($year_array);
-// return 0;
-
+// 全レースを検索
 for($i=0;$i<count($all_table);$i++){
     $table_name_jp=$all_table[$i]->RACE_NAME;
     $table_name_eng=$keiba_wpdb->get_row("SELECT ENG_NAME FROM RACENAME_JP_ENG_TRANS WHERE JP_NAME = \"$table_name_jp\"")->ENG_NAME;
@@ -85,62 +79,34 @@ for($i=0;$i<count($all_table);$i++){
             $tg_year=$year_array[$j];
         }
         $tmp_array=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$tg_year\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
-        // if($table_name_eng=="Hanshin_Juvenile_Fillies"){
-        //     print_r($tmp_array);
-        //     // return 0;
-        // }
-        //$tmp_array=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$year_array[$j]\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
         if($tmp_array){
             // プログラムの都合上、第2添字が0の要素に結果を追加する
             foreach($tmp_array as $tmp){
                 $race_results[$num][0][]=$tmp;
             }
-            // $race_results[$num][$add_num]=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$tg_year\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
-            // $race_results[$num][0]=$race_results[$num][0]+$tmp_array;
-            // $race_results[$num][]=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$tg_year\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
-            // $add_num++;
         }
     }
-    // for($j=0;$j<count($year_array);$j++){
-    //     $tmp_array=array();
-    //     $tmp_array=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$year_array[$j]\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
-    //     if($tmp_array){
-    //         $race_results[$num][$add_num]=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng . " WHERE 年度 REGEXP \"$year_array[$j]\" AND 馬名 REGEXP \"$umamei_regexp[$j]\"");
-    //         $add_num++;
-    //     }
-    // }
 
     if($race_results[$num]){
         $race_name[$num]=$table_name_jp;
-        // $race_name[$table_name_jp]=$table_name_jp
         if($race_name[$num]==$target_race_name_jp){
             $target_num=$num;
         }
 
+        // 対象レースの全結果を格納
         $race_results_all[$num][0]=$keiba_wpdb->get_results("SELECT * FROM " . $table_name_eng);
 
         $num++;
     }
 }
 
-// print_r($race_results_all);
-
 // 重複レコードを削除する
 for($i=0;$i<count($race_results);$i++){
     $race_results[$i][0]=array_values(array_unique($race_results[$i][0],SORT_REGULAR));
 }
 
-//$unique=array_unique($race_results[$target_num][0],SORT_REGULAR);
-// print_r(array_values($unique));
-// $race_results[$target_num][0]=array_values($unique);
-// print_r(array_unique($race_results[$target_num][0],SORT_REGULAR));
-
-// $copy=$race_results[$target_num][0][0];
-// print_r($race_results[$target_num]);
-// print_r($copy);
-
-$race_results_as_umamei=array();
 // 予想レースは1頭ごとに結果表を作る
+$race_results_as_umamei=array();
 for($i=0;$i<count($race_results[$target_num]);$i++){
     for($j=0;$j<count($race_results[$target_num][$i]);$j++){
         $uma_name=$race_results[$target_num][$i][$j]->馬名;
@@ -160,18 +126,7 @@ for($i=0;$i<count($race_results[$target_num]);$i++){
     }
 }
 
-// print($target_num);
-// print_r($race_name);
-// print_r($race_results[$target_num]);
-// return 0;
-
-// print_r($race_results[0]);
-// print_r($race_name[0]);
-// return 0;
-
-// レースごとの要素情報をカウントする
-// $ninki_percent=array();
-// $umaban_percent=array();
+// レースごとの項目情報をカウントする
 for($i=0;$i<count($race_results);$i++){
     for($j=0;$j<count($race_results[$i][0]);$j++){
         $chakujun_num=$race_results[$i][0][$j]->着順;
@@ -214,9 +169,6 @@ for($i=0;$i<count($race_results);$i++){
     }
 }
 
-// $ret=preg_match('|\d{1,2}$|','1-2-3-14',$tmp_1234);
-// print_r($tuka_last_percent);
-
 // 添え字をソートして格納
 for($i=0;$i<count($race_results);$i++){
     $chakujun_percent_index[$i]=array_keys($chakujun_percent[$i]);
@@ -233,14 +185,59 @@ for($i=0;$i<count($race_results);$i++){
     sort($agarijun_percent_index[$i],SORT_NATURAL);
 }
 
-// print_r($umaban_percent[34]);
-// print_r($umaban_percent_index[34]);
-// print_r($race_results)[34][0][0];
-// print_r($race_results[34][0][0]);
-// print_r(array_keys(array_column($race_results[34][0],'人気'),'1'));
-// $tmp_1=$keiba_wpdb->get_results("SELECT * FROM AICHI_HAI");
-// $print_r($tmp_1);
-// print_r($race_results_all[$target_num][0]);
+// 項目ごとの平均単勝を計算
+for($i=0;$i<count($race_results);$i++){
+    // 着順
+    foreach($chakujun_percent_index[$i] as $index){
+        preg_match('|^\d{1,2}|',$index,$chakujun);
+        $keys=array_keys(array_column($race_results[$i][0],'着順'),$chakujun[0]);
+        $sum=0;
+        foreach($keys as $key){
+            $sum=($sum+$race_results[$i][0][$key]->単勝);
+        }
+        $chakujun_percent_index_tansho_avrg[$i][$index]=round(($sum/count($keys)),2);
+    }
+    // 人気
+    foreach($ninki_percent_index[$i] as $index){
+        preg_match('|^\d{1,2}|',$index,$ninki);
+        $keys=array_keys(array_column($race_results[$i][0],'人気'),$ninki[0]);
+        $sum=0;
+        foreach($keys as $key){
+            $sum=($sum+$race_results[$i][0][$key]->単勝);
+        }
+        $ninki_percent_index_tansho_avrg[$i][$index]=round(($sum/count($keys)),2);
+    }
+    // 馬番
+    foreach($umaban_percent_index[$i] as $index){
+        preg_match('|\d{1,2}$|',$index,$umaban);
+        $keys=array_keys(array_column($race_results[$i][0],'馬番'),$umaban[0]);
+        $sum=0;
+        foreach($keys as $key){
+            $sum=($sum+$race_results[$i][0][$key]->単勝);
+        }
+        $umaban_percent_index_tansho_avrg[$i][$index]=round(($sum/count($keys)),2);
+    }
+    // 枠番
+    foreach($wakuban_percent_index[$i] as $index){
+        preg_match('|\d{1,2}$|',$index,$wakuban);
+        $keys=array_keys(array_column($race_results[$i][0],'枠番'),$wakuban[0]);
+        $sum=0;
+        foreach($keys as $key){
+            $sum=($sum+$race_results[$i][0][$key]->単勝);
+        }
+        $wakuban_percent_index_tansho_avrg[$i][$index]=round(($sum/count($keys)),2);
+    }
+    // 上り順位
+    foreach($agarijun_percent_index[$i] as $index){
+        preg_match('|^\d{1,2}|',$index,$agarijun);
+        $keys=array_keys(array_column($race_results[$i][0],'上り順位'),$agarijun[0]);
+        $sum=0;
+        foreach($keys as $key){
+            $sum=($sum+$race_results[$i][0][$key]->単勝);
+        }
+        $agarijun_percent_index_tansho_avrg[$i][$index]=round(($sum/count($keys)),2);
+    }
+}
 
 ?>
 
@@ -276,7 +273,6 @@ for($i=0;$i<count($race_results);$i++){
 <head>
     <meta charset="UTF-8">
     <title>Hello!</title>
-    <!-- <link rel="stylesheet" href="/execution.css"> -->
     <link rel="stylesheet" href="/graph.css">
     <link rel="stylesheet" href="https://cdn.rawgit.com/theus/chart.css/v1.0.0/dist/chart.css" />
     <style>
@@ -369,7 +365,7 @@ for($i=0;$i<count($race_results);$i++){
                             <p style="color: blue;">【着順】</p>
                             <div class="charts">
                                 <?php foreach($chakujun_percent_index[$target_num] as $index) : ?>
-                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$chakujun_percent[$target_num][$index]."/".array_sum($chakujun_percent[$target_num]).")" ?></span>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$chakujun_percent[$target_num][$index]."/".array_sum($chakujun_percent[$target_num]).")";echo " 単勝平均:".$chakujun_percent_index_tansho_avrg[$target_num][$index]."倍"; ?></span>
                                     <div class="charts__chart chart--p<?php echo floor(($chakujun_percent[$target_num][$index]/array_sum($chakujun_percent[$target_num])*100)); ?> chart--blue" data-percent></div>
                                 <?php endforeach ?>
                             </div>
@@ -384,7 +380,7 @@ for($i=0;$i<count($race_results);$i++){
                             <p style="color: blue;">【人気】</p>
                             <div class="charts">
                                 <?php foreach($ninki_percent_index[$target_num] as $index) : ?>
-                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$ninki_percent[$target_num][$index]."/".array_sum($ninki_percent[$target_num]).")" ?></span>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$ninki_percent[$target_num][$index]."/".array_sum($ninki_percent[$target_num]).")";echo " 単勝平均:".$ninki_percent_index_tansho_avrg[$target_num][$index]."倍"; ?></span>
                                     <div class="charts__chart chart--p<?php echo floor(($ninki_percent[$target_num][$index]/array_sum($ninki_percent[$target_num])*100)); ?> chart--blue" data-percent></div>
                                 <?php endforeach ?>
                             </div>
@@ -399,7 +395,7 @@ for($i=0;$i<count($race_results);$i++){
                             <p style="color: blue;">【馬番】</p>
                             <div class="charts">
                                 <?php foreach($umaban_percent_index[$target_num] as $index) : ?>
-                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$umaban_percent[$target_num][$index]."/".array_sum($umaban_percent[$target_num]).")" ?></span>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$umaban_percent[$target_num][$index]."/".array_sum($umaban_percent[$target_num]).")";echo " 単勝平均:".$umaban_percent_index_tansho_avrg[$target_num][$index]."倍"; ?></span>
                                     <div class="charts__chart chart--p<?php echo floor(($umaban_percent[$target_num][$index]/array_sum($umaban_percent[$target_num])*100)); ?> chart--blue" data-percent></div>
                                 <?php endforeach ?>
                             </div>
@@ -414,7 +410,7 @@ for($i=0;$i<count($race_results);$i++){
                             <p style="color: blue;">【枠番】</p>
                             <div class="charts">
                                 <?php foreach($wakuban_percent_index[$target_num] as $index) : ?>
-                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$wakuban_percent[$target_num][$index]."/".array_sum($wakuban_percent[$target_num]).")" ?></span>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$wakuban_percent[$target_num][$index]."/".array_sum($wakuban_percent[$target_num]).")";echo " 単勝平均:".$wakuban_percent_index_tansho_avrg[$target_num][$index]."倍"; ?></span>
                                     <div class="charts__chart chart--p<?php echo floor(($wakuban_percent[$target_num][$index]/array_sum($wakuban_percent[$target_num])*100)); ?> chart--blue" data-percent></div>
                                 <?php endforeach ?>
                             </div>
@@ -430,7 +426,7 @@ for($i=0;$i<count($race_results);$i++){
                             <p style="color: blue;">【最終コーナー】</p>
                             <div class="charts">
                                 <?php foreach($tuka_last_percent_index[$target_num] as $index) : ?>
-                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$tuka_last_percent[$target_num][$index]."/".array_sum($tuka_last_percent[$target_num]).")" ?></span>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$tuka_last_percent[$target_num][$index]."/".array_sum($tuka_last_percent[$target_num]).")"; ?></span>
                                     <div class="charts__chart chart--p<?php echo floor(($tuka_last_percent[$target_num][$index]/array_sum($tuka_last_percent[$target_num])*100)); ?> chart--blue" data-percent></div>
                                 <?php endforeach ?>
                             </div>
@@ -446,7 +442,7 @@ for($i=0;$i<count($race_results);$i++){
                             <p style="color: blue;">【上り順位】</p>
                             <div class="charts">
                                 <?php foreach($agarijun_percent_index[$target_num] as $index) : ?>
-                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$agarijun_percent[$target_num][$index]."/".array_sum($agarijun_percent[$target_num]).")" ?></span>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$agarijun_percent[$target_num][$index]."/".array_sum($agarijun_percent[$target_num]).")";echo " 単勝平均:".$agarijun_percent_index_tansho_avrg[$target_num][$index]."倍"; ?></span>
                                     <div class="charts__chart chart--p<?php echo floor(($agarijun_percent[$target_num][$index]/array_sum($agarijun_percent[$target_num])*100)); ?> chart--blue" data-percent></div>
                                 <?php endforeach ?>
                             </div>
@@ -455,9 +451,6 @@ for($i=0;$i<count($race_results);$i++){
                 </th>
                 <th>単勝</th><th>馬体重</th>
             </tr>
-            <!-- <tr>
-                <th style="border-top: 0ch;"></th><th style="border-top: none;"></th><th style="border-top: none;"></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>1</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
-            </tr> -->
             <?php for($j=0;$j<count($race_results[$target_num]);$j++) : ?>
                 <?php for($k=0;$k<count($race_results[$target_num][$j]);$k++) : ?>
                     <tr>
@@ -524,7 +517,7 @@ for($i=0;$i<count($race_results);$i++){
                             <p style="color: blue;">【着順】</p>
                             <div class="charts">
                                 <?php foreach($chakujun_percent_index[$i] as $index) : ?>
-                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$chakujun_percent[$i][$index]."/".array_sum($chakujun_percent[$i]).")" ?></span>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$chakujun_percent[$i][$index]."/".array_sum($chakujun_percent[$i]).")";echo " 単勝平均:".$chakujun_percent_index_tansho_avrg[$i][$index]."倍"; ?></span>
                                     <div class="charts__chart chart--p<?php echo floor(($chakujun_percent[$i][$index]/array_sum($chakujun_percent[$i])*100)); ?> chart--blue" data-percent></div>
                                 <?php endforeach ?>
                             </div>
@@ -539,7 +532,7 @@ for($i=0;$i<count($race_results);$i++){
                             <p style="color: blue;">【人気】</p>
                             <div class="charts">
                                 <?php foreach($ninki_percent_index[$i] as $index) : ?>
-                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$ninki_percent[$i][$index]."/".array_sum($ninki_percent[$i]).")" ?></span>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$ninki_percent[$i][$index]."/".array_sum($ninki_percent[$i]).")";echo " 単勝平均:".$ninki_percent_index_tansho_avrg[$i][$index]."倍"; ?></span>
                                     <div class="charts__chart chart--p<?php echo floor(($ninki_percent[$i][$index]/array_sum($ninki_percent[$i])*100)); ?> chart--blue" data-percent></div>
                                 <?php endforeach ?>    
                             </div>
@@ -554,7 +547,7 @@ for($i=0;$i<count($race_results);$i++){
                             <p style="color: blue;">【馬番】</p>
                             <div class="charts">
                                 <?php foreach($umaban_percent_index[$i] as $index) : ?>
-                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$umaban_percent[$i][$index]."/".array_sum($umaban_percent[$i]).")" ?></span>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$umaban_percent[$i][$index]."/".array_sum($umaban_percent[$i]).")";echo " 単勝平均:".$umaban_percent_index_tansho_avrg[$i][$index]."倍"; ?></span>
                                     <div class="charts__chart chart--p<?php echo floor(($umaban_percent[$i][$index]/array_sum($umaban_percent[$i])*100)); ?> chart--blue" data-percent></div>
                                 <?php endforeach ?>
                             </div>
@@ -569,7 +562,7 @@ for($i=0;$i<count($race_results);$i++){
                             <p style="color: blue;">【枠番】</p>
                             <div class="charts">
                                 <?php foreach($wakuban_percent_index[$i] as $index) : ?>
-                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$wakuban_percent[$i][$index]."/".array_sum($wakuban_percent[$i]).")" ?></span>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$wakuban_percent[$i][$index]."/".array_sum($wakuban_percent[$i]).")";echo " 単勝平均:".$wakuban_percent_index_tansho_avrg[$i][$index]."倍"; ?></span>
                                     <div class="charts__chart chart--p<?php echo floor(($wakuban_percent[$i][$index]/array_sum($wakuban_percent[$i])*100)); ?> chart--blue" data-percent></div>
                                 <?php endforeach ?>
                             </div>
@@ -584,7 +577,7 @@ for($i=0;$i<count($race_results);$i++){
                             <p style="color: blue;">【最終コーナー】</p>
                             <div class="charts">
                                 <?php foreach($tuka_last_percent_index[$i] as $index) : ?>
-                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$tuka_last_percent[$i][$index]."/".array_sum($tuka_last_percent[$i]).")" ?></span>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$tuka_last_percent[$i][$index]."/".array_sum($tuka_last_percent[$i]).")"; ?></span>
                                     <div class="charts__chart chart--p<?php echo floor(($tuka_last_percent[$i][$index]/array_sum($tuka_last_percent[$i])*100)); ?> chart--blue" data-percent></div>
                                 <?php endforeach ?>
                             </div>
@@ -600,7 +593,7 @@ for($i=0;$i<count($race_results);$i++){
                             <p style="color: blue;">【上り順位】</p>
                             <div class="charts">
                                 <?php foreach($agarijun_percent_index[$i] as $index) : ?>
-                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$agarijun_percent[$i][$index]."/".array_sum($agarijun_percent[$i]).")" ?></span>
+                                    <span style="text-align: left;color: blue"><?php echo $index;echo "(".$agarijun_percent[$i][$index]."/".array_sum($agarijun_percent[$i]).")";echo " 単勝平均:".$agarijun_percent_index_tansho_avrg[$i][$index]."倍"; ?></span>
                                     <div class="charts__chart chart--p<?php echo floor(($agarijun_percent[$i][$index]/array_sum($agarijun_percent[$i])*100)); ?> chart--blue" data-percent></div>
                                 <?php endforeach ?>
                             </div>
