@@ -659,6 +659,52 @@ if(!(in_array(1,$j_result_flg))){
         echo "条件に合致する検索結果がありませんでした。";
     }
 }
+
+// 予想レースの結果に出力された馬の正規表現を作成する
+$umamei_regexp=".*";
+for($i=0;$i<count($year_results);$i++){
+    for($j=0;$j<count($year_results[$i]);$j++){
+        if($umamei_regexp==".*"){
+            $umamei_regexp=$year_results[$i][$j]->馬名;
+        }else{
+            $umamei_regexp="$umamei_regexp"."|".$year_results[$i][$j]->馬名;
+        }
+    }
+}
+$umamei_regexp="^(".$umamei_regexp.")$";
+
+// DBに格納しているレース名一覧を取り出す
+$all_table=$keiba_wpdb->get_results("SELECT * FROM RACE_DATE_SORT");
+// テーブルごとに馬を検索
+$num=0;
+$table_results_as_umamei=array();
+$race_name=array();
+for($i=0;$i<count($all_table);$i++){
+    $table_name_jp=$all_table[$i]->RACE_NAME;
+    $table_name_eng=$keiba_wpdb->get_row("SELECT ENG_NAME FROM RACENAME_JP_ENG_TRANS WHERE JP_NAME = \"$table_name_jp\"")->ENG_NAME;
+    $tmp=$keiba_wpdb->get_results("SELECT * FROM $table_name_eng WHERE 馬名 REGEXP \"$umamei_regexp\"");
+    if($tmp){
+        $table_results_as_umamei[$num]=$tmp;
+        $race_name[$num]=$table_name_jp;
+        $num++;
+    }
+}
+
+// 馬名ごとに他のレース結果を出せるようにする
+$year_results_as_umamei=array();
+for($i=0;$i<count($year_results);$i++){
+    for($j=0;$j<count($year_results[$i]);$j++){
+        $umamei=$year_results[$i][$j]->馬名;
+        for($x=0;$x<count($table_results_as_umamei);$x++){
+            for($y=0;$y<count($table_results_as_umamei[$x]);$y++){
+                if($table_results_as_umamei[$x][$y]->馬名==$umamei){
+                    $year_results_as_umamei[$umamei][$x]=$table_results_as_umamei[$x][$y];
+                }
+            }
+        }
+    }
+}
+
 ?>
 
 <!-- 入力情報を保存する -->
@@ -993,6 +1039,28 @@ if(!(in_array(1,$year_result_flg))){
         .tatget_scroll::-webkit-scrollbar-thumb { /*tableにスクロールバーを追加*/
             background: #BCBCBC;
         }
+
+        /* ポップアップ表示 */
+        #popup{
+            width:70%;
+            height:auto;
+            background:ghostwhite;
+            padding:0 4%;
+            box-sizing:border-box;
+            display:none;
+            position:fixed;
+            top:50%;
+            left:35%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+        input[type="checkbox"]{
+            display:none;
+        }
+        input[type="checkbox"]:checked + #popup{
+            display:block;
+            transition:.2s;
+        }
     </style>
 </head>
 <body>
@@ -1008,7 +1076,26 @@ if(!(in_array(1,$year_result_flg))){
             <table class="target_table" border="1" style="margin-top: -3%;">
                 <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
                     <?php foreach ($year_results[$diff-$i] as $row) : ?>
-                        <tr><td bgcolor="white"><?php echo $row->年度 ?></td><td bgcolor="white"><?php echo $row->馬名 ?></td><td bgcolor="white"><?php echo $row->着順 ?></td><td bgcolor="white"><?php echo $row->人気 ?></td><td bgcolor="white"><?php echo $row->馬番 ?></td><td bgcolor="white"><?php echo $row->枠番 ?></td><td bgcolor="white"><?php echo $row->性齢 ?></td><td bgcolor="white"><?php echo $row->斤量 ?></td><td bgcolor="white"><?php echo $row->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($row->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $row->通過 ?></td><td bgcolor="white"><?php echo $row->上り ?></td><td bgcolor="white"><?php echo $row->上り順位 ?></td><td bgcolor="white"><?php echo $row->単勝 ?></td><td bgcolor="white"><?php echo $row->馬体重 ?></td></tr>
+                        <tr><td bgcolor="white"><?php echo $row->年度 ?></td>
+                        <td bgcolor="white">
+                            <label>
+                                <span><u style="color: blue;"><?php echo $row->馬名 ?><u></span>
+                                <input type="checkbox" name="checkbox">
+                                <div id="popup">
+                                    <?php for($x=0;$x<count($race_name);$x++) : ?>
+                                        <?php if(!$year_results_as_umamei[$row->馬名][$x]){ continue; } ?>
+                                        <div class="tatget_scroll">
+                                            <table class="jouken_table">
+                                            <p style="margin-bottom: 0%;margin-top: -2%;color: black;font-size: 15px"><?php echo $race_name[$x]; ?></p>
+                                            <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
+                                            <tr><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->年度 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->馬名 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->着順 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->人気 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->馬番 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->枠番 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->性齢 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->斤量 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($year_results_as_umamei[$row->馬名][$x]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $year_results_as_umamei[$row->馬名][$x]->通過 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->上り ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->上り順位 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->単勝 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->馬体重 ?></td></tr>    
+                                        </table>
+                                        </div>
+                                    <?php endfor ?>
+                                </div>
+                            </label>
+                        </td>
+                        <td bgcolor="white"><?php echo $row->着順 ?></td><td bgcolor="white"><?php echo $row->人気 ?></td><td bgcolor="white"><?php echo $row->馬番 ?></td><td bgcolor="white"><?php echo $row->枠番 ?></td><td bgcolor="white"><?php echo $row->性齢 ?></td><td bgcolor="white"><?php echo $row->斤量 ?></td><td bgcolor="white"><?php echo $row->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($row->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $row->通過 ?></td><td bgcolor="white"><?php echo $row->上り ?></td><td bgcolor="white"><?php echo $row->上り順位 ?></td><td bgcolor="white"><?php echo $row->単勝 ?></td><td bgcolor="white"><?php echo $row->馬体重 ?></td></tr>
                     <?php endforeach; ?>
             </table>
             <details style="margin-bottom: 4%; margin-top: -2%; margin-left:1%; font-size: 15px;">
