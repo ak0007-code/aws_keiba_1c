@@ -503,8 +503,6 @@ for ($j=0;$j<J_MAX;$j++){
         $tuka_regexp="^(".$tuka_regexp.")$";
         $year_regexp="^(".$year_regexp.")$";
 
-        // echo $year_regexp;
-
         // 条件j:SQL実行        
         // いずれかの選択がされている場合は条件通りに検索、されていない場合は全検索する
         if($all_result_check_flg == 1){
@@ -544,7 +542,7 @@ if(!(in_array(1,$j_result_flg))){
         $tmp_array[$i][0]=null; // 0番目にnullを入れないとarray_pushが使えないため
 
         // 全条件に対して開催年=$yearに合致する要素を取り出す
-        for ($k=0;$k<count($j_results);$k++){
+        for ($k=0;$k<array_key_last($j_results)+1;$k++){
             if(count($j_results[$k])==0){
                 continue;
             }
