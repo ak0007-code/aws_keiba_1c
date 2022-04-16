@@ -29,7 +29,8 @@ for ($i=0;$i<=$diff;$i++){
 }
 
 // レース名を英語に変換して格納
-$target_race_name=$keiba_wpdb->get_row("SELECT ENG_NAME FROM RACENAME_JP_ENG_TRANS WHERE JP_NAME = \"$_POST[race_name] \"")->ENG_NAME;
+$target_race_name_jp=$_POST['race_name'];
+$target_race_name_eng=$keiba_wpdb->get_row("SELECT ENG_NAME FROM RACENAME_JP_ENG_TRANS WHERE JP_NAME = \"$_POST[race_name] \"")->ENG_NAME;
 
 // データ格納用配列
 $delete_check_btn_array=array(); // 削除ボタンの押下状況
@@ -59,16 +60,13 @@ $ninki_array=array(); // 人気
 $agarijun_array=array(); // 上り順位
 $chakujun_array=array(); // 着順
 
-// print($_POST["j1_and_or_select"]);
-// return 0;
+// DBに格納しているレース名を日付順に格納
+$all_race=$keiba_wpdb->get_results("SELECT * FROM RACE_DATE_SORT");
 
 // 条件を確認 j:条件 i:個別番号
 for ($j=0;$j<J_MAX;$j++){
     // ANN・ORのセレクト状況
     $and_or_select_array[$j]=$_POST["j".($j+1)."_and_or_select"];
-
-    // 前年検索のセレクト状況
-    $pre_year_select_array[$j]=$_POST["j".($j+1)."_pre_year_select"];
 
     // 削除ボタン
     $delete_check_btn_array[$j]=$_POST["j".($j+1)."_delete_checkbox"];
@@ -77,6 +75,15 @@ for ($j=0;$j<J_MAX;$j++){
     $race_name_array_jp[$j]=$_POST["j".($j+1)."_race_name"];
     // 英語表記
     $race_name_array_eng[$j]=$keiba_wpdb->get_row("SELECT ENG_NAME FROM RACENAME_JP_ENG_TRANS WHERE JP_NAME = \"$race_name_array_jp[$j]\"")->ENG_NAME;
+
+    // 前年検索のセレクト状況(レースの日付を見てPRE=去年かCURRENT=本年を調整する)
+    $jouken_num=array_search($race_name_array_jp[$j],array_column($all_race,'RACE_NAME'));
+    $target_num=array_search($target_race_name_jp,array_column($all_race,'RACE_NAME'));
+    if($jouken_num > $target_num){
+        $pre_year_select_array[$j]="PRE";
+    }else{
+        $pre_year_select_array[$j]="CURRENT";
+    }
 
     // 馬番格納
     for($i=0;$i<UMABAN_MAX;$i++){
@@ -150,8 +157,6 @@ for ($j=0;$j<J_MAX;$j++){
         $chakujun_array[$j][$i]=$_POST["j".($j+1)."_chakujun_".($i+1)];
     }
 }
-
-// print_r($pre_year_select_array);
 
 // 結果フラグ 0:結果無し 1:結果有り
 $j_result_flg=array();
@@ -581,7 +586,7 @@ if(!(in_array(1,$j_result_flg))){
         $uma_name_regexp="^(".$uma_name_regexp.")$";
 
         // SQL実行
-        $year_results[$i]=$keiba_wpdb->get_results("SELECT * FROM $target_race_name WHERE 年度 = ". $year . " AND 馬名 REGEXP \"$uma_name_regexp\"");
+        $year_results[$i]=$keiba_wpdb->get_results("SELECT * FROM $target_race_name_eng WHERE 年度 = ". $year . " AND 馬名 REGEXP \"$uma_name_regexp\"");
         if(count($year_results[$i])!=0){
             $year_result_flg[$i]=1;
         }
@@ -608,7 +613,7 @@ if(!(in_array(1,$j_result_flg))){
         $j=0;
         $k=0;
         foreach($race_name_array_eng as $race_name_eng){
-            if($race_name_eng != $target_race_name && $delete_check_btn_array[$j] != 1){
+            if($race_name_eng != $target_race_name_eng && $delete_check_btn_array[$j] != 1){
                 if(!in_array($race_name_eng,$tmp_array[$i])){
                     array_push($tmp_array[$i],$race_name_eng);            
                     // レース名を日本語に変換して格納
@@ -738,16 +743,16 @@ for($i=0;$i<count($year_results);$i++){
             }
         }
     }
-    // PRE YEARセレクト
-    function preyearselectsave(){
-        <?php $json_array = json_encode($pre_year_select_array); ?>
-        let js_array = <?php echo $json_array; ?>;
-        for(let j=1;j<=<?php echo J_MAX; ?>;j++){
-            if(js_array[j-1]){
-                document.getElementById("j"+j+"_pre_year_select").value=js_array[j-1];
-            }
-        }
-    }
+    // // PRE YEARセレクト
+    // function preyearselectsave(){
+    //     <?php //$json_array = json_encode($pre_year_select_array); ?>
+    //     let js_array = <?php //echo $json_array; ?>;
+    //     for(let j=1;j<=<?php //echo J_MAX; ?>;j++){
+    //         if(js_array[j-1]){
+    //             document.getElementById("j"+j+"_pre_year_select").value=js_array[j-1];
+    //         }
+    //     }
+    // }
     // レース名
     function racesave(){
         <?php $json_array = json_encode($race_name_array_jp); ?>
@@ -956,7 +961,6 @@ for($i=0;$i<count($year_results);$i++){
 <?php echo '<script type="text/javascript">','targetyearsave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','deletebtnsave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','andorselectsave();','</script>'; ?>
-<?php echo '<script type="text/javascript">','preyearselectsave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','racesave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','umabansave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','wakubansave();','</script>'; ?>
