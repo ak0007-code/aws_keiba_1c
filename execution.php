@@ -1065,9 +1065,10 @@ if(!(in_array(1,$year_result_flg))){
     <hr>
     <br>
     <b>全レース</b>
-    <p style="margin-top: 0%;"><?php echo "単勝率:".round($win_rates_sum[0],1)."%"."(".$first_num."/".$all_num.")"."</br>"." 連体率:".round($win_rates_sum[1],1)."%"."(".$second_num."/".$all_num.")"."</br>"." 複勝率:".round($win_rates_sum[2],1)."%"."(".$third_num."/".$all_num.")"; ?></p>
+    <p style="margin-top: 0%;"><?php echo $first_num."-".($second_num-$first_num)."-".($third_num-$second_num)."-".($all_num-$third_num); ?></p>
+    <p style="margin-top: -3%;"><?php echo "単勝率:".round($win_rates_sum[0],1)."%"."(".$first_num."/".$all_num.")"."</br>"." 連体率:".round($win_rates_sum[1],1)."%"."(".$second_num."/".$all_num.")"."</br>"." 複勝率:".round($win_rates_sum[2],1)."%"."(".$third_num."/".$all_num.")"; ?></p>
     <?php for($i=0,$year_tmp=$_POST['year_e'] ;$i<=$diff;$i++,$year_tmp--) : ?>
-        <?php if(!$year_results[$diff-$i]){ continue;} ?>
+        <?php if(!$year_results[$diff-$i]){ continue; } ?>
         <b><?php echo $year_tmp." - ".$_POST['race_name']; ?></b>
         <p style="margin-top: -0%;"><?php echo "単勝率:".round($win_rates[$diff-$i][0],1)."%"." 連体率:".round($win_rates[$diff-$i][1],1)."%"." 複勝率:".round($win_rates[$diff-$i][2],1)."%"; ?></p>
         <div class="tatget_scroll">
