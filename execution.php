@@ -1024,6 +1024,7 @@ if(!(in_array(1,$year_result_flg))){
             border: 1px solid gray;
             text-align:left;
             font-size: 12px;
+            color: black;
         }
 
         .tatget_scroll{
@@ -1054,9 +1055,6 @@ if(!(in_array(1,$year_result_flg))){
             -webkit-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
         }
-        input[type="checkbox"]{
-            display:none;
-        }
         input[type="checkbox"]:checked + #popup{
             display:block;
             transition:.2s;
@@ -1080,16 +1078,16 @@ if(!(in_array(1,$year_result_flg))){
                         <td bgcolor="white">
                             <label>
                                 <span><u style="color: blue;"><?php echo $row->馬名 ?><u></span>
-                                <input type="checkbox" name="checkbox">
+                                <input type="checkbox" name="checkbox" style="display: none;">
                                 <div id="popup">
                                     <?php for($x=0;$x<count($race_name);$x++) : ?>
                                         <?php if(!$year_results_as_umamei[$row->馬名][$x]){ continue; } ?>
                                         <div class="tatget_scroll">
-                                            <table class="jouken_table">
-                                            <p style="margin-bottom: 0%;margin-top: -2%;color: black;font-size: 15px"><?php echo $race_name[$x]; ?></p>
-                                            <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
-                                            <tr><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->年度 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->馬名 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->着順 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->人気 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->馬番 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->枠番 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->性齢 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->斤量 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($year_results_as_umamei[$row->馬名][$x]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $year_results_as_umamei[$row->馬名][$x]->通過 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->上り ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->上り順位 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->単勝 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->馬体重 ?></td></tr>    
-                                        </table>
+                                            <table class="jouken_result_table">
+                                                <p style="margin-bottom: 0%;margin-top: -2%;color: black;font-size: 15px"><?php echo $race_name[$x]; ?></p>
+                                                <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
+                                                <tr><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->年度 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->馬名 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->着順 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->人気 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->馬番 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->枠番 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->性齢 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->斤量 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($year_results_as_umamei[$row->馬名][$x]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $year_results_as_umamei[$row->馬名][$x]->通過 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->上り ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->上り順位 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->単勝 ?></td><td bgcolor="white"><?php echo $year_results_as_umamei[$row->馬名][$x]->馬体重 ?></td></tr>    
+                                            </table>
                                         </div>
                                     <?php endfor ?>
                                 </div>
