@@ -71,10 +71,15 @@ for($i=0;$i<count($all_table);$i++){
     $table_name_eng=$keiba_wpdb->get_row("SELECT ENG_NAME FROM RACENAME_JP_ENG_TRANS WHERE JP_NAME = \"$table_name_jp\"")->ENG_NAME;
     $num_tmp=$num;
     $add_num=0;
+
+    // 前年検索のセレクト状況(レースの日付を見てPRE=去年かCURRENT=本年を調整する)
+    $tmp1_num=array_search($table_name_jp,array_column($all_table,'RACE_NAME'));
+    $tmp2_num=array_search($target_race_name_jp,array_column($all_table,'RACE_NAME'));
+
     for($j=0;$j<count($year_array);$j++){
         $tmp_array=array();
-        if($pre_year=="PRE" && $table_name_eng!=$target_race_name_jp){
-            $tg_year=$year_array[$j]."|".($year_array[$j]-1);
+        if($tmp1_num > $tmp2_num){
+            $tg_year=$year_array[$j]-1;
         }else{
             $tg_year=$year_array[$j];
         }
@@ -257,17 +262,12 @@ for($i=0;$i<count($race_results);$i++){
         document.getElementById("chakujun_min").value=<?php echo $_POST['chakujun_min']; ?>;
         document.getElementById("chakujun_max").value=<?php echo $_POST['chakujun_max']; ?>;
     }
-    // 前年検索着順
-    function preyearselectsave(){
-        document.getElementById("pre_year_select").value="<?php echo $_POST["pre_year_select"]; ?>";
-    }
 </script>
 
 <!-- 値保持についてJavaScriptでは最初の更新しか適用されないため、下記PHPを実行する -->
 <?php echo '<script type="text/javascript">','targetracesave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','targetyearsave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','targetchakujunsave();','</script>'; ?>
-<?php echo '<script type="text/javascript">','preyearselectsave();','</script>'; ?>
 
 <html lang="ja">
 <head>
