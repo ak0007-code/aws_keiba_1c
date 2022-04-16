@@ -1082,6 +1082,7 @@ if(!(in_array(1,$year_result_flg))){
                                 <div id="popup">
                                     <?php for($x=0;$x<count($race_name);$x++) : ?>
                                         <?php if(!$year_results_as_umamei[$row->馬名][$x]){ continue; } ?>
+                                        <?php if($year_results_as_umamei[$row->馬名][$x]->年度 != $row->年度 && $year_results_as_umamei[$row->馬名][$x]->年度 != ($row->年度-1) ){ continue; } ?>
                                         <div class="tatget_scroll">
                                             <table class="jouken_result_table">
                                                 <p style="margin-bottom: 0%;margin-top: -2%;color: black;font-size: 15px"><?php echo $race_name[$x]; ?></p>
