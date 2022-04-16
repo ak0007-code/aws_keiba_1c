@@ -65,6 +65,25 @@ $race_results_all=array(); // [レース番号][0][全結果]
 $num=0;
 $target_num=0;
 
+// $g1_race=$keiba_wpdb->get_results("SELECT * FROM RACENAME_JP_ENG_TRANS WHERE GRADE=\"G3\"");
+// for($i=0;$i<count($g1_race);$i++){
+//     $tmp1=$g1_race[$i]->JP_NAME;
+//     $tmp2=array_search($tmp1,array_column($all_table,'RACE_NAME'));
+//     $tmp3[$tmp2]=$tmp1;
+//     // for($k=0;$k<count($all_table);$k++){
+//     //     $tmp2=$all_table[$k]->RACE_NAME;
+//     //     // if($g1_race[$i]->JP_NAME==$all_table[$k]->RACE_NAME){
+//     //     //     $tmp[$k]=$all_table[$k]->RACE_NAME;
+//     //     // }
+//     // }
+// }
+// for($i=0;$i<140;$i++){
+//     if($tmp3[$i]){
+//         echo $tmp3[$i];
+//         echo "</br>";
+//     }
+// }
+
 // 全レースを検索
 for($i=0;$i<count($all_table);$i++){
     $table_name_jp=$all_table[$i]->RACE_NAME;
