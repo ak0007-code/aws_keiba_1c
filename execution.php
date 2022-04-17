@@ -1076,8 +1076,9 @@ if(!(in_array(1,$year_result_flg))){
     <p style="margin-top: 0%;"><?php echo "単勝率:".round($win_rates_sum[0],1)."%"."(".$first_num."/".$all_num.")"."</br>"." 連体率:".round($win_rates_sum[1],1)."%"."(".$second_num."/".$all_num.")"."</br>"." 複勝率:".round($win_rates_sum[2],1)."%"."(".$third_num."/".$all_num.")"; ?></p>
     <?php for($i=0,$year_tmp=$_POST['year_e'] ;$i<=$diff;$i++,$year_tmp--) : ?>
         <?php if(!$year_results[$diff-$i]){ continue; } ?>
-        <b><?php echo $year_tmp." - ".$_POST['race_name']."(".$year_results_race_info[$diff-$i][0]->PLACE."/".$year_results_race_info[$diff-$i][0]->HOLD_NUM."/".$year_results_race_info[$diff-$i][0]->DISTANCE."/".$year_results_race_info[$diff-$i][0]->WEATHER."/".$year_results_race_info[$diff-$i][0]->STATE.")"; ?></b>
-        <p style="margin-top: -0%;"><?php echo "単勝率:".round($win_rates[$diff-$i][0],1)."%"." 連体率:".round($win_rates[$diff-$i][1],1)."%"." 複勝率:".round($win_rates[$diff-$i][2],1)."%"; ?></p>
+        <b><?php echo $year_tmp." - ".$_POST['race_name']; ?></b>
+        <p><?php echo "(".$year_results_race_info[$diff-$i][0]->PLACE."/".$year_results_race_info[$diff-$i][0]->HOLD_NUM."/".$year_results_race_info[$diff-$i][0]->DISTANCE."/".$year_results_race_info[$diff-$i][0]->WEATHER."/".$year_results_race_info[$diff-$i][0]->STATE.")"; ?></p>
+        <p style="margin-top: -30px;"><?php echo "単勝率:".round($win_rates[$diff-$i][0],1)."%"." 連体率:".round($win_rates[$diff-$i][1],1)."%"." 複勝率:".round($win_rates[$diff-$i][2],1)."%"; ?></p>
         <div class="tatget_scroll">
             <table class="target_table" border="1" style="margin-top: -3%;">
                 <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
