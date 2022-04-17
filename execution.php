@@ -529,9 +529,11 @@ if(!(in_array(1,$j_result_flg))){
     $tmp_array=array(); // 一時格納用
     $win_rates=array(); // 年度ごとの勝率→[year][0]=勝率 [year][1]=連体率 [year][2]=複勝率
     $year_results=array(); // 開催年ごとの結果
+    $year_results_race_info=array(); // 開催年ごとのレース情報
     $year_result_flg=array(); // 開催年に値があったかどうか
     $year_results_others=array(); // 検索条件で選ばれた別レースの結果
     $year_results_others_jp=array(); // 別レースの一覧
+    $year_results_others_race_info=array(); // 開催年ごとの別レース情報
     $j_num=count($j_results); // 条件数
     $i=0;
 
@@ -589,6 +591,9 @@ if(!(in_array(1,$j_result_flg))){
             $year_result_flg[$i]=1;
         }
 
+        // レース情報取得
+        $year_results_race_info[$i]=$keiba_wpdb->get_results("SELECT * FROM RACE_ID WHERE RACE_NAME REGEXP \"$target_race_name_jp\" AND RACE_DATE REGEXP \"^$year\";");
+
         // 年度ごとの勝率計算
         $first=0;
         $second=0;
@@ -622,7 +627,8 @@ if(!(in_array(1,$j_result_flg))){
                     }else{
                         $tg_year=$year;
                     }
-                    $year_results_others[$i][$k]=$keiba_wpdb->get_results("SELECT * FROM $race_name_eng WHERE 年度 = ". $tg_year . " AND 馬名 REGEXP \"$uma_name_regexp\"");;
+                    $year_results_others[$i][$k]=$keiba_wpdb->get_results("SELECT * FROM $race_name_eng WHERE 年度 = ". $tg_year . " AND 馬名 REGEXP \"$uma_name_regexp\"");
+                    $year_results_others_race_info[$i][$k]=$keiba_wpdb->get_results("SELECT * FROM RACE_ID WHERE RACE_NAME REGEXP \"$year_results_others_jp[$k]\" AND RACE_DATE REGEXP \"^$tg_year\";");
                     $k++;
                 }
 
@@ -1066,12 +1072,11 @@ if(!(in_array(1,$year_result_flg))){
 <body>
     <hr>
     <br>
-    <b>全レース</b>
-    <p style="margin-top: 0%;"><?php echo $first_num."-".($second_num-$first_num)."-".($third_num-$second_num)."-".($all_num-$third_num); ?></p>
-    <p style="margin-top: -3%;"><?php echo "単勝率:".round($win_rates_sum[0],1)."%"."(".$first_num."/".$all_num.")"."</br>"." 連体率:".round($win_rates_sum[1],1)."%"."(".$second_num."/".$all_num.")"."</br>"." 複勝率:".round($win_rates_sum[2],1)."%"."(".$third_num."/".$all_num.")"; ?></p>
+    <b>全レース：<?php echo $first_num."-".($second_num-$first_num)."-".($third_num-$second_num)."-".($all_num-$third_num); ?></b>
+    <p style="margin-top: 0%;"><?php echo "単勝率:".round($win_rates_sum[0],1)."%"."(".$first_num."/".$all_num.")"."</br>"." 連体率:".round($win_rates_sum[1],1)."%"."(".$second_num."/".$all_num.")"."</br>"." 複勝率:".round($win_rates_sum[2],1)."%"."(".$third_num."/".$all_num.")"; ?></p>
     <?php for($i=0,$year_tmp=$_POST['year_e'] ;$i<=$diff;$i++,$year_tmp--) : ?>
         <?php if(!$year_results[$diff-$i]){ continue; } ?>
-        <b><?php echo $year_tmp." - ".$_POST['race_name']; ?></b>
+        <b><?php echo $year_tmp." - ".$_POST['race_name']."(".$year_results_race_info[$diff-$i][0]->PLACE."/".$year_results_race_info[$diff-$i][0]->HOLD_NUM."/".$year_results_race_info[$diff-$i][0]->DISTANCE."/".$year_results_race_info[$diff-$i][0]->WEATHER."/".$year_results_race_info[$diff-$i][0]->STATE.")"; ?></b>
         <p style="margin-top: -0%;"><?php echo "単勝率:".round($win_rates[$diff-$i][0],1)."%"." 連体率:".round($win_rates[$diff-$i][1],1)."%"." 複勝率:".round($win_rates[$diff-$i][2],1)."%"; ?></p>
         <div class="tatget_scroll">
             <table class="target_table" border="1" style="margin-top: -3%;">
@@ -1103,7 +1108,7 @@ if(!(in_array(1,$year_result_flg))){
             <details style="margin-bottom: 4%; margin-top: -2%; margin-left:1%; font-size: 15px;">
                 <summary style="color: black;color:darkslategrey">条件レース</summary>
                 <?php for($k=0;$k<count($year_results_others_jp);$k++) : ?>
-                    <p style="font-size: 14px; margin-left: 0%;"><?php echo $year_results_others_jp[$k]; ?></p>
+                    <p style="font-size: 14px; margin-left: 0%;"><?php echo $year_results_others_jp[$k]."(".$year_results_others_race_info[$diff-$i][$k][0]->PLACE."/".$year_results_others_race_info[$diff-$i][$k][0]->HOLD_NUM."/".$year_results_others_race_info[$diff-$i][$k][0]->DISTANCE."/".$year_results_others_race_info[$diff-$i][$k][0]->WEATHER."/".$year_results_others_race_info[$diff-$i][$k][0]->STATE.")"; ?></p>
                     <table class="jouken_result_table" border="1" style="margin-top: -2%;">
                         <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
                             <?php foreach ($year_results_others[$diff-$i][$k] as $row) : ?>
