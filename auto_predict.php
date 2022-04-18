@@ -149,6 +149,27 @@ for($i=0;$i<count($race_results[$target_num]);$i++){
         }
     }
 }
+// 1頭ごとの結果表を開催順に整列する
+$race_results_as_umamei_sort=array();
+foreach($race_results_as_umamei as $key => $value){
+    for($i=0;$i<count($race_name);$i++){
+        if(!$race_results_as_umamei[$key][$i]){
+            continue;
+        }
+
+        for($k=0;$k<count($race_results_as_umamei[$key][$i]);$k++){
+            $race_results_as_umamei[$key][$i][$k]->RACE_NAME=$race_name[$i]; // 「レース名」をレコードに追加
+            $race_results_as_umamei[$key][$i][$k]->RACE_NUM=$race_results_as_umamei[$key][$i][$k]->年度."_".$i; // 「開催年_レース番号」をレコードに追加
+            $race_results_as_umamei_sort[$key][]=$race_results_as_umamei[$key][$i][$k];
+        }
+    }
+}
+// 「開催年_レース番号」でソートする
+foreach($race_results_as_umamei_sort as $key => $value){
+    usort($race_results_as_umamei_sort[$key], function ($a, $b){
+        return $a->RACE_NUM < $b->RACE_NUM ? 1 : -1;
+    }); 
+}
 
 // レースごとの項目情報をカウントする
 for($i=0;$i<count($race_results);$i++){
@@ -498,14 +519,11 @@ for($i=0;$i<count($race_results);$i++){
                                 <div id="popup">
                                     <div class="tatget_scroll">
                                         <table class="jouken_table">
-                                        <p style="margin-bottom: 0%;color: black;font-size: 15px">関連レース</p>
-                                        <tr><th>レース名</th><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
+                                            <p style="margin-bottom: 0%;color: black;font-size: 15px">関連レース</p>
+                                            <tr><th>レース名</th><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
                                             <?php $umamei=$race_results[$target_num][$j][$k]->馬名 ?>
-                                            <?php for($x=0;$x<count($race_name);$x++) : ?>
-                                                <?php if(!$race_results_as_umamei["$umamei"][$x]){ continue; } ?>
-                                                <?php for($y=0;$y<count($race_results_as_umamei["$umamei"][$x]);$y++) : ?>
-                                                    <tr><td bgcolor="white"><?php echo $race_name[$x]; ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->年度 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬名 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->着順 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->人気 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->枠番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->性齢 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->斤量 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results_as_umamei["$umamei"][$x][$y]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->通過 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->上り ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->上り順位 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->単勝 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬体重 ?></td></tr>
-                                                <?php endfor ?>
+                                            <?php for($x=0;$x<count($race_results_as_umamei_sort[$umamei]);$x++) : ?>
+                                                <tr><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->RACE_NAME; ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->年度 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->馬名 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->着順 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->人気 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->馬番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->枠番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->性齢 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->斤量 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results_as_umamei_sort[$umamei][$x]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results_as_umamei_sort[$umamei][$x]->通過 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->上り ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->上り順位 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->単勝 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->馬体重 ?></td></tr>
                                             <?php endfor ?>
                                         </table>
                                     </div>
@@ -648,14 +666,11 @@ for($i=0;$i<count($race_results);$i++){
                                     <div id="popup">
                                         <div class="tatget_scroll">
                                             <table class="jouken_table">
-                                            <p style="margin-bottom: 0%;color: black;font-size: 15px">関連レース</p>
-                                            <tr><th>レース名</th><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
+                                                <p style="margin-bottom: 0%;color: black;font-size: 15px">関連レース</p>
+                                                <tr><th>レース名</th><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
                                                 <?php $umamei=$race_results[$i][$j][$k]->馬名 ?>
-                                                <?php for($x=0;$x<count($race_name);$x++) : ?>
-                                                    <?php if(!$race_results_as_umamei["$umamei"][$x]){ continue; } ?>
-                                                    <?php for($y=0;$y<count($race_results_as_umamei["$umamei"][$x]);$y++) : ?>
-                                                        <tr><td bgcolor="white"><?php echo $race_name[$x]; ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->年度 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬名 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->着順 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->人気 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->枠番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->性齢 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->斤量 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results_as_umamei["$umamei"][$x][$y]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->通過 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->上り ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->上り順位 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->単勝 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei["$umamei"][$x][$y]->馬体重 ?></td></tr>
-                                                    <?php endfor ?>
+                                                <?php for($x=0;$x<count($race_results_as_umamei_sort[$umamei]);$x++) : ?>
+                                                    <tr><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->RACE_NAME; ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->年度 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->馬名 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->着順 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->人気 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->馬番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->枠番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->性齢 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->斤量 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results_as_umamei_sort[$umamei][$x]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results_as_umamei_sort[$umamei][$x]->通過 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->上り ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->上り順位 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->単勝 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->馬体重 ?></td></tr>
                                                 <?php endfor ?>
                                             </table>
                                         </div>
