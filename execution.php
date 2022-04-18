@@ -592,7 +592,9 @@ if(!(in_array(1,$j_result_flg))){
         }
 
         // レース情報取得
-        $year_results_race_info[$i]=$keiba_wpdb->get_results("SELECT * FROM RACE_ID WHERE RACE_NAME REGEXP \"$target_race_name_jp\" AND RACE_DATE REGEXP \"^$year\";");
+        $tmp_race_name=str_replace('(', '\\\\(', $target_race_name_jp);
+        $tmp_race_name=str_replace(')', '\\\\)', $tmp_race_name);
+        $year_results_race_info[$i]=$keiba_wpdb->get_results("SELECT * FROM RACE_ID WHERE RACE_NAME REGEXP \"$tmp_race_name\" AND RACE_DATE REGEXP \"^$year\";");
 
         // 年度ごとの勝率計算
         $first=0;
@@ -628,7 +630,10 @@ if(!(in_array(1,$j_result_flg))){
                         $tg_year=$year;
                     }
                     $year_results_others[$i][$k]=$keiba_wpdb->get_results("SELECT * FROM $race_name_eng WHERE 年度 = ". $tg_year . " AND 馬名 REGEXP \"$uma_name_regexp\"");
-                    $year_results_others_race_info[$i][$k]=$keiba_wpdb->get_results("SELECT * FROM RACE_ID WHERE RACE_NAME REGEXP \"$year_results_others_jp[$k]\" AND RACE_DATE REGEXP \"^$tg_year\";");
+                    
+                    $tmp_race_name=str_replace('(', '\\\\(', $year_results_others_jp[$k]);
+                    $tmp_race_name=str_replace(')', '\\\\)', $tmp_race_name);
+                    $year_results_others_race_info[$i][$k]=$keiba_wpdb->get_results("SELECT * FROM RACE_ID WHERE RACE_NAME REGEXP \"$tmp_race_name\" AND RACE_DATE REGEXP \"^$tg_year\";");
                     $k++;
                 }
 
