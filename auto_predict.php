@@ -129,6 +129,19 @@ for($i=0;$i<count($race_results);$i++){
     $race_results[$i][0]=array_values(array_unique($race_results[$i][0],SORT_REGULAR));
 }
 
+// レース情報を格納
+$race_results_all_info=array();
+for($i=0;$i<count($race_results_all);$i++){
+    $tmp_race_name=str_replace('(', '\\\\(', $race_name[$i]);
+    $tmp_race_name=str_replace(')', '\\\\)', $tmp_race_name);
+    for($k=0;$k<count($year_array);$k++){
+        $race_results_all_info[$i][$year_array[$k]]=$keiba_wpdb->get_results("SELECT * FROM RACE_ID WHERE RACE_NAME REGEXP \"$tmp_race_name\" AND RACE_DATE REGEXP \"^$year_array[$k]\";");
+    }
+    // 最後の要素の1年前のレコードも記録しておく
+    $tmp=$year_array[count($year_array)-1]-1;
+    $race_results_all_info[$i][$tmp]=$keiba_wpdb->get_results("SELECT * FROM RACE_ID WHERE RACE_NAME REGEXP \"$tmp_race_name\" AND RACE_DATE REGEXP \"^$tmp\";");
+}
+
 // 予想レースは1頭ごとに結果表を作る
 $race_results_as_umamei=array();
 for($i=0;$i<count($race_results[$target_num]);$i++){
@@ -501,7 +514,7 @@ for($i=0;$i<count($race_results);$i++){
                                 <div id="popup">
                                     <div class="tatget_scroll">
                                         <table class="jouken_table">
-                                            <p style="margin-bottom: 0%;color: black;font-size: 15px"><?php echo $race_name[$target_num]." ".$race_results[$target_num][$j][$k]->年度 ?></p>
+                                            <p style="margin-bottom: 0%;color: black;font-size: 15px"><?php echo $race_name[$target_num]." ".$race_results[$target_num][$j][$k]->年度." "."(".$race_results_all_info[$target_num][$race_results[$target_num][$j][$k]->年度][0]->PLACE."/".$race_results_all_info[$target_num][$race_results[$target_num][$j][$k]->年度][0]->HOLD_NUM."/".$race_results_all_info[$target_num][$race_results[$target_num][$j][$k]->年度][0]->DISTANCE."/".$race_results_all_info[$target_num][$race_results[$target_num][$j][$k]->年度][0]->WEATHER."/".$race_results_all_info[$target_num][$race_results[$target_num][$j][$k]->年度][0]->STATE.")"; ?></p>
                                             <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
                                                 <?php for($x=0;$x<count($race_results_all[$target_num][0]);$x++) : ?>
                                                     <?php if($race_results_all[$target_num][0][$x]->年度!=$race_results[$target_num][$j][$k]->年度){ continue; } ?>
@@ -648,7 +661,7 @@ for($i=0;$i<count($race_results);$i++){
                                     <div id="popup">
                                         <div class="tatget_scroll">
                                             <table class="jouken_table">
-                                                <p style="margin-bottom: 0%;color: black;font-size: 15px"><?php echo $race_name[$i]." ".$race_results[$i][$j][$k]->年度 ?></p>
+                                                <p style="margin-bottom: 0%;color: black;font-size: 15px"><?php echo $race_name[$i]." ".$race_results[$i][$j][$k]->年度." "."(".$race_results_all_info[$i][$race_results[$i][$j][$k]->年度][0]->PLACE."/".$race_results_all_info[$i][$race_results[$i][$j][$k]->年度][0]->HOLD_NUM."/".$race_results_all_info[$i][$race_results[$i][$j][$k]->年度][0]->DISTANCE."/".$race_results_all_info[$i][$race_results[$i][$j][$k]->年度][0]->WEATHER."/".$race_results_all_info[$i][$race_results[$i][$j][$k]->年度][0]->STATE.")"; ?></p>
                                                 <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順位</th><th>単勝</th><th>馬体重</th></tr>
                                                     <?php for($x=0;$x<count($race_results_all[$i][0]);$x++) : ?>
                                                         <?php if($race_results_all[$i][0][$x]->年度!=$race_results[$i][$j][$k]->年度){ continue; } ?>
