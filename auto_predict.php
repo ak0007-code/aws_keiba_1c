@@ -172,7 +172,8 @@ foreach($race_results_as_umamei as $key => $value){
 
         for($k=0;$k<count($race_results_as_umamei[$key][$i]);$k++){
             $race_results_as_umamei[$key][$i][$k]->RACE_NAME=$race_name[$i]; // 「レース名」をレコードに追加
-            $race_results_as_umamei[$key][$i][$k]->RACE_NUM=$race_results_as_umamei[$key][$i][$k]->年度."_".$i; // 「開催年_レース番号」をレコードに追加
+            $race_num=str_pad($i, 4, 0, STR_PAD_LEFT); // レース番号を0詰めの4桁にする
+            $race_results_as_umamei[$key][$i][$k]->RACE_NUM=$race_results_as_umamei[$key][$i][$k]->年度."_".$race_num; // 「開催年_レース番号」をレコードに追加
             $race_results_as_umamei_sort[$key][]=$race_results_as_umamei[$key][$i][$k];
         }
     }
