@@ -553,8 +553,8 @@ for($i=0;$i<count($race_results);$i++){
 
     <p><?php echo "<以下関連レース>"; ?></p>  
 
-    <?php for($i=0;$i<count($race_name);$i++) : ?>
-        <?php if($i==$target_num){ continue;} ?>
+    <?php for($i=($target_num-1);$i>=0;$i--) : ?>
+        <?php if($i==$target_num){ break; } ?>
         <b><?php echo $race_name[$i]; ?></b>
         <div class="tatget_scroll">
             <table class="target_table" border="1" style="margin-top: 0%;">
@@ -698,6 +698,7 @@ for($i=0;$i<count($race_results);$i++){
                 <?php endfor; ?>
             </table>
         </div>
+        <?php if($i==0){ $i=count($race_name);} ?>
     <?php endfor; ?>
 </body>
 </html>
