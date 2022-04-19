@@ -410,7 +410,7 @@ for($i=0;$i<count($race_results);$i++){
     <div class="tatget_scroll">
         <table class="target_table" border="1" style="margin-top: 0%;">
             <tr class="item_name">
-                <th>年度</th><th>馬名</th>
+                <th>開催</th><th>馬名</th>
                 <th>
                     <label>
                         <span><u>着順<u></span>
@@ -516,7 +516,7 @@ for($i=0;$i<count($race_results);$i++){
                                     <div class="tatget_scroll">
                                         <table class="jouken_table">
                                             <p style="margin-bottom: 0%;color: black;font-size: 15px"><?php echo $race_name[$target_num]." ".$race_results[$target_num][$j][$k]->年度." "."(".$race_results_all_info[$target_num][$race_results[$target_num][$j][$k]->年度][0]->PLACE."/".$race_results_all_info[$target_num][$race_results[$target_num][$j][$k]->年度][0]->HOLD_NUM."/".$race_results_all_info[$target_num][$race_results[$target_num][$j][$k]->年度][0]->DISTANCE."/".$race_results_all_info[$target_num][$race_results[$target_num][$j][$k]->年度][0]->WEATHER."/".$race_results_all_info[$target_num][$race_results[$target_num][$j][$k]->年度][0]->STATE.")"; ?></p>
-                                            <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順</th><th>単勝</th><th>馬体重</th></tr>
+                                            <tr><th>開催</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順</th><th>単勝</th><th>馬体重</th></tr>
                                                 <?php for($x=0;$x<count($race_results_all[$target_num][0]);$x++) : ?>
                                                     <?php if($race_results_all[$target_num][0][$x]->年度!=$race_results[$target_num][$j][$k]->年度){ continue; } ?>
                                                     <tr><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->年度; ?></td><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->馬名; ?></td><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->着順; ?></td><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->人気; ?></td><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->馬番; ?></td><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->枠番; ?></td><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->性齢; ?></td><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->斤量; ?></td><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->騎手; ?></td><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->タイム; ?></td><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->通過; ?></td><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->上り; ?></td><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->上り順位; ?></td><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->単勝; ?></td><td bgcolor="white"><?php echo $race_results_all[$target_num][0][$x]->馬体重; ?></td></tr>
@@ -534,7 +534,7 @@ for($i=0;$i<count($race_results);$i++){
                                     <div class="tatget_scroll">
                                         <table class="jouken_table">
                                             <p style="margin-bottom: 0%;color: black;font-size: 15px">関連レース</p>
-                                            <tr><th>レース名</th><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順</th><th>単勝</th><th>馬体重</th></tr>
+                                            <tr><th>レース名</th><th>開催</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順</th><th>単勝</th><th>馬体重</th></tr>
                                             <?php $umamei=$race_results[$target_num][$j][$k]->馬名 ?>
                                             <?php for($x=0;$x<count($race_results_as_umamei_sort[$umamei]);$x++) : ?>
                                                 <tr><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->RACE_NAME; ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->年度 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->馬名 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->着順 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->人気 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->馬番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->枠番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->性齢 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->斤量 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results_as_umamei_sort[$umamei][$x]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results_as_umamei_sort[$umamei][$x]->通過 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->上り ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->上り順位 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->単勝 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->馬体重 ?></td></tr>
@@ -552,14 +552,15 @@ for($i=0;$i<count($race_results);$i++){
         </table>
     </div>
 
-    <p><?php echo "<以下関連レース>"; ?></p>  
+    <hr>
+    </br>
 
     <?php for($i=($target_num-1);$i>=0;$i--) : ?>
         <?php if($i==$target_num){ break; } ?>
         <b><?php echo $race_name[$i]; ?></b>
         <div class="tatget_scroll">
             <table class="target_table" border="1" style="margin-top: 0%;">
-                <tr><th>年度</th><th>馬名</th>
+                <tr><th>開催</th><th>馬名</th>
                 <th>
                     <label>
                         <span><u>着順<u></span>
@@ -663,7 +664,7 @@ for($i=0;$i<count($race_results);$i++){
                                         <div class="tatget_scroll">
                                             <table class="jouken_table">
                                                 <p style="margin-bottom: 0%;color: black;font-size: 15px"><?php echo $race_name[$i]." ".$race_results[$i][$j][$k]->年度." "."(".$race_results_all_info[$i][$race_results[$i][$j][$k]->年度][0]->PLACE."/".$race_results_all_info[$i][$race_results[$i][$j][$k]->年度][0]->HOLD_NUM."/".$race_results_all_info[$i][$race_results[$i][$j][$k]->年度][0]->DISTANCE."/".$race_results_all_info[$i][$race_results[$i][$j][$k]->年度][0]->WEATHER."/".$race_results_all_info[$i][$race_results[$i][$j][$k]->年度][0]->STATE.")"; ?></p>
-                                                <tr><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順</th><th>単勝</th><th>馬体重</th></tr>
+                                                <tr><th>開催</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順</th><th>単勝</th><th>馬体重</th></tr>
                                                     <?php for($x=0;$x<count($race_results_all[$i][0]);$x++) : ?>
                                                         <?php if($race_results_all[$i][0][$x]->年度!=$race_results[$i][$j][$k]->年度){ continue; } ?>
                                                         <tr><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->年度; ?></td><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->馬名; ?></td><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->着順; ?></td><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->人気; ?></td><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->馬番; ?></td><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->枠番; ?></td><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->性齢; ?></td><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->斤量; ?></td><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->騎手; ?></td><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->タイム; ?></td><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->通過; ?></td><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->上り; ?></td><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->上り順位; ?></td><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->単勝; ?></td><td bgcolor="white"><?php echo $race_results_all[$i][0][$x]->馬体重; ?></td></tr>
@@ -681,7 +682,7 @@ for($i=0;$i<count($race_results);$i++){
                                         <div class="tatget_scroll">
                                             <table class="jouken_table">
                                                 <p style="margin-bottom: 0%;color: black;font-size: 15px">関連レース</p>
-                                                <tr><th>レース名</th><th>年度</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順</th><th>単勝</th><th>馬体重</th></tr>
+                                                <tr><th>レース名</th><th>開催</th><th>馬名</th><th>着順</th><th>人気</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>騎手</th><th>タイム</th><th>通過</th><th>上り</th><th>上り順</th><th>単勝</th><th>馬体重</th></tr>
                                                 <?php $umamei=$race_results[$i][$j][$k]->馬名 ?>
                                                 <?php for($x=0;$x<count($race_results_as_umamei_sort[$umamei]);$x++) : ?>
                                                     <tr><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->RACE_NAME; ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->年度 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->馬名 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->着順 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->人気 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->馬番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->枠番 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->性齢 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->斤量 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->騎手 ?></td><td bgcolor="white"><?php echo substr_replace(substr($race_results_as_umamei_sort[$umamei][$x]->タイム, 1, 7),".",4,1) ?></td><td bgcolor="#ffffff"><?php echo $race_results_as_umamei_sort[$umamei][$x]->通過 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->上り ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->上り順位 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->単勝 ?></td><td bgcolor="white"><?php echo $race_results_as_umamei_sort[$umamei][$x]->馬体重 ?></td></tr>
