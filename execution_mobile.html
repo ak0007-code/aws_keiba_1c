@@ -433,6 +433,16 @@
                     +'<td><input type="checkbox" id="j_seirei_b8_tmp" name="j_seirei_b8_tmp" value="牡8">牡8</td>'
                     +'<td><input type="checkbox" id="j_seirei_b9_tmp" name="j_seirei_b9_tmp" value="牡9">牡9</td>'
                     +'</tr>'
+                    +'<tr>'
+                    +'<td><input type="checkbox" id="j_seirei_s2_tmp" name="j_seirei_s2_tmp" value="セ2">セ2</td>'
+                    +'<td><input type="checkbox" id="j_seirei_s3_tmp" name="j_seirei_s3_tmp" value="セ3">セ3</td>'
+                    +'<td><input type="checkbox" id="j_seirei_s4_tmp" name="j_seirei_s4_tmp" value="セ4">セ4</td>'
+                    +'<td><input type="checkbox" id="j_seirei_s5_tmp" name="j_seirei_s5_tmp" value="セ5">セ5</td>'
+                    +'<td><input type="checkbox" id="j_seirei_s6_tmp" name="j_seirei_s6_tmp" value="セ6">セ6</td>'
+                    +'<td><input type="checkbox" id="j_seirei_s7_tmp" name="j_seirei_s7_tmp" value="セ7">セ7</td>'
+                    +'<td><input type="checkbox" id="j_seirei_s8_tmp" name="j_seirei_s8_tmp" value="セ8">セ8</td>'
+                    +'<td><input type="checkbox" id="j_seirei_s9_tmp" name="j_seirei_s9_tmp" value="セ9">セ9</td>'
+                    +'</tr>'
                     +'</table>'
                     +'</p>'
                     +'<p style="margin-left: 50px;">斤量<br>' // 斤量のid,namaは52.5→525と表す
@@ -1244,6 +1254,9 @@
                     tmp_array[i]=document.getElementById("j_seirei_b"+j+"_tmp");
                     tmp_array[i].id="j"+i+"_seirei_b"+j;
                     tmp_array[i].name="j"+i+"_seirei_b"+j;
+                    tmp_array[i]=document.getElementById("j_seirei_s"+j+"_tmp");
+                    tmp_array[i].id="j"+i+"_seirei_s"+j;
+                    tmp_array[i].name="j"+i+"_seirei_s"+j;
                 }
 
                 // 条件i>斤量(KINRYO_MIN~KINRYO_MAX)

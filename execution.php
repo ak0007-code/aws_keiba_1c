@@ -41,6 +41,7 @@ $umaban_array=array(); // 馬番
 $wakuban_array=array(); // 枠番
 $seirei_h_array=array(); // 性齢 牝馬
 $seirei_b_array=array(); // 性齢 牡馬
+$seirei_s_array=array(); // 性齢 セ馬
 $kinryo_array=array(); // 斤量
 $time_min_array=array(); // タイム最小値
 $time_max_array=array(); // タイム最大値
@@ -102,6 +103,10 @@ for ($j=0;$j<J_MAX;$j++){
     // 性齢牡馬格納
     for($i=0;$i<(SEIREI_MAX-SEIREI_MIN+1);$i++){
         $seirei_b_array[$j][$i]=$_POST["j".($j+1)."_seirei_b".($i+SEIREI_MIN)];
+    }
+    // 性齢セ馬格納
+    for($i=0;$i<(SEIREI_MAX-SEIREI_MIN+1);$i++){
+        $seirei_s_array[$j][$i]=$_POST["j".($j+1)."_seirei_s".($i+SEIREI_MIN)];
     }
 
     // 斤量格納
@@ -233,7 +238,7 @@ for ($j=0;$j<J_MAX;$j++){
         }
 
         // 性齢
-        for($i=0;$i<(SEIREI_MAX-SEIREI_MIN-1);$i++){
+        for($i=0;$i<(SEIREI_MAX-SEIREI_MIN+1);$i++){
             if($seirei_h_array[$j][$i]){
                 if($seirei_regexp[$j]=="99" || $seirei_regexp[$j]==".*"){
                     $seirei_regexp[$j]=(string)$seirei_h_array[$j][$i];
@@ -247,6 +252,14 @@ for ($j=0;$j<J_MAX;$j++){
                     $seirei_regexp[$j]=(string)$seirei_b_array[$j][$i];
                 }else{
                     $seirei_regexp[$j]="$seirei_regexp[$j]"."|".(string)$seirei_b_array[$j][$i];
+                }
+                $all_result_check_flg=1;
+            }
+            if($seirei_s_array[$j][$i]){
+                if($seirei_regexp[$j]=="99" || $seirei_regexp[$j]==".*"){
+                    $seirei_regexp[$j]=(string)$seirei_s_array[$j][$i];
+                }else{
+                    $seirei_regexp[$j]="$seirei_regexp[$j]"."|".(string)$seirei_s_array[$j][$i];
                 }
                 $all_result_check_flg=1;
             }
@@ -706,7 +719,6 @@ for($i=0;$i<count($all_table);$i++){
 
 $year_results_as_umamei=array();
 foreach($year_results as $key => $value){
-    // echo $key;
     for($j=0;$j<count($year_results[$key]);$j++){
         $umamei=$year_results[$key][$j]->馬名;
         for($x=0;$x<count($table_results_as_umamei);$x++){
@@ -846,6 +858,18 @@ foreach($year_results_as_umamei_sort as $key => $value){
             for(let i=0;i< <?php echo (SEIREI_MAX-SEIREI_MIN+1); ?>;i++){
                 if(js_array[j-1][i]){
                     document.getElementById("j"+j+"_seirei_b"+(i+<?php echo SEIREI_MIN; ?>)).checked="true";
+                }
+            }
+        }
+    }
+    // 性齢(セ馬)
+    function seireissave(){
+        <?php $json_array = json_encode($seirei_s_array); ?>
+        let js_array = <?php echo $json_array; ?>;
+        for(let j=1;j<=<?php echo J_MAX; ?>;j++){
+            for(let i=0;i< <?php echo (SEIREI_MAX-SEIREI_MIN+1); ?>;i++){
+                if(js_array[j-1][i]){
+                    document.getElementById("j"+j+"_seirei_s"+(i+<?php echo SEIREI_MIN; ?>)).checked="true";
                 }
             }
         }
@@ -1005,6 +1029,7 @@ foreach($year_results_as_umamei_sort as $key => $value){
 <?php echo '<script type="text/javascript">','wakubansave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','seireihsave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','seireibsave();','</script>'; ?>
+<?php echo '<script type="text/javascript">','seireissave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','kinryosave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','timesave();','</script>'; ?>
 <?php echo '<script type="text/javascript">','tukasave();','</script>'; ?>
