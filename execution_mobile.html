@@ -15,14 +15,14 @@
                         <option value="大阪杯">　大阪杯</option>
                         <option value="桜花賞">　桜花賞</option>
                         <option value="皐月賞">　皐月賞</option>
-                        <option value="天皇賞(春)" selected>　天皇賞(春)</option>
+                        <option value="天皇賞(春)">　天皇賞(春)</option>
                         <option value="NHKマイルC">　NHKマイルC</option>
                         <option value="ヴィクトリアマイル">　ヴィクトリアマイル</option>
                         <option value="優駿牝馬">　優駿牝馬</option>
                         <option value="東京優駿">　東京優駿</option>
                         <option value="安田記念">　安田記念</option>
                         <option value="宝塚記念">　宝塚記念</option>
-                        <option value="スプリンターズS">　スプリンターズS</option>
+                        <option value="スプリンターズS" selected>　スプリンターズS</option>
                         <option value="秋華賞">　秋華賞</option>
                         <option value="菊花賞">　菊花賞</option>
                         <option value="天皇賞(秋)">　天皇賞(秋)</option>
@@ -1397,6 +1397,9 @@
                 document.getElementById("j"+j_no+"_tansho_max").value="";
                 for(let i=1;i<=NINKI_MAX;i++){
                     document.getElementById("j"+j_no+"_ninki_"+i).checked=0;
+                }
+                for(let i=1;i<=AGARIJUN_MAX;i++){
+                    document.getElementById("j"+j_no+"_agarijun_"+i).checked=0;
                 }
                 for(let i=1;i<=CHAKUJUN_MAX;i++){
                     document.getElementById("j"+j_no+"_chakujun_"+i).checked=0;
