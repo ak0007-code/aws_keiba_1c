@@ -487,6 +487,8 @@ function add_files() {
         wp_enqueue_style( 'challenge', get_template_directory_uri() . '/../../../execution.css');
     }else if( is_page('11') ){
         wp_enqueue_style( 'challenge', get_template_directory_uri() . '/../../../auto_predict.css');
+    }else if( is_page('152') ){
+	    wp_enqueue_style( 'challenge', get_template_directory_uri() . '/../../../auto_predict.css');
     }
 }
 add_action( 'wp_enqueue_scripts', 'add_files' );

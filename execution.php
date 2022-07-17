@@ -304,7 +304,7 @@ for ($j=0;$j<J_MAX;$j++){
         if($tuka_1_array[$j]){
             if($tuka_1_symbol_array[$j]=="eq"){
                 $tuka_1_regexp=$tuka_1_array[$j];
-            }else if($tuka_1_symbol_array[$j]=="ge"){
+            }else if($tuka_1_symbol_array[$j]=="le"){
                 for($i=$tuka_1_array[$j];$i<=TUKA_MAX;$i++){
                     if($i==$tuka_1_array[$j]){
                         $tuka_1_regexp=$tuka_1_array[$j];
@@ -312,7 +312,7 @@ for ($j=0;$j<J_MAX;$j++){
                         $tuka_1_regexp="$tuka_1_regexp"."|"."$i";
                     }
                 }
-            }else if($tuka_1_symbol_array[$j]=="le"){
+            }else if($tuka_1_symbol_array[$j]=="ge"){
                 for($i=$tuka_1_array[$j];$i>=TUKA_MIN;$i--){
                     if($i==$tuka_1_array[$j]){
                         $tuka_1_regexp=$tuka_1_array[$j];
@@ -329,7 +329,7 @@ for ($j=0;$j<J_MAX;$j++){
         if($tuka_2_array[$j]){
             if($tuka_2_symbol_array[$j]=="eq"){
                 $tuka_2_regexp=$tuka_2_array[$j];
-            }else if($tuka_2_symbol_array[$j]=="ge"){
+            }else if($tuka_2_symbol_array[$j]=="le"){
                 for($i=$tuka_2_array[$j];$i<=TUKA_MAX;$i++){
                     if($i==$tuka_2_array[$j]){
                         $tuka_2_regexp=$tuka_2_array[$j];
@@ -337,7 +337,7 @@ for ($j=0;$j<J_MAX;$j++){
                         $tuka_2_regexp="$tuka_2_regexp"."|"."$i";
                     }
                 }
-            }else if($tuka_2_symbol_array[$j]=="le"){
+            }else if($tuka_2_symbol_array[$j]=="ge"){
                 for($i=$tuka_2_array[$j];$i>=TUKA_MIN;$i--){
                     if($i==$tuka_2_array[$j]){
                         $tuka_2_regexp=$tuka_2_array[$j];
@@ -354,7 +354,7 @@ for ($j=0;$j<J_MAX;$j++){
         if($tuka_3_array[$j]){
             if($tuka_3_symbol_array[$j]=="eq"){
                 $tuka_3_regexp=$tuka_3_array[$j];
-            }else if($tuka_3_symbol_array[$j]=="ge"){
+            }else if($tuka_3_symbol_array[$j]=="le"){
                 for($i=$tuka_3_array[$j];$i<=TUKA_MAX;$i++){
                     if($i==$tuka_3_array[$j]){
                         $tuka_3_regexp=$tuka_3_array[$j];
@@ -362,7 +362,7 @@ for ($j=0;$j<J_MAX;$j++){
                         $tuka_3_regexp="$tuka_3_regexp"."|"."$i";
                     }
                 }
-            }else if($tuka_3_symbol_array[$j]=="le"){
+            }else if($tuka_3_symbol_array[$j]=="ge"){
                 for($i=$tuka_3_array[$j];$i>=TUKA_MIN;$i--){
                     if($i==$tuka_3_array[$j]){
                         $tuka_3_regexp=$tuka_3_array[$j];
@@ -379,7 +379,7 @@ for ($j=0;$j<J_MAX;$j++){
         if($tuka_4_array[$j]){
             if($tuka_4_symbol_array[$j]=="eq"){
                 $tuka_4_regexp=$tuka_4_array[$j];
-            }else if($tuka_4_symbol_array[$j]=="ge"){
+            }else if($tuka_4_symbol_array[$j]=="le"){
                 for($i=$tuka_4_array[$j];$i<=TUKA_MAX;$i++){
                     if($i==$tuka_4_array[$j]){
                         $tuka_4_regexp=$tuka_4_array[$j];
@@ -387,7 +387,7 @@ for ($j=0;$j<J_MAX;$j++){
                         $tuka_4_regexp="$tuka_4_regexp"."|"."$i";
                     }
                 }
-            }else if($tuka_4_symbol_array[$j]=="le"){
+            }else if($tuka_4_symbol_array[$j]=="ge"){
                 for($i=$tuka_4_array[$j];$i>=TUKA_MIN;$i--){
                     if($i==$tuka_4_array[$j]){
                         $tuka_4_regexp=$tuka_4_array[$j];
