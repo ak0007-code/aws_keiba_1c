@@ -13,6 +13,12 @@
 
 /*** モバイル用 ***/
 @media screen and (max-width: 768px) {
+  #main {
+    background: #eff4f7;
+    margin-left: auto;
+    width: auto;
+  }
+
   /* セレクトボックス */
   .main_div select {
     background-color: #eff4f7;
