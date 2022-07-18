@@ -2,6 +2,8 @@
 @media screen and (min-width: 768px) {
   #main {
     background: #eff4f7;
+    margin-left: 6.5%;
+    width: 60%;
   }
 
   /* セレクトボックス */
